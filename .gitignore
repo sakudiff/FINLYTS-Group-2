@@ -1,0 +1,26 @@
+# IDE and Tool Specific
+.claude/
+.gemini/
+.DS_Store
+
+# RStudio
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+
+# Quarto / RMarkdown
+_site/
+site_libs/
+/objects/
+/trajectories/
+_freeze/
+*.pdf
+*.html
+
+# Python (if used via reticulate)
+__pycache__/
+.venv/
+venv/
+env/
+.env
