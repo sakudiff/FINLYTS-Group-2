@@ -15,8 +15,6 @@ site_libs/
 /objects/
 /trajectories/
 _freeze/
-*.pdf
-*.html
 
 # Python (if used via reticulate)
 __pycache__/
