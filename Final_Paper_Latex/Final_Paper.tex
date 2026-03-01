@@ -1,0 +1,95 @@
+\documentclass[12pt]{article}
+
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\graphicspath{{../}}
+\usepackage{hyperref}
+
+\definecolor{dlsugreen}{HTML}{00703C}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+
+    % Top Logo and Name (Inline)
+    \vspace*{0.5cm}
+    \begin{tabular}{c@{\quad}l}
+        \raisebox{-2.0ex}{\includegraphics[height=3.5em]{image/paper/dlsu_logo.png}} & 
+        \huge \textbf{\color{dlsugreen} De La Salle University}
+    \end{tabular}
+    
+    \vfill
+
+    % Central Seal (Smaller)
+    \includegraphics[width=0.25\textwidth]{image/paper/dlsu_logo.png} \\
+
+    \vfill
+
+    % Project Title
+    {\LARGE \textbf{Fama-French 5-Factor Model Evaluation}} \\
+    \vspace{1.5cm}
+
+    \begin{minipage}{0.8\textwidth}
+        \centering
+        {\normalsize A Financial Analytics Project \\ Presented to \\ The Department of Financial Management \\ Ramon V. Del Rosario College of Business}
+    \end{minipage}
+
+    \vfill
+
+    \begin{minipage}{0.8\textwidth}
+        \centering
+        {\normalsize in partial fulfillment of the requirements for the course \\ \textbf{Financial Analytics (FINLYTS)}}
+    \end{minipage}
+
+    \vfill
+
+    {\normalsize By:} \\
+    \vspace{0.5cm}
+    {\normalsize 
+    ABRIL, Jehan \\ 
+    GO, Keira Ley Arcala \\ 
+    SISON, Aaron Joshua Estacio \\ 
+    VALENCIA, Carlos Martin Belangel}
+
+    \vfill
+
+    {\normalsize March 1, 2026}
+\end{titlepage}
+
+\newpage
+\tableofcontents
+\newpage
+
+\section{Introduction}
+This document provides a rigorous evaluation of the \textbf{Fama-French 5-Factor Model} using R. The model extends the Capital Asset Pricing Model (CAPM) by incorporating Size, Value, Profitability, and Investment factors alongside standard market risk. The core objective is to determine the efficacy of these five factors in explaining the excess returns of a portfolio comprising eight selected assets.
+
+\subsection{Objectives}
+\begin{itemize}
+    \item \textbf{Empirical Analysis:} Assess how well the five factors (Market, SMB, HML, RMW, CMA) explain asset returns.
+    \item \textbf{Statistical Interpretation:} Analyze alpha and beta coefficients for statistical significance and economic meaning.
+\end{itemize}
+
+\section{Methodology}
+The methodology involves a systematic technical workflow utilizing the Kenneth French data library and R-based statistical modeling.
+
+\subsection{Asset Selection}
+The following 8 assets were selected representing tilts toward Market, SMB, HML, RMW, and CMA. Each selection is justified based on historical factor exposure.
+
+\subsection{Descriptive Statistics}
+Historical return data for the selected assets is analyzed using mean, median, standard deviation, skewness, and kurtosis to understand the distribution and risk profile of the portfolio.
+
+\section{Results}
+[Detailed results, regression coefficients, and visual analysis to be imported from Calculations.Rmd]
+
+\section{Conclusion}
+The study concludes with an academic verdict on the model's efficacy for the selected portfolio, linking empirical findings to practical investment implications.
+
+\section{References}
+[References list in APA7 format]
+
+\end{document}

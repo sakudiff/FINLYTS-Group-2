@@ -34,13 +34,21 @@ This project involves a rigorous evaluation of the **Fama-French 5-Factor Model*
 ## Directory Map
 ```text
 /
-├── data/           # Kenneth French CSVs & Asset Data Sets
-├── scripts/        # Raw .R scripts (Preprocessing/Analysis)
-├── output/         # Final PDF/HTML Deliverables (Everything we will submit)
-├── README.md       # Project Documentation (Guide about the project for groupmates)
-├── .gitignore      # File to tell Git which files to ignore (don't upload)
-└── project.Rmd     # Main Reproducible RMarkdown (RMD)
+├── data/               # Kenneth French CSVs & Asset Data Sets
+├── image/              # Figures and assets for README and Paper
+│   ├── paper/          # Logos and specific images for the LaTeX paper
+│   └── README/         # Images used in this README
+├── Final_Paper_Latex/  # Final LaTeX source files
+│   └── Final_Paper.tex # Main document for PDF generation
+├── Calculations.Rmd    # Main RMarkdown for analysis & visualizations
+├── Readme.md           # Project Documentation
+└── .gitignore          # Git ignore rules
 ```
+
+## Workflow & Deliverables
+*   **Calculations & Visuals:** All data processing, factor modeling, and plot generation are handled in `Calculations.Rmd`.
+*   **Final Paper:** The formal academic report is maintained in `Final_Paper_Latex/Final_Paper.tex`. Results and plots from the R analysis are exported and integrated here for the final PDF submission.
+
 
 > [!TIP]
 > **What is a `.gitignore`?**  
