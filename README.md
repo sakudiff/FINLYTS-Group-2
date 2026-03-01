@@ -207,5 +207,63 @@ tinytex::install_tinytex()
 ```
 Once done, just click the **Render** button at the top of your RStudio editor.
 
+## 8. Working with LaTeX (`.tex`)
+The formal academic paper is located in `Final_Paper_Latex/Final_Paper.tex`.
+
+> [!TIP]
+> **The Google Docs Analogy:**  
+> Think of the **`.tex` file** as the **"Editing Mode"** in Google Docs where you type all your text and add formatting codes. The **`.pdf` file** is like the **"View Only"** or **"Print Preview"** version that everyone else sees. You cannot edit the PDF directly; you must change the `.tex` file first, then "Render" (Print) it to see the update.
+
+### Why LaTeX?
+We use LaTeX for the final report to ensure professional, academic-standard typesetting. It handles citations, mathematical formulas, and complex layouts more reliably than standard word processors.
+
+### How to Edit
+1.  **Open the file:** Navigate to `Final_Paper_Latex/Final_Paper.tex` in RStudio or any text editor (VS Code, Notepad++, etc.).
+2.  **Make Changes:** Write your content directly in the `.tex` file. If you are unfamiliar with LaTeX, follow the existing structure (e.g., `\section{...}`, `\subsection{...}`).
+3.  **Save:** Just save the file as you would any other.
+
+### Common LaTeX Commands (Basics)
+If you are new to LaTeX, here are the most common commands you will need:
+
+| Action | Command / Syntax |
+| :--- | :--- |
+| **New Section** | `\section{Section Name}` |
+| **Sub-section** | `\subsection{Subsection Name}` |
+| **Bold Text** | `\textbf{your text here}` |
+| **Italic Text** | `\textit{your text here}` |
+| **Bullet Points** | `\begin{itemize} \item Point 1 \item Point 2 \end{itemize}` |
+| **Numbered List** | `\begin{enumerate} \item Item 1 \item Item 2 \end{enumerate}` |
+| **Mathematical Formulas** | `$E = mc^2$` (inline) or `\[ A = \pi r^2 \]` (centered block) |
+| **Citations (BibTeX)** | `\cite{author2024}` or `\parencite{author2024}` |
+| **Referencing Figures** | `Figure \ref{fig:my_plot}` |
+| **Insert Image** | `\begin{figure}[h] \centering \includegraphics[width=0.8\textwidth]{path.png} \caption{...} \label{fig:1} \end{figure}` |
+| **Simple Table** | `\begin{table}[h] \centering \begin{tabular}{cc} A & B \\ C & D \end{tabular} \caption{...} \label{tab:1} \end{table}` |
+| **Flowcharts (TikZ)** | `\begin{tikzpicture} \node [draw] (a) {Start}; \end{tikzpicture}` |
+
+> [!TIP]
+> **For Flowcharts:** We use the `TikZ` package. It's powerful but can be complex. If you need a specific flowchart, it's often easiest to describe it to the project lead or look at existing examples in the `.tex` file to copy-paste.
+
+> [!IMPORTANT]
+> **Special Characters:** Characters like `%`, `$`, `&`, `_`, `{`, and `}` have special meanings in LaTeX. If you want to type them as text, you usually need to put a backslash before them (e.g., `\$` or `\%`).
+
+### Citations & References (BibTeX)
+We use a separate file, `Final_Paper_Latex/references.bib`, to manage our academic sources. This keeps the main paper clean.
+
+**The Citation Workflow:**
+1.  **Find the BibTeX:** On Google Scholar or any journal site, click the **"Cite"** button and select **"BibTeX"**.
+2.  **Add to the `.bib` file:** Copy the code block and paste it into `Final_Paper_Latex/references.bib`. 
+    *   *Example:* `@article{fama2015, title={...}, author={Fama, Eugene and French, Kenneth}, ...}`
+3.  **Note the "Key":** The first word after the `{` is the **Key** (e.g., `fama2015`).
+4.  **Cite in the `.tex` file:** Use the key in your paper to create the citation automatically.
+    *   `\cite{fama2015}` $\rightarrow$ Fama and French (2015)
+    *   `\parencite{fama2015}` $\rightarrow$ (Fama & French, 2015)
+
+The bibliography at the end of the paper will update automatically.
+
+### How to Render (See changes in the PDF)
+To see how your changes look in the final PDF:
+*   **The "Automated" Way:** If you followed **Section 2 (Initial Setup)** and ran the setup script, you should already have the necessary LaTeX tools installed. Simply press **Cmd + S** (Mac) or **Ctrl + S** (Windows) in RStudio to save, and it may automatically attempt to compile. If it doesn't work, don't worry—just let the project lead know.
+*   **The "No-Install" Way:** You don't actually *need* to render it yourself. Simply **Save and Push** your changes to the `draft` branch. The project leads will handle the rendering and verify the layout for you.
+
 ---
 

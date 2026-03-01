@@ -8,6 +8,8 @@
 \usepackage{graphicx}
 \graphicspath{{../}}
 \usepackage{hyperref}
+\usepackage[style=apa, backend=biber]{biblatex}
+\addbibresource{references.bib}
 
 \definecolor{dlsugreen}{HTML}{00703C}
 
@@ -66,7 +68,7 @@
 \newpage
 
 \section{Introduction}
-This document provides a rigorous evaluation of the \textbf{Fama-French 5-Factor Model} using R. The model extends the Capital Asset Pricing Model (CAPM) by incorporating Size, Value, Profitability, and Investment factors alongside standard market risk. The core objective is to determine the efficacy of these five factors in explaining the excess returns of a portfolio comprising eight selected assets.
+This document provides a rigorous evaluation of the \textbf{Fama-French 5-Factor Model} using R. The model extends the Capital Asset Pricing Model (CAPM) by incorporating Size, Value, Profitability, and Investment factors alongside standard market risk \parencite{fama1993common, fama2015five}. The core objective is to determine the efficacy of these five factors in explaining the excess returns of a portfolio comprising eight selected assets.
 
 \subsection{Objectives}
 \begin{itemize}
@@ -75,7 +77,7 @@ This document provides a rigorous evaluation of the \textbf{Fama-French 5-Factor
 \end{itemize}
 
 \section{Methodology}
-The methodology involves a systematic technical workflow utilizing the Kenneth French data library and R-based statistical modeling.
+The methodology involves a systematic technical workflow utilizing the Kenneth French data library \parencite{french2024data} and R-based statistical modeling.
 
 \subsection{Asset Selection}
 The following 8 assets were selected representing tilts toward Market, SMB, HML, RMW, and CMA. Each selection is justified based on historical factor exposure.
@@ -89,7 +91,6 @@ Historical return data for the selected assets is analyzed using mean, median, s
 \section{Conclusion}
 The study concludes with an academic verdict on the model's efficacy for the selected portfolio, linking empirical findings to practical investment implications.
 
-\section{References}
-[References list in APA7 format]
+\printbibliography
 
 \end{document}
