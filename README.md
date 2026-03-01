@@ -1,7 +1,8 @@
 # Financial Analytics [FINLYTS CO2] 
 
 > [!IMPORTANT]
-> **View the live project on GitHub:** [sakudiff/FINLYTS-Group-2](https://github.com/sakudiff/FINLYTS-Group-2/blob/main/README.md)
+> **View the live project on GitHub:** [sakudiff/FINLYTS-Group-2](https://github.com/sakudiff/FINLYTS-Group-2/blob/main/README.md)  
+> *Note: You must be signed into a GitHub account with authorized access to view this private repository.*
 
 ## Fama-French 5-Factor Model Evaluation
 
