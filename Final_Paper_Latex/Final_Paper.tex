@@ -1,13 +1,13 @@
 \documentclass[12pt]{article}
 
+% Packages needed to make the formatting possible
 \usepackage{geometry}
 \geometry{margin=1in}
 \usepackage{tikz}
 \usetikzlibrary{calc}
 \usepackage{xcolor}
-\usepackage{graphicx}
 \graphicspath{{../}}
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
 \usepackage[style=apa, backend=biber]{biblatex}
 \addbibresource{references.bib}
 
@@ -66,6 +66,11 @@
 \newpage
 \tableofcontents
 \newpage
+
+
+    % DO NOT TOUCH ANYTHING ABOVE THIS LINE
+
+
 
 \section{Introduction}
 This document provides a rigorous evaluation of the \textbf{Fama-French 5-Factor Model} using R. The model extends the Capital Asset Pricing Model (CAPM) by incorporating Size, Value, Profitability, and Investment factors alongside standard market risk \parencite{fama1993common, fama2015five}. The core objective is to determine the efficacy of these five factors in explaining the excess returns of a portfolio comprising eight selected assets.

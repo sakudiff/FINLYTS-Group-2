@@ -73,13 +73,13 @@ This project involves a rigorous evaluation of the **Fama-French 5-Factor Model*
 
 | Task Title | Role Assigned | Research Section | Description |
 | :--- | :--- | :--- | :--- |
-| **Factor Theory & Research** | Researcher | **I** | Summary of 5-factor model, theoretical significance, and impact on risk/portfolio management. |
-| **Asset Selection & Tilt** | Data Specialist | **II** | Select 8 assets with explicit tilts toward SMB, HML, RMW, CMA. Provide justification for each. |
-| **Descriptive Statistics** | Data Specialist | **II** | Calculate mean, median, SD, min, max, skewness, and kurtosis for all 8 assets. |
-| **R Model Implementation** | Programmer | **II** | Factor ingestion, data alignment, and multivariate regression execution. |
-| **Results, Discussion & Analysis** | Programmer & Researcher | **III** | Generate ggplot2 charts (rolling beta, bar charts) and interpret coefficients. |
-| **Synthesis & Conclusion** | Researcher | **IV** | Relate empirical findings to theory and practical investment implications. |
-| **Final Assembly & QC** | Compiler | **Deliverables** | RMD compilation, BibTeX audit, and formatting for submission. |
+| **Factor Theory & Research** | Theory & Writing | **I** | Summary of 5-factor model, theoretical significance, and impact on risk/portfolio management. |
+| **Asset Selection & Tilt** | Data & Stats | **II** | Select 8 assets with explicit tilts toward SMB, HML, RMW, CMA. Provide justification for each. |
+| **Descriptive Statistics** | Data & Stats | **II** | Calculate mean, median, SD, min, max, skewness, and kurtosis for all 8 assets. |
+| **R Model Implementation** | R Analysis | **II** | Factor ingestion, data alignment, and multivariate regression execution. |
+| **Results, Discussion & Analysis** | R Analysis & Theory | **III** | Generate ggplot2 charts (rolling beta, bar charts) and interpret coefficients. |
+| **Synthesis & Conclusion** | Theory & Writing | **IV** | Relate empirical findings to theory and practical investment implications. |
+| **Final Assembly & QC** | Final Review | **Deliverables** | RMD compilation, BibTeX audit, and formatting for submission. |
 
 ---
 
