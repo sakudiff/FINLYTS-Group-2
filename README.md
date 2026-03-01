@@ -8,13 +8,6 @@
 
 ### Group 2
 
-| Name | Email |
-| :--- | :--- |
-| ABRIL, JEHAN | [jehan_abril@dlsu.edu.ph](mailto:jehan_abril@dlsu.edu.ph) |
-| GO, KEIRA LEY ARCALA | [keira_go@dlsu.edu.ph](mailto:keira_go@dlsu.edu.ph) |
-| SISON, AARON JOSHUA ESTACIO | [aaron_sison@dlsu.edu.ph](mailto:aaron_sison@dlsu.edu.ph) |
-| VALENCIA, CARLOS MARTIN BELANGEL | [carlos_valencia@dlsu.edu.ph](mailto:carlos_valencia@dlsu.edu.ph) |
-
 ---
 
 ## Quick Navigation
