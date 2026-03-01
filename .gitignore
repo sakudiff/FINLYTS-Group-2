@@ -22,3 +22,12 @@ __pycache__/
 venv/
 env/
 .env
+
+# LaTeX
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc

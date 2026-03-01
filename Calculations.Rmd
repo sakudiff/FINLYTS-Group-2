@@ -1,0 +1,67 @@
+---
+title: "Fama-French 5-Factor Model: Calculations & Visualizations"
+author: "Group 2"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+required_packages <- c("tidyverse", "tidyquant", "quantmod", "broom", "PerformanceAnalytics", "tinytex")
+new_packages <- required_packages[!(required_packages %in% installed.packages()[,"Package"])]
+
+if(length(new_packages)) {
+  install.packages(new_packages, repos = "http://cran.us.r-project.org")
+}
+
+library(tidyverse)
+library(tidyquant)
+library(quantmod)
+library(broom)
+library(PerformanceAnalytics)
+```
+
+# Data Ingestion
+This section handles the loading of asset data and the Kenneth French factors.
+
+```{r data-ingestion}
+# Code to load data from the /data directory
+```
+
+# Preprocessing
+Merging returns and factor premiums.
+
+```{r preprocessing}
+# Data cleaning and merging logic
+```
+
+# Descriptive Statistics
+Analyzing the 8 selected assets.
+
+```{r descriptive-stats}
+# Mean, SD, Skewness, Kurtosis calculations
+```
+
+# Regression Modeling
+Fitting the 5-factor model for each asset.
+
+```{r model-fitting}
+# Multivariate regression execution
+```
+
+# Visualizations
+Generating high-fidelity plots for the Final Paper.
+
+```{r visualizations}
+# ggplot2 visualizations (Rolling beta, Coefficient bars, etc.)
+# Export plots to image/paper/ for LaTeX integration
+```
+
+# Model Diagnostics
+Checking for significance and residuals.
+
+```{r diagnostics}
+# Statistical significance and R-squared analysis
+```
