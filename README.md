@@ -34,13 +34,21 @@ This project involves a rigorous evaluation of the **Fama-French 5-Factor Model*
 ## Directory Map
 ```text
 /
-├── data/           # Kenneth French CSVs & Asset Data Sets
-├── scripts/        # Raw .R scripts (Preprocessing/Analysis)
-├── output/         # Final PDF/HTML Deliverables (Everything we will submit)
-├── README.md       # Project Documentation (Guide about the project for groupmates)
-├── .gitignore      # File to tell Git which files to ignore (don't upload)
-└── project.Rmd     # Main Reproducible RMarkdown (RMD)
+├── data/               # Kenneth French CSVs & Asset Data Sets
+├── image/              # Figures and assets for README and Paper
+│   ├── paper/          # Logos and specific images for the LaTeX paper
+│   └── README/         # Images used in this README
+├── Final_Paper_Latex/  # Final LaTeX source files
+│   └── Final_Paper.tex # Main document for PDF generation
+├── Calculations.Rmd    # Main RMarkdown for analysis & visualizations
+├── Readme.md           # Project Documentation
+└── .gitignore          # Git ignore rules
 ```
+
+## Workflow & Deliverables
+*   **Calculations & Visuals:** All data processing, factor modeling, and plot generation are handled in `Calculations.Rmd`.
+*   **Final Paper:** The formal academic report is maintained in `Final_Paper_Latex/Final_Paper.tex`. Results and plots from the R analysis are exported and integrated here for the final PDF submission.
+
 
 > [!TIP]
 > **What is a `.gitignore`?**  
@@ -121,7 +129,7 @@ Before you can see or download the files, you need permission.
 2.  **Check your Email:** You will receive an invitation from GitHub.
 3.  **Click "Accept Invitation":** You must do this, or the next steps will fail.
 
-> Example of a invite: ![1772364545697](image/README/1772364545697.png)
+> Example of a invite: ![1772365170360](image/README/1772365170360.png)
 
 
 ## 2. Initial Setup (The "Automated" Way)
@@ -137,7 +145,7 @@ Open **RStudio** and look for the **Terminal** tab (usually next to the Console)
 ```bash
 gh auth login
 ```
-![1772364084193](image/README/1772364084193.png)
+![1772365121967](image/README/1772365121967.png)
 
 *   **What should be your preferred protocol?** Select `HTTPS`.
 *   **Authenticate Git with your GitHub credentials?** Select `Yes`.
@@ -189,7 +197,7 @@ git push origin draft
 
 > **Note:** If you check the website on the `main` view, your changes **won't show up**. You have to switch the branch toggle on GitHub from `main` to `draft` to see your work. We keep them separate so we don't accidentally ruin the final submission.
 
-![1772363877341](image/README/1772363877341.png)
+![1772365140954](image/README/1772365140954.png)
 
 ## 7. Rendering to PDF
 To turn your `.qmd` or `.rmd` files into professional PDFs, run this in your **R Console**:
@@ -200,3 +208,4 @@ tinytex::install_tinytex()
 Once done, just click the **Render** button at the top of your RStudio editor.
 
 ---
+
