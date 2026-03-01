@@ -11,6 +11,17 @@
 | SISON, AARON JOSHUA ESTACIO | [aaron_sison@dlsu.edu.ph](mailto:aaron_sison@dlsu.edu.ph) |
 | VALENCIA, CARLOS MARTIN BELANGEL | [carlos_valencia@dlsu.edu.ph](mailto:carlos_valencia@dlsu.edu.ph) |
 
+---
+
+## Quick Navigation
+*   [**Project Overview**](#project-overview) - High-level goals and data sources.
+*   [**Directory Map**](#directory-map) - Where to find specific files.
+*   [**Research Outline**](#research-outline) - The 4-part academic structure.
+*   [**GitHub & R Guide**](#github--r-guide) - Setup and workflow instructions (Start here for collaborators).
+*   [**LaTeX Guide**](#8-working-with-latex-tex) - Instructions for editing the final paper.
+
+---
+
 ## Project Overview
 This project involves a rigorous evaluation of the **Fama-French 5-Factor Model** using R. The model extends the Capital Asset Pricing Model (CAPM) by incorporating Size, Value, Profitability, and Investment factors alongside standard market risk. The core objective is to determine the efficacy of these five factors in explaining the excess returns of a portfolio comprising eight selected assets.
 
@@ -32,18 +43,15 @@ This project involves a rigorous evaluation of the **Fama-French 5-Factor Model*
 | **Code Audit** | Full R code integrated into the narrative or technical appendix. |
 
 ## Directory Map
-```text
-/
-├── data/               # Kenneth French CSVs & Asset Data Sets
-├── image/              # Figures and assets for README and Paper
-│   ├── paper/          # Logos and specific images for the LaTeX paper
-│   └── README/         # Images used in this README
-├── Final_Paper_Latex/  # Final LaTeX source files
-│   └── Final_Paper.tex # Main document for PDF generation
-├── Calculations.Rmd    # Main RMarkdown for analysis & visualizations
-├── Readme.md           # Project Documentation
-└── .gitignore          # Git ignore rules
-```
+
+| Title & Link | Description | Purpose |
+| :--- | :--- | :--- |
+| [**data/**](data/) | Raw CSV files from Kenneth French & Yahoo Finance. | Source data for all quantitative models. |
+| [**image/**](image/) | Plots, logos, and screenshots. | Visual assets for the README and the final paper. |
+| [**Final_Paper_Latex/**](Final_Paper_Latex/) ![1772373428466](image/README/1772373428466.png) | LaTeX source files and `.bib` references. | The production environment for the formal academic report. |
+| [**Calculations.Rmd**](Calculations.Rmd) ![1772373395801](image/README/1772373395801.png)| The primary RMarkdown execution script. | Handles data cleaning, regression analysis, and plot generation. |
+| [**README.md**](README.md) | This documentation file. | Project roadmap, setup guide, and team coordination. |
+| [**.gitignore**](.gitignore) | Version control exclusion list. | Prevents system junk and local R history from cluttering the repo. |
 
 ## Workflow & Deliverables
 *   **Calculations & Visuals:** All data processing, factor modeling, and plot generation are handled in `Calculations.Rmd`.
