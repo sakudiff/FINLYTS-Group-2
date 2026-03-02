@@ -201,9 +201,9 @@ git checkout draft
 ```
 
 ### Step 2: Get Latest Changes (Sync)
-It's like hitting "Refresh" on a Google Doc to see what others wrote:
+It's like hitting "Refresh" on a Google Doc to see what others wrote. We use `--rebase` to keep our history clean:
 ```bash
-git pull origin draft
+git pull --rebase origin draft
 ```
 
 ### Step 3: Make your edits
@@ -226,25 +226,63 @@ git push origin draft
 | Command | Action | Google Docs Analogy | Why it's Essential |
 | :--- | :--- | :--- | :--- |
 | `git checkout draft` | **Switch Branch** | Switching from "Final" to "Draft" tab. | Keeps the main submission safe while we experiment. |
-| `git pull origin draft` | **Sync Down** | Refreshing the browser to see team edits. | Prevents overwriting someone else's work (Merge Conflicts). |
+| `git pull --rebase origin draft` | **Sync Down** | Refreshing the browser to see team edits. | Keeps history linear and avoids "Merge Junk." |
+| `git rebase --abort` | **Emergency Stop** | Hitting "Undo" on a failed refresh. | Rescues you if a rebase gets messy or confusing. |
 | `git status` | **Check State** | Checking which files have "Unsaved Changes." | Confirms what you've actually changed before you save. |
 | `git add .` | **Stage Changes** | Highlighting the text you want to keep. | Prepares your work for the official save/checkpoint. |
 | `git commit -m "msg"` | **Save Locally** | Clicking "File > Save Version" with a name. | Creates a history point you can return to if things break. |
 | `git push origin draft` | **Sync Up** | Clicking "Share" to update the cloud. | Makes your work visible and accessible to the team. |
-| `git log --oneline` | **View History** | Browsing the "Version History" list. | Lets you track the timeline of project progress. |
 
-### 6.2 Workflow Safety Tips
-*   **Pull Before You Start:** Always run `git pull origin draft` before editing anything. This ensures you're working on the latest version.
+### 6.2 Why we use `git pull --rebase`?
+Standard `git pull` often creates "Merge Commits"—messy nodes in our history that look like a tangled web. By using `--rebase`, we ensure a **Linear History**.
+
+*   **How it works:** Git temporarily sets aside your local work, downloads the team's latest changes, and then "re-applies" your work on top of theirs.
+*   **The Result:** A single, straight line of progress that is much easier to read and troubleshoot.
+*   **The Escape Hatch:** If things go wrong during a rebase, just type `git rebase --abort` to return to exactly where you were before you tried to pull.
+
+### 6.3 Workflow Safety Tips
+*   **Pull Before You Start:** Always run `git pull --rebase origin draft` before editing anything. This ensures you're working on the latest version.
 *   **Small, Frequent Saves:** Don't wait until you've finished a 10-page report. Commit after every major change.
 *   **Descriptive Notes:** Your commit messages (the stuff in `"..."`) should explain **what** you did (e.g., `git commit -m "Fixed Table 1 formatting"`).
 *   **When in Doubt, `git status`:** If you're unsure if your work saved, run `git status`. It tells you exactly what Git sees.
 
-### 6.3 Handling "Conflicts" (The "Collision")
-If you and a teammate edit the same sentence at the same time, Git will show a **"Merge Conflict"** error.
-*   **What it looks like:** Git marks the file with arrows: `<<<<<<< HEAD` (your version) and `=======` and `>>>>>>>` (their version).
-*   **The Fix:** Simply delete the arrows and the version you *don't* want. Keep the text you *do* want.
-*   **Save:** After fixing, just `git add .`, `git commit -m "Resolved conflict"`, and `git push origin draft`.
-*   **Safety Net:** If this happens and you're unsure, just message the team lead—don't try to force it!
+> [!TIP]
+> **Advanced Efficiency:** You can create a shortcut (Alias) so you don't have to type the long rebase command. Run this in your terminal to set `git pr` as your default pull:  
+> `git config --global alias.pr "pull --rebase origin draft"`
+
+### 6.4 Mastering Merge Conflicts (The "Collision")
+If you and a teammate edit the same sentence at the same time, Git will show a **"Merge Conflict"** error. This is common and nothing to fear!
+
+#### 1. Immediate Conflict Management
+If you aren't ready to resolve it yet, return to a safe state immediately:
+*   **Command:** `git merge --abort` (or `git rebase --abort`)
+*   **Effect:** This resets your repo to exactly how it was before the pull attempt.
+
+#### 2. Understanding Conflict Markers
+Git communicates conflicts by injecting literal text into your file. It looks like this:
+```text
+<<<<<<< HEAD
+(Your version of the text)
+=======
+(Their version of the text from GitHub)
+>>>>>>> [branch_name]
+```
+*   `<<<<<<< HEAD`: Starts your local changes.
+*   `=======`: The separator between your work and theirs.
+*   `>>>>>>>`: Ends their incoming changes.
+
+#### 3. Resolution Workflow Checklist
+To fix the conflict permanently, follow these steps:
+
+| Step | Action | Command |
+| :--- | :--- | :--- |
+| **1** | **Identify Files** | `git status` to see which files are "Unmerged." |
+| **2** | **Find Markers** | Open the file and search for `=======` in your editor. |
+| **3** | **Manual Synthesis** | Delete the markers and the version you don't want. Combine both if needed! |
+| **4** | **Stage & Finalize** | Save the file, then `git add <filename>` and `git commit`. |
+
+> [!TIP]
+> **Don't Struggle in Isolation:** Automated "Accept Current" buttons in IDEs often discard good work. If the conflict is complex, message the team lead or the person who wrote the conflicting code. Manual editing is the safest way!
 
 ## 7. Rendering to PDF
 To turn your `.qmd` or `.rmd` files into professional PDFs, run this in your **R Console**:
