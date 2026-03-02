@@ -128,6 +128,13 @@ This project involves a rigorous evaluation of the **Fama-French 5-Factor Model*
 
 If you have never used GitHub or the Command Line, follow this exactly. Do not skip steps.
 
+## 0. Why GitHub? (The "Why")
+GitHub is our **Centralized Office**. It is where our project "lives" and evolves. We use it for:
+*   **Safety:** If your computer breaks, the project is safe in the cloud.
+*   **Version History:** If you make a mistake, we can "Rewind" time to any previous save.
+*   **Collaboration:** Multiple team members can work on different sections simultaneously without overwriting each other.
+*   **Transparency:** It tracks who contributed what, making it easy to see project progress.
+
 ## 1. Get Access (Crucial!)
 Before you can see or download the files, you need permission.
 1.  **Send your GitHub Username** to the Project Owner (Aaron).
@@ -163,6 +170,16 @@ Think of this project like a Google Doc:
 *   **The `main` Branch:** This is the **Final Printed Version**. We don't touch this until the very end. 
 *   **The `draft` Branch:** This is like a **Working Tab** in a spreadsheet or a "Version 1" copy. We do ALL our work here.
 *   **Cloning:** This is like clicking "Make a Copy" so you have it on your own computer.
+
+### 4.1 Why Two Branches?
+1.  **Safety:** If we make a mistake on the `draft` branch, it doesn't break the "Final Printed Version" (`main`).
+2.  **Review:** Before merging to `main`, the project lead can review all changes to ensure they meet the submission criteria.
+3.  **No Messy History:** The `main` branch will only contain clean, finalized versions.
+
+> [!WARNING]
+> **Visibility on GitHub:** When you view our repository on GitHub.com, it defaults to the `main` branch. **You will NOT see your changes there.**
+> 
+> To see your work on the website, you MUST click the branch dropdown (top-left) and select `draft`. This is the most common source of "Where is my work?!" panic—don't forget to toggle!
 
 ## 5. Cloning the Repo (Getting the Files)
 1.  In the RStudio Terminal, navigate to where you keep your code (e.g., `Documents`):
@@ -203,6 +220,31 @@ git push origin draft
 > **Note:** If you check the website on the `main` view, your changes **won't show up**. You have to switch the branch toggle on GitHub from `main` to `draft` to see your work. We keep them separate so we don't accidentally ruin the final submission.
 
 ![1772365140954](image/README/1772365140954.png)
+
+### 6.1 Essential Command Cheat Sheet
+
+| Command | Action | Google Docs Analogy | Why it's Essential |
+| :--- | :--- | :--- | :--- |
+| `git checkout draft` | **Switch Branch** | Switching from "Final" to "Draft" tab. | Keeps the main submission safe while we experiment. |
+| `git pull origin draft` | **Sync Down** | Refreshing the browser to see team edits. | Prevents overwriting someone else's work (Merge Conflicts). |
+| `git status` | **Check State** | Checking which files have "Unsaved Changes." | Confirms what you've actually changed before you save. |
+| `git add .` | **Stage Changes** | Highlighting the text you want to keep. | Prepares your work for the official save/checkpoint. |
+| `git commit -m "msg"` | **Save Locally** | Clicking "File > Save Version" with a name. | Creates a history point you can return to if things break. |
+| `git push origin draft` | **Sync Up** | Clicking "Share" to update the cloud. | Makes your work visible and accessible to the team. |
+| `git log --oneline` | **View History** | Browsing the "Version History" list. | Lets you track the timeline of project progress. |
+
+### 6.2 Workflow Safety Tips
+*   **Pull Before You Start:** Always run `git pull origin draft` before editing anything. This ensures you're working on the latest version.
+*   **Small, Frequent Saves:** Don't wait until you've finished a 10-page report. Commit after every major change.
+*   **Descriptive Notes:** Your commit messages (the stuff in `"..."`) should explain **what** you did (e.g., `git commit -m "Fixed Table 1 formatting"`).
+*   **When in Doubt, `git status`:** If you're unsure if your work saved, run `git status`. It tells you exactly what Git sees.
+
+### 6.3 Handling "Conflicts" (The "Collision")
+If you and a teammate edit the same sentence at the same time, Git will show a **"Merge Conflict"** error.
+*   **What it looks like:** Git marks the file with arrows: `<<<<<<< HEAD` (your version) and `=======` and `>>>>>>>` (their version).
+*   **The Fix:** Simply delete the arrows and the version you *don't* want. Keep the text you *do* want.
+*   **Save:** After fixing, just `git add .`, `git commit -m "Resolved conflict"`, and `git push origin draft`.
+*   **Safety Net:** If this happens and you're unsure, just message the team lead—don't try to force it!
 
 ## 7. Rendering to PDF
 To turn your `.qmd` or `.rmd` files into professional PDFs, run this in your **R Console**:
