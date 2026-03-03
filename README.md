@@ -68,7 +68,7 @@ This project involves a rigorous evaluation of the **Fama-French 5-Factor Model*
 
 ## Technical Stack
 - **Language:** R
-- **Environment:** RStudio / RMarkdown
+- **Environment:** RStudio / RMarkdown / LaTeX
 - **Key Libraries:** `tidyquant`, `quantmod`, `tidyverse`, `broom`, `PerformanceAnalytics`.
 - **Reference Management:** BibTeX (APA7 Style).
 
