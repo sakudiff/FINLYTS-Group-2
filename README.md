@@ -68,7 +68,7 @@ This project involves a rigorous evaluation of the **Fama-French 5-Factor Model*
 
 ## Technical Stack
 - **Language:** R
-- **Environment:** RStudio / RMarkdown
+- **Environment:** RStudio / RMarkdown / LaTeX
 - **Key Libraries:** `tidyquant`, `quantmod`, `tidyverse`, `broom`, `PerformanceAnalytics`.
 - **Reference Management:** BibTeX (APA7 Style).
 
@@ -128,6 +128,13 @@ This project involves a rigorous evaluation of the **Fama-French 5-Factor Model*
 
 If you have never used GitHub or the Command Line, follow this exactly. Do not skip steps.
 
+## 0. Why GitHub? (The "Why")
+GitHub is our **Centralized Office**. It is where our project "lives" and evolves. We use it for:
+*   **Safety:** If your computer breaks, the project is safe in the cloud.
+*   **Version History:** If you make a mistake, we can "Rewind" time to any previous save.
+*   **Collaboration:** Multiple team members can work on different sections simultaneously without overwriting each other.
+*   **Transparency:** It tracks who contributed what, making it easy to see project progress.
+
 ## 1. Get Access (Crucial!)
 Before you can see or download the files, you need permission.
 1.  **Send your GitHub Username** to the Project Owner (Aaron).
@@ -164,6 +171,16 @@ Think of this project like a Google Doc:
 *   **The `draft` Branch:** This is like a **Working Tab** in a spreadsheet or a "Version 1" copy. We do ALL our work here.
 *   **Cloning:** This is like clicking "Make a Copy" so you have it on your own computer.
 
+### 4.1 Why Two Branches?
+1.  **Safety:** If we make a mistake on the `draft` branch, it doesn't break the "Final Printed Version" (`main`).
+2.  **Review:** Before merging to `main`, the project lead can review all changes to ensure they meet the submission criteria.
+3.  **No Messy History:** The `main` branch will only contain clean, finalized versions.
+
+> [!WARNING]
+> **Visibility on GitHub:** When you view our repository on GitHub.com, it defaults to the `main` branch. **You will NOT see your changes there.**
+> 
+> To see your work on the website, you MUST click the branch dropdown (top-left) and select `draft`. This is the most common source of "Where is my work?!" panic—don't forget to toggle!
+
 ## 5. Cloning the Repo (Getting the Files)
 1.  In the RStudio Terminal, navigate to where you keep your code (e.g., `Documents`):
     ```bash
@@ -184,9 +201,9 @@ git checkout draft
 ```
 
 ### Step 2: Get Latest Changes (Sync)
-It's like hitting "Refresh" on a Google Doc to see what others wrote:
+It's like hitting "Refresh" on a Google Doc to see what others wrote. We use `--rebase` to keep our history clean:
 ```bash
-git pull origin draft
+git pull --rebase origin draft
 ```
 
 ### Step 3: Make your edits
@@ -203,6 +220,69 @@ git push origin draft
 > **Note:** If you check the website on the `main` view, your changes **won't show up**. You have to switch the branch toggle on GitHub from `main` to `draft` to see your work. We keep them separate so we don't accidentally ruin the final submission.
 
 ![1772365140954](image/README/1772365140954.png)
+
+### 6.1 Essential Command Cheat Sheet
+
+| Command | Action | Google Docs Analogy | Why it's Essential |
+| :--- | :--- | :--- | :--- |
+| `git checkout draft` | **Switch Branch** | Switching from "Final" to "Draft" tab. | Keeps the main submission safe while we experiment. |
+| `git pull --rebase origin draft` | **Sync Down** | Refreshing the browser to see team edits. | Keeps history linear and avoids "Merge Junk." |
+| `git rebase --abort` | **Emergency Stop** | Hitting "Undo" on a failed refresh. | Rescues you if a rebase gets messy or confusing. |
+| `git status` | **Check State** | Checking which files have "Unsaved Changes." | Confirms what you've actually changed before you save. |
+| `git add .` | **Stage Changes** | Highlighting the text you want to keep. | Prepares your work for the official save/checkpoint. |
+| `git commit -m "msg"` | **Save Locally** | Clicking "File > Save Version" with a name. | Creates a history point you can return to if things break. |
+| `git push origin draft` | **Sync Up** | Clicking "Share" to update the cloud. | Makes your work visible and accessible to the team. |
+
+### 6.2 Why we use `git pull --rebase`?
+Standard `git pull` often creates "Merge Commits"—messy nodes in our history that look like a tangled web. By using `--rebase`, we ensure a **Linear History**.
+
+*   **How it works:** Git temporarily sets aside your local work, downloads the team's latest changes, and then "re-applies" your work on top of theirs.
+*   **The Result:** A single, straight line of progress that is much easier to read and troubleshoot.
+*   **The Escape Hatch:** If things go wrong during a rebase, just type `git rebase --abort` to return to exactly where you were before you tried to pull.
+
+### 6.3 Workflow Safety Tips
+*   **Pull Before You Start:** Always run `git pull --rebase origin draft` before editing anything. This ensures you're working on the latest version.
+*   **Small, Frequent Saves:** Don't wait until you've finished a 10-page report. Commit after every major change.
+*   **Descriptive Notes:** Your commit messages (the stuff in `"..."`) should explain **what** you did (e.g., `git commit -m "Fixed Table 1 formatting"`).
+*   **When in Doubt, `git status`:** If you're unsure if your work saved, run `git status`. It tells you exactly what Git sees.
+
+> [!TIP]
+> **Advanced Efficiency:** You can create a shortcut (Alias) so you don't have to type the long rebase command. Run this in your terminal to set `git pr` as your default pull:  
+> `git config --global alias.pr "pull --rebase origin draft"`
+
+### 6.4 Mastering Merge Conflicts (The "Collision")
+If you and a teammate edit the same sentence at the same time, Git will show a **"Merge Conflict"** error. This is common and nothing to fear!
+
+#### 1. Immediate Conflict Management
+If you aren't ready to resolve it yet, return to a safe state immediately:
+*   **Command:** `git merge --abort` (or `git rebase --abort`)
+*   **Effect:** This resets your repo to exactly how it was before the pull attempt.
+
+#### 2. Understanding Conflict Markers
+Git communicates conflicts by injecting literal text into your file. It looks like this:
+```text
+<<<<<<< HEAD
+(Your version of the text)
+=======
+(Their version of the text from GitHub)
+>>>>>>> [branch_name]
+```
+*   `<<<<<<< HEAD`: Starts your local changes.
+*   `=======`: The separator between your work and theirs.
+*   `>>>>>>>`: Ends their incoming changes.
+
+#### 3. Resolution Workflow Checklist
+To fix the conflict permanently, follow these steps:
+
+| Step | Action | Command |
+| :--- | :--- | :--- |
+| **1** | **Identify Files** | `git status` to see which files are "Unmerged." |
+| **2** | **Find Markers** | Open the file and search for `=======` in your editor. |
+| **3** | **Manual Synthesis** | Delete the markers and the version you don't want. Combine both if needed! |
+| **4** | **Stage & Finalize** | Save the file, then `git add <filename>` and `git commit`. |
+
+> [!TIP]
+> **Don't Struggle in Isolation:** Automated "Accept Current" buttons in IDEs often discard good work. If the conflict is complex, message the team lead or the person who wrote the conflicting code. Manual editing is the safest way!
 
 ## 7. Rendering to PDF
 To turn your `.qmd` or `.rmd` files into professional PDFs, run this in your **R Console**:
