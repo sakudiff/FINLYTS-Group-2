@@ -115,7 +115,31 @@ R_{it} - R_{ft} = \alpha_i + \beta_{i1}(R_{Mt} - R_{ft}) + \beta_{i2}SMB_t + \be
 This model allows us to decompose the source of returns for our portfolio, identifying whether performance is driven by market risk, size, value, profitability, or investment intensity.
 
 \subsection{Asset Selection}
-The portfolio analyzed in this study consists of eight diverse assets chosen for their hypothesized exposures to various risk factors: VUSA.L, WSML.L, VEVE.L, IWQU.L, VIG, IITU.L, SGLN.L, and VWRA.L. These assets represent various tilts toward Market, SMB, HML, RMW, and CMA factors, providing a comprehensive dataset for evaluating the model's explanatory power across different asset classes and investment styles.
+The portfolio analyzed in this study consists of eight diverse assets chosen for their hypothesized exposures to various risk factors: VUSA.L, WSML.L, VEVE.L, IWQU.L, VIG, IITU.L, SGLN.L, and VWRA.L. These assets represent various tilts toward Market, SMB, HML, RMW, and CMA factors, providing a comprehensive dataset for evaluating the model's explanatory power across different asset classes and investment styles. Table \ref{tab:asset_selection} details the specific academic and technical justification for each selection.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Asset Selection and Factor Exposure}
+    \label{tab:asset_selection}
+    \begin{tabular}{|l|l|}
+        \hline
+        \textbf{Asset Ticker} & \textbf{Factor Exposure} \\ \hline
+        VUSA.L & Market (Beta) \\ \hline
+        WSML.L & Size (SMB) \\ \hline
+        VEVE.L & Market / Developed \\ \hline
+        IWQU.L & Profitability (RMW) \\ \hline
+        VIG    & Investment (CMA) \\ \hline
+        IITU.L & Growth (Low HML) \\ \hline
+        SGLN.L & Diversification \\ \hline
+        VWRA.L & Total Market \\ \hline
+    \end{tabular}
+\end{table}
+
+To capture the specific risk premiums identified by the Fama-French framework, the portfolio includes a selection of eight exchange-traded funds (ETFs) with distinct factor tilts. The baseline for market exposure is established through \textbf{VUSA.L} (Vanguard S\&P 500 UCITS), which serves as the primary proxy for broad U.S. equity market beta ($R_i - R_f$). This is complemented by \textbf{VWRA.L} (Vanguard FTSE All-World), representing the global market portfolio and ensuring the model accounts for aggregate risk across both developed and emerging regions. To further refine geographical exposure, \textbf{VEVE.L} (Vanguard FTSE Developed World) is utilized to test the model's validity across the broader developed-market universe beyond the United States.
+
+Factor-specific tilts are achieved through targeted allocations. The size premium is captured via \textbf{WSML.L} (iShares MSCI World Small Cap), which holds a diversified set of global small-capitalization firms hypothesized to outperform large-cap counterparts over time. The profitability (RMW) factor is represented by \textbf{IWQU.L} (iShares Edge MSCI World Quality), which filters for companies with high operating profitability and stable earnings. Conversely, the investment (CMA) factor is addressed through \textbf{VIG} (Vanguard Dividend Appreciation); firms with consistent dividend increases typically follow conservative reinvestment policies, prioritizing shareholder returns over aggressive expansion.
+
+To provide a counter-balance to value-oriented factors, \textbf{IITU.L} (iShares S\&P 500 Info Tech) introduces a significant growth tilt, characterized by lower book-to-market ratios. Finally, \textbf{SGLN.L} (iShares Physical Gold) is included as a non-equity stabilizer. While gold does not carry direct exposure to standard Fama-French equity premiums, its inclusion serves a critical diagnostic purpose: it allows for an evaluation of the model's intercept behavior (Alpha) when applied to assets with zero hypothesized factor loadings.
 
 \subsection{Descriptive Statistics}
 Historical return data for the selected assets is analyzed using mean, median, standard deviation, skewness, and kurtosis to understand the distribution and risk profile of the portfolio.
