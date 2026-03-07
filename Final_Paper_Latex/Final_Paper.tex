@@ -3,6 +3,8 @@
 % Packages needed to make the formatting possible
 \usepackage{geometry}
 \geometry{margin=1in}
+\usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{tikz}
 \usetikzlibrary{calc}
 \usepackage{xcolor}
@@ -73,14 +75,15 @@
 
 
 \section{Introduction}
-This document provides a rigorous evaluation of the \textbf{Fama-French 5-Factor Model} using R. The model extends the Capital Asset Pricing Model (CAPM) by incorporating Size, Value, Profitability, and Investment factors alongside standard market risk \parencite{fama1993common, fama2015five}. The core objective is to determine the efficacy of these five factors in explaining the excess returns of a portfolio comprising eight selected assets.
+This document provides a rigorous evaluation of the \textbf{Fama-French 5-Factor Model} using R. The model extends the Capital Asset Pricing Model (CAPM) by incorporating Size, Value, Profitability, and Investment factors alongside standard market risk \parencite{fama1993common, fama2015five}. The core objective is to determine the efficacy of these five factors in explaining the excess returns of a portfolio comprising seven selected assets.
 The shift from the single-factor CAPM was driven by its poor empirical record, which, as noted by \textcite{fama2004capital}, is often considered insufficient for practical applications. While the CAPM posits that risk is measured solely relative to a comprehensive market portfolio, empirical tests frequently show that the relation between average return and beta is flatter than predicted. This gap between theory and evidence necessitated a multidimensional approach to capture the risk factors that a single market beta could not account for.
 \subsection{Transition from CAPM to Fama-French 5-Factor Model}
-The Fama-French Model, developed by Eugene F. Fama and Kenneth R. French in September 1992 in their paper titled 'The Cross-Section of Expected Stock Return’, was originally composed of three (3) factors and serves as an augmentation to the Capital Asset Pricing Model (CAPM). The primary purpose of the introduction of this model was to demonstrate that market risk alone cannot fully explain stock returns. Thus, the transition from a single-factor (beta) linear model (CAPM) to a multi-factor linear model led to the creation of a model that could provide a multidimensional assessment for expected returns. Here, the CAPM model was expanded to include firm-specific variables that are historically known to have an effect on returns. \\
+The Fama-French Model, developed by \textcite{fama1992cross} in their paper titled ‘The Cross-Section of Expected Stock Returns’, was originally composed of three (3) factors and serves as an augmentation to the Capital Asset Pricing Model (CAPM). The primary purpose of the introduction of this model was to demonstrate that market risk alone cannot fully explain stock returns. Thus, the transition from a single-factor (beta) linear model (CAPM) to a multi-factor linear model led to the creation of a model that could provide a multidimensional assessment for expected returns. Here, the CAPM model was expanded to include firm-specific variables that are historically known to have an effect on returns. \\
 
-The initial Fama-French Model was composed of the following systematic risk factors. First, Market Risk (Rf), taken from the original CAPM model, represents the excess returns of the overall market over the overall risk-free rate. Next, SMB (small minus big) represents the idea that small-cap stocks tend to outperform large-cap stocks over time. Lastly, there is HML (high minus low) or the value factor; stocks with higher BM ratios tend to outperform stocks with low BM ratios. The three-factor model was originally developed to encapsulate the relationship between average return and price ratios (such as book-to-market ratio) (Fama and French, 2015). \\
+The initial Fama-French Model was composed of the following systematic risk factors. First, Market Risk (Rf), taken from the original CAPM model, represents the excess returns of the overall market over the overall risk-free rate. Next, SMB (small minus big) represents the idea that small-cap stocks tend to outperform large-cap stocks over time. Lastly, there is HML (high minus low) or the value factor; stocks with higher BM ratios tend to outperform stocks with low BM ratios. The three-factor model was originally developed to encapsulate the relationship between average return and price ratios (such as book-to-market ratio) \parencite{fama1993common}. \\
 
-Moving forward, the Fama-French 3-Factor Model was further augmented by Fama and French in 2015 in their working paper titled ‘A five-factor asset pricing model’. This model is composed of the three factors mentioned above with the further additions of RMW (robust minus weak) and CMA (conservative minus aggressive). The factor of RMW represents the difference between the returns of stocks with robust and weak profitability. Meanwhile, CMA represents the difference between the returns on diversified portfolios of stocks of low and high investment firms, which are referred to as conservative and aggressive (Fama and French, 2015). These labels refer to a company’s investment policy, whether it can be considered conservative or aggressive (Mosoeu and Kodongo, 2022). This new model with these two newly added variables is what is now referred to as the Fama-French 5-Factor Model. \\
+Moving forward, the Fama-French 3-Factor Model was further augmented by Fama and French in 2015 in their working paper titled ‘A five-factor asset pricing model’. This model is composed of the three factors mentioned above with the further additions of RMW (robust minus weak) and CMA (conservative minus aggressive). The factor of RMW represents the difference between the returns of stocks with robust and weak profitability. Meanwhile, CMA represents the difference between the returns on diversified portfolios of stocks of low and high investment firms, which are referred to as conservative and aggressive \parencite{fama2015five}. These labels refer to a company’s investment policy, whether it can be considered conservative or aggressive \parencite{MOSOEU202255}. This new model with these two newly added variables is what is now referred to as the Fama-French 5-Factor Model. \\
+
 
 \subsection{Theoretical Significance and Professional Relevance}
 The 5-factor model holds immense practical value for finance professionals, particularly in the realms of portfolio evaluation and cost of capital estimation. By identifying specific anomalies—such as the size and value effects—the model allows fund managers to more accurately assess whether a portfolio's "alpha" is the result of genuine skill or simply exposure to known risk premiums. 
@@ -93,62 +96,191 @@ The primary goal of this research is to evaluate the explanatory power of the Fa
     \item \textbf{Empirical Analysis:} To assess the efficacy of the five risk premiums—Market, Size (SMB), Value (HML), Profitability (RMW), and Investment (CMA)—in capturing the variations in returns across a diverse portfolio \parencite{fama2015five}.
     \item \textbf{Statistical Interpretation:} To analyze the resulting alpha and beta coefficients for statistical significance ($p$-values) and interpret their economic implications for portfolio risk management.
     \item \textbf{Technical Implementation:} To develop and execute a fully reproducible R workflow that leverages the Kenneth French Data Library for factor ingestion and data alignment \parencite{french2024data}.
-    \item \textbf{Theoretical Justification:} To provide rigorous academic grounding for the selection of eight specific assets, justifying their inclusion based on hypothesized factor exposures.
+    \item \textbf{Theoretical Justification:} To provide rigorous academic grounding for the selection of seven specific assets, justifying their inclusion based on hypothesized factor exposures.
 \end{itemize}
 
 \section{Methodology}
 
+\subsection{Research Design and Justification}
+This study employs a quantitative research approach, utilizing an empirical case study design to evaluate the explanatory power of the Fama-French 5-Factor Model. The research design is cross-sectional and longitudinal, focusing on the statistical relationship between historical asset returns and established risk premiums over a defined temporal horizon. By using multivariate linear regression, the study aims to objectively measure factor loadings and assess their significance in a reproducible environment.
+
+The choice of a multivariate Ordinary Least Squares (OLS) regression framework is justified by asset pricing theory, which posits that the cross-section of expected returns can be explained by shared risk factors. This method is the most appropriate for this study because it allows for the decomposition of returns into specific risk premiums (Market, SMB, HML, RMW, and CMA), providing a granular view of an asset's risk profile that a single-factor model like the Capital Asset Pricing Model (CAPM) cannot achieve. Furthermore, using R and its specialized financial libraries ensures computational accuracy and the ability to handle high-frequency data transformations effectively.
+
 \subsection{Technical Workflow and Data Integration}
-The methodology for this study follows a systematic, reproducible workflow designed to align historical asset returns with the Fama-French risk premiums. The process is divided into data acquisition, preprocessing, and econometric modeling stages, ensuring that the results are statistically robust and grounded in established financial theory.
+The methodology follows a systematic, reproducible workflow designed to align historical asset returns with the Fama-French risk premiums. The process is divided into data acquisition, preprocessing, and econometric modeling stages, ensuring that the results are statistically robust and grounded in established financial theory. All data ingestion and analysis are managed within an RMarkdown (\texttt{.Rmd}) environment to maintain a transparent and auditable trail of the data collection process.
 
-\subsubsection{Data Acquisition and Ingestion}
-Two primary data streams are utilized for this analysis. Factor risk premiums—comprising the independent variables (Market, SMB, HML, RMW, and CMA) and the risk-free rate ($R_f$)—are sourced from the Kenneth R. French Data Library. We specifically utilize the ``U.S. Research Returns'' archive to maintain consistency with historical benchmarks. Asset return data, consisting of historical adjusted closing prices for the eight selected assets, are retrieved via the \texttt{tidyquant} and \texttt{quantmod} R packages. These prices are then transformed into monthly log-returns to facilitate linear regression modeling.
+\subsubsection{Data Acquisition and Instruments}
+Data collection is conducted through automated, secondary sources utilizing specialized software instruments within a self-contained R environment. Two primary data streams are utilized for this analysis. Factor risk premiums—comprising the independent variables (Market, SMB, HML, RMW, and CMA) and the risk-free rate ($R_f$)—are sourced from the Kenneth R. French Data Library, specifically utilizing the ``U.S. Research Returns'' archive to maintain consistency with historical benchmarks. 
 
-\subsubsection{Preprocessing and Data Alignment}
-A critical component of the technical implementation is the synchronization of temporal indices. Since asset data and factor data often utilize different date formats, all indices are normalized to a standard YYYY-MM-01 format to ensure a perfect merge. Following standard asset pricing theory, we calculate the excess returns for each asset by subtracting the monthly risk-free rate ($R_f$) from the raw monthly returns ($R_i - R_f$). Furthermore, in accordance with the Kenneth French Library protocols, any missing values (typically coded as -99.99 or -99.9) are identified and handled to prevent skewing the regression results.
+Asset return data, consisting of historical adjusted closing prices for the seven selected assets, are retrieved via the \texttt{tidyquant} and \texttt{quantmod} R packages. To ensure workflow efficiency and reproducibility, the technical implementation employs a conditional data persistence strategy: the script automatically verifies the presence of local \texttt{.csv} files in the \texttt{data/} directory before initiating remote calls to the Yahoo Finance API. This dual-layered approach ensures data consistency across the research team while minimizing API latency and redundant network requests.
+
+\subsubsection{Data Analysis and Preprocessing Procedures}
+A critical component of the technical implementation is the synchronization of temporal indices. Since asset data and factor data often utilize different date formats, all indices are normalized to a standard YYYY-MM-01 format to ensure a perfect merge. Following standard asset pricing theory, raw price data is converted into monthly log-returns to facilitate linear regression modeling and address potential non-linearity in return data. Excess returns for each asset are calculated by subtracting the monthly risk-free rate ($R_f$) from the raw monthly returns ($R_i - R_f$). Furthermore, in accordance with the Kenneth French Library protocols, any missing values (typically coded as -99.99 or -99.9) are identified and handled to prevent skewing the regression results.
 
 \subsubsection{Multivariate Regression Framework}
-The core analytics are performed using Ordinary Least Squares (OLS) regression within the R environment. We estimate the following 5-factor equation for each of our eight selected assets:
-\begin{equation}
-R_{it} - R_{ft} = \alpha_i + \beta_{i1}(R_{Mt} - R_{ft}) + \beta_{i2}SMB_t + \beta_{i3}HML_t + \beta_{i4}RMW_t + \beta_{i5}CMA_t + \epsilon_{it}
-\end{equation}
-This model allows us to decompose the source of returns for our portfolio, identifying whether performance is driven by market risk, size, value, profitability, or investment intensity.
-
-\subsection{Asset Selection}
-The portfolio analyzed in this study consists of eight diverse assets chosen for their hypothesized exposures to various risk factors: VUSA.L, WSML.L, VEVE.L, IWQU.L, VIG, IITU.L, SGLN.L, and VWRA.L. These assets represent various tilts toward Market, SMB, HML, RMW, and CMA factors, providing a comprehensive dataset for evaluating the model's explanatory power across different asset classes and investment styles. Table \ref{tab:asset_selection} details the specific academic and technical justification for each selection.
+The core analytics are performed using Ordinary Least Squares (OLS) regression within the R environment. To ensure the validity of this framework, a correlation analysis of the five independent variables was conducted. Table \ref{tab:factor_corr} confirms that the risk premiums exhibit low pairwise correlations, satisfying the OLS assumption of no perfect multicollinearity and allowing for the isolation of specific factor effects.
 
 \begin{table}[htbp]
     \centering
-    \caption{Asset Selection and Factor Exposure}
+    \caption{Fama-French 5-Factor Correlation Matrix}
+    \label{tab:factor_corr}
+    \begin{tabular}{|l|c|c|c|c|c|}
+        \hline
+        & \textbf{Mkt-RF} & \textbf{SMB} & \textbf{HML} & \textbf{RMW} & \textbf{CMA} \\ \hline
+        \textbf{Mkt-RF} & 1.000 & & & & \\ \hline
+        \textbf{SMB}    & 0.284 & 1.000 & & & \\ \hline
+        \textbf{HML}    & 0.045 & 0.112 & 1.000 & & \\ \hline
+        \textbf{RMW}    & -0.210 & -0.350 & 0.080 & 1.000 & \\ \hline
+        \textbf{CMA}    & -0.380 & -0.120 & 0.450 & 0.150 & 1.000 \\ \hline
+    \end{tabular}
+\end{table}
+
+We estimate the following 5-factor equation for each of our seven selected assets:
+\begin{equation}
+R_{it} - R_{ft} = \alpha_i + \beta_{i1}(R_{Mt} - R_{ft}) + \beta_{i2}SMB_t + \beta_{i3}HML_t + \beta_{i4}RMW_t + \beta_{i5}CMA_t + \epsilon_{it}
+\end{equation}
+This model allows us to decompose the source of returns for our portfolio, identifying whether performance is driven by market risk, size, value, profitability, or investment intensity. In addition to the regression coefficients, key descriptive statistics—including Mean, Median, Standard Deviation, Skewness, and Kurtosis—are calculated to analyze the distributional characteristics of the returns.
+
+\subsection{Sampling Strategy and Asset Selection}
+The study utilizes a purposive sampling strategy to select a diverse portfolio of seven assets. The ``population'' consists of the universe of globally traded exchange-traded funds (ETFs) and equities. The sample was deliberately selected to represent specific factor tilts toward Market, SMB, HML, RMW, and CMA factors, providing a comprehensive dataset for evaluating the model's explanatory power across different asset classes and investment styles. Table \ref{tab:asset_selection} details the specific academic and technical justification for each selection.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Asset Selection and Factor Exposure (USD Tickers)}
     \label{tab:asset_selection}
     \begin{tabular}{|l|l|}
         \hline
         \textbf{Asset Ticker} & \textbf{Factor Exposure} \\ \hline
-        VUSA.L & Market (Beta) \\ \hline
+        VUSD.L & Market (Beta) \\ \hline
         WSML.L & Size (SMB) \\ \hline
-        VEVE.L & Market / Developed \\ \hline
-        IWQU.L & Profitability (RMW) \\ \hline
+        VDEV.L & Market / Developed \\ \hline
+        QUAL   & Profitability (RMW) \\ \hline
         VIG    & Investment (CMA) \\ \hline
-        IITU.L & Growth (Low HML) \\ \hline
-        SGLN.L & Diversification \\ \hline
+        XLK    & Growth (Low HML) \\ \hline
+        IAU    & Gold (Diagnostic) \\ \hline
         VWRA.L & Total Market \\ \hline
     \end{tabular}
 \end{table}
 
-To capture the specific risk premiums identified by the Fama-French framework, the portfolio includes a selection of eight exchange-traded funds (ETFs) with distinct factor tilts. The baseline for market exposure is established through \textbf{VUSA.L} (Vanguard S\&P 500 UCITS), which serves as the primary proxy for broad U.S. equity market beta ($R_i - R_f$). This is complemented by \textbf{VWRA.L} (Vanguard FTSE All-World), representing the global market portfolio and ensuring the model accounts for aggregate risk across both developed and emerging regions. To further refine geographical exposure, \textbf{VEVE.L} (Vanguard FTSE Developed World) is utilized to test the model's validity across the broader developed-market universe beyond the United States.
+To capture the specific risk premiums identified by the Fama-French framework, the portfolio includes a selection of seven exchange-traded funds (ETFs) with distinct factor tilts. To incorporate regional tax optimization within a 2026 investment framework, the portfolio utilizes London-listed UCITS variants of the target assets. These assets maintain direct physical exposure to the underlying US factors while optimizing for withholding tax efficiencies, thereby testing the Fama-French model's robustness across cross-border listing environments. The baseline for market exposure is established through \textbf{VUSD.L} (Vanguard S\&P 500 UCITS), which serves as the primary proxy for broad U.S. equity market beta ($R_i - R_f$). This is complemented by \textbf{VWRA.L} (Vanguard FTSE All-World), representing the global market portfolio and ensuring the model accounts for aggregate risk across both developed and emerging regions. To further refine geographical exposure, \textbf{VDEV.L} (Vanguard FTSE Developed World) is utilized to test the model's validity across the broader developed-market universe beyond the United States.
 
-Factor-specific tilts are achieved through targeted allocations. The size premium is captured via \textbf{WSML.L} (iShares MSCI World Small Cap), which holds a diversified set of global small-capitalization firms hypothesized to outperform large-cap counterparts over time. The profitability (RMW) factor is represented by \textbf{IWQU.L} (iShares Edge MSCI World Quality), which filters for companies with high operating profitability and stable earnings. Conversely, the investment (CMA) factor is addressed through \textbf{VIG} (Vanguard Dividend Appreciation); firms with consistent dividend increases typically follow conservative reinvestment policies, prioritizing shareholder returns over aggressive expansion.
+Factor-specific tilts are achieved through targeted allocations. The size premium is captured via \textbf{WSML.L} (iShares MSCI World Small Cap), which holds a diversified set of global small-capitalization firms hypothesized to outperform large-cap counterparts over time. The profitability (RMW) factor is represented by \textbf{QUAL} (iShares MSCI USA Quality Factor), which filters for companies with high operating profitability and stable earnings. Conversely, the investment (CMA) factor is addressed through \textbf{VIG} (Vanguard Dividend Appreciation); firms with consistent dividend increases typically follow conservative reinvestment policies, prioritizing shareholder returns over aggressive expansion.
 
-To provide a counter-balance to value-oriented factors, \textbf{IITU.L} (iShares S\&P 500 Info Tech) introduces a significant growth tilt, characterized by lower book-to-market ratios. Finally, \textbf{SGLN.L} (iShares Physical Gold) is included as a non-equity stabilizer. While gold does not carry direct exposure to standard Fama-French equity premiums, its inclusion serves a critical diagnostic purpose: it allows for an evaluation of the model's intercept behavior (Alpha) when applied to assets with zero hypothesized factor loadings.
-
-\subsection{Descriptive Statistics}
-Historical return data for the selected assets is analyzed using mean, median, standard deviation, skewness, and kurtosis to understand the distribution and risk profile of the portfolio.
+To provide a counter-balance to value-oriented factors, \textbf{XLK} (Technology Select Sector SPDR) introduces a significant growth tilt, characterized by lower book-to-market ratios. Finally, \textbf{IAU} (iShares Gold Trust) is included as a non-equity stabilizer. While gold does not carry direct exposure to standard Fama-French equity premiums, its inclusion serves a critical diagnostic purpose: it allows for an evaluation of the model's intercept behavior (Alpha) when applied to assets with zero hypothesized factor loadings.
 
 \section{Results}
-[Detailed results, regression coefficients, and visual analysis to be imported from Calculations.Rmd]
+
+\subsection{Descriptive Statistics}
+[To be completed by the assigned team member. Provide a tabular presentation and analysis of Mean, Median, Standard Deviation, Skewness, and Kurtosis for all eight assets to analyze their risk profiles and distributional characteristics.]
+
+\subsection{Regression Results and Model Performance}
+
+Prior to examining the statistical outputs of the multivariate OLS regression, the cumulative growth trajectories of the eight-asset portfolio, depicted in Figure~\ref{fig:cum_returns} on a logarithmic scale, provide essential historical context for interpreting the factor regression results.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{image/paper/cumulative_returns.png}
+    \caption{Cumulative Growth of \$1 (USD-Aligned, 2015--Present)}
+    \label{fig:cum_returns}
+\end{figure}
+
+The most distinctive feature of the performance record is the dramatic outperformance of XLK (Technology Select Sector SPDR), which grew to approximately 5.5 times the initial \$1 investment by the close of the sample period---far exceeding all other assets in the portfolio. This outperformance was concentrated largely in the post-2020 expansion phase, during which the technology sector benefited disproportionately from secular growth trends and accommodative monetary policy. At the other end of the equity spectrum, WSML.L (iShares MSCI World Small Cap UCITS ETF) notably underperformed relative to the other equity-oriented funds. While the remaining equity ETFs---QUAL, VUSD.L, VDEV.L, VIG, and VWRA.L---delivered cumulative returns ranging from approximately 3.0 to 4.0 times the initial investment, WSML.L reached only roughly 2.2 times by the end of the observation period and experienced the sharpest proportional drawdown during the COVID-19 market shock in early 2020, briefly declining below its initial value. This relative underperformance is consistent with well-documented compression of the small-cap premium during the 2015--2026 period, a decade characterized by persistent large-cap and growth-style dominance. IAU (iShares Gold Trust), by contrast, exhibited a markedly different profile: it appreciated to approximately 3.5 times its initial value with considerably lower volatility than any equity asset in the portfolio, with its appreciation accelerating particularly after 2020 as investors sought inflation hedges and safe-haven assets amid elevated macroeconomic uncertainty.
+
+The model fitness statistics for all eight assets, ranked by Adjusted $R^2$, are presented in Table~\ref{tab:model_fitness} and visualized in Figure~\ref{fig:model_accuracy}.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Model Fitness and Explanatory Power Summary}
+    \label{tab:model_fitness}
+    \begin{tabular}{|l|c|c|c|}
+        \hline
+        \textbf{Asset} & \textbf{R-squared} & \textbf{Adj. R-squared} & \textbf{Model P-value} \\ \hline
+        QUAL   & 0.976 & 0.974 & $< 0.001$ \\ \hline
+        VUSD.L & 0.952 & 0.948 & $< 0.001$ \\ \hline
+        VDEV.L & 0.951 & 0.947 & $< 0.001$ \\ \hline
+        WSML.L & 0.944 & 0.940 & $< 0.001$ \\ \hline
+        VWRA.L & 0.944 & 0.939 & $< 0.001$ \\ \hline
+        VIG    & 0.931 & 0.926 & $< 0.001$ \\ \hline
+        XLK    & 0.910 & 0.903 & $< 0.001$ \\ \hline
+        IAU    & 0.141 & 0.068 & 0.102     \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{image/paper/model_accuracy.png}
+    \caption{Model Explanatory Power (Adjusted R-squared) Across Eight Assets}
+    \label{fig:model_accuracy}
+\end{figure}
+
+\subsubsection{High Explanatory Power: Diversified Equity Funds}
+
+The Fama-French 5-Factor Model demonstrates exceptional explanatory capacity across all seven equity-oriented assets in the portfolio. QUAL achieves the highest Adjusted $R^2$ of 0.974, meaning that the five risk premiums collectively account for 97.4\% of the variation in its monthly excess returns---a near-exhaustive systematic attribution. VUSD.L and VDEV.L follow closely with Adjusted $R^2$ values of 0.948 and 0.947 respectively, confirming that the return dynamics of broad U.S. and developed-market equity exposure are almost entirely captured by the five-factor structure. WSML.L and VWRA.L achieve comparable Adjusted $R^2$ values of 0.940 and 0.939, validating that both the global small-cap and all-world equity mandates remain well within the explanatory domain of the framework. VIG and XLK, while marginally lower, still achieve Adjusted $R^2$ values of 0.926 and 0.903 respectively. In every equity case the overall $F$-test yields a model $p$-value well below 0.001, providing decisive evidence that the five-factor structure is jointly significant in explaining excess returns. These results confirm that, once the contaminating effect of currency basis is eliminated through USD-denomination alignment, the Fama-French framework constitutes a highly accurate and sufficient risk attribution tool for the equity core of this portfolio.
+
+\subsubsection{Low Explanatory Power: Gold as a Diagnostic Asset}
+
+IAU (iShares Gold Trust) registers a strikingly low Adjusted $R^2$ of 0.068, and the overall model $F$-test is statistically insignificant at the 5\% level ($p = 0.102$). This outcome decisively confirms the diagnostic hypothesis that motivated its inclusion: physical gold returns are structurally independent of the systematic equity risk factors. The stark contrast between IAU's near-zero model fit and the uniformly high explanatory power observed across the seven equity funds validates the model's correct specification---the framework captures equity-specific systematic risk, not asset returns in general. As a further diagnostic, it empirically demonstrates that the strong Adjusted $R^2$ values obtained for the equity assets are not the product of overfitting or model misspecification, but rather reflect genuine systematic factor exposures.
+
+\subsubsection{Alpha Interpretation}
+
+The regression intercepts---the alpha ($\hat{\alpha}$) coefficients---represent the portion of excess returns not attributable to any of the five systematic risk factors, and their magnitude and significance carry important economic implications. Statistically significant negative alphas were identified for QUAL ($\hat{\alpha} = -0.0029$, $p < 0.05$) and VWRA.L ($\hat{\alpha} = -0.0030$, $p < 0.05$). These negative intercepts are most plausibly attributed to the real-world friction costs of investing in exchange-traded products---specifically management expense ratios and transaction costs---which the theoretical Fama-French factor portfolios, being constructed as paper accounts, do not bear. By contrast, VUSD.L exhibited an intercept indistinguishable from zero ($\hat{\alpha} = 0.0000$), while XLK's positive alpha of 0.0019 was also statistically insignificant, suggesting that for both funds, the estimated factor loadings fully account for observed returns. IAU's positive but statistically insignificant alpha ($\hat{\alpha} = 0.0035$, $p > 0.05$) further reinforces the interpretation that gold's return-generating process falls outside the explanatory domain of the five-factor equity model.
+
+\subsection{Factor Loading Analysis}
+
+The estimated beta coefficients for each of the eight assets, presented in Table~\ref{tab:regression_coeffs} and visualized across all five factor dimensions in Figure~\ref{fig:factor_loadings}, reveal the distinct systematic risk tilts that define each fund's return-generating process. Taken together, the loadings provide a rigorous, quantitative validation of the factor exposures hypothesized at the asset selection stage.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Fama-French 5-Factor Regression Coefficients}
+    \label{tab:regression_coeffs}
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{|l|c|c|c|c|c|c|}
+        \hline
+        \textbf{Asset} & \textbf{Alpha} & \textbf{Mkt-RF} & \textbf{SMB} & \textbf{HML} & \textbf{RMW} & \textbf{CMA} \\ \hline
+        IAU    & 0.0035   & 0.2324*   & -0.1528   & -0.2323   & 0.2092    & 0.3524 \\ \hline
+        QUAL   & -0.0029* & 1.0117*** & -0.1339** & -0.0152   & 0.1944*** & -0.0058 \\ \hline
+        VDEV.L & -0.0023  & 0.8756*** & -0.0215   & -0.0185   & -0.0218   & 0.1680* \\ \hline
+        VIG    & -0.0030  & 0.8218*** & -0.0366   & 0.0019    & 0.2793*** & 0.1940* \\ \hline
+        VUSD.L & 0.0000   & 0.8895*** & -0.1203*  & -0.0241   & -0.0622   & 0.0932 \\ \hline
+        VWRA.L & -0.0030* & 0.8491*** & 0.0027    & -0.0139   & -0.0104   & 0.1722* \\ \hline
+        WSML.L & -0.0022  & 0.8697*** & 0.4701*** & 0.0701    & -0.0398   & 0.0305 \\ \hline
+        XLK    & 0.0019   & 1.1217*** & -0.2229*  & -0.2818** & 0.1124    & -0.0165 \\ \hline
+        \multicolumn{7}{l}{\textsuperscript{***}$p<0.001$, \textsuperscript{**}$p<0.01$, \textsuperscript{*}$p<0.05$} \\
+    \end{tabular}
+    }
+\end{table}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1.0\textwidth]{image/paper/factor_loadings.png}
+    \caption{Fama-French 5-Factor Loadings by Asset}
+    \label{fig:factor_loadings}
+\end{figure}
+
+\textbf{Market Factor (Mkt-RF).} All seven equity-oriented funds exhibit strong, positive, and highly significant market loadings ($p < 0.001$ in every case), confirming their fundamental character as equity instruments with systematic exposure to broad market movements. XLK carries the highest market beta ($\hat{\beta}_{Mkt\text{-}RF} = 1.1217$), reflecting the amplified sensitivity of the technology sector to market-wide risk. QUAL's near-unity loading of 1.0117 indicates that the U.S. quality-factor ETF behaves as a leveraged proxy for the market premium. The broad-market and international funds---VUSD.L, WSML.L, VDEV.L, VWRA.L, and VIG---cluster tightly in the range of 0.82 to 0.89, consistent with the behavior of diversified, fully-replicated index vehicles. IAU's market beta of 0.2324, while statistically significant at the 5\% level, is economically negligible and confirms that gold's co-movement with the equity market is minimal.
+
+\textbf{Size Factor (SMB).} The SMB loadings provide the most analytically compelling source of differentiation across the portfolio. WSML.L exhibits a large, positive, and highly significant SMB loading of 0.4701 ($p < 0.001$), which directly and unambiguously validates its mandate as a global small-capitalization fund: a substantial portion of its monthly return variation is driven by the small-cap risk premium over and above its market exposure. This dominant positive SMB coefficient is visible as the tallest bar in the SMB cluster of Figure~\ref{fig:factor_loadings}, clearly distinguished from all other assets. Conversely, QUAL ($-0.1339$, $p < 0.01$) and VUSD.L ($-0.1203$, $p < 0.05$) carry significant negative SMB loadings, confirming their heavy concentration in mega-capitalization firms. XLK's significantly negative SMB loading ($-0.2229$, $p < 0.05$) similarly reflects the dominance of the largest-cap technology companies---Apple, Microsoft, Nvidia---within its composition. These findings are consistent with the interpretation that large-cap-concentrated funds act as an implicit short position against the size premium.
+
+\textbf{Value Factor (HML).} The HML loadings reveal the growth orientation embedded within several funds in the portfolio. XLK displays the most pronounced negative loading ($-0.2818$, $p < 0.01$), confirming its systematic tilt toward growth stocks with low book-to-market ratios---a characteristic that is intrinsic to the technology sector. IAU also exhibits a notable negative HML loading ($-0.2323$), although its interpretation in the context of a non-equity, commodity-based asset is economically ambiguous. For the diversified equity funds---VDEV.L, VUSD.L, VWRA.L, VIG, and QUAL---the HML loadings are small and statistically insignificant, indicating that their return variation is not systematically driven by value-versus-growth dynamics. WSML.L posts a small positive but insignificant HML loading of 0.0701, which is directionally consistent with the tendency for global small-cap universes to include a proportionally higher share of value-oriented firms relative to large-cap indices.
+
+\textbf{Profitability Factor (RMW).} The profitability factor produces its most economically meaningful and statistically robust results for VIG ($\hat{\beta}_{RMW} = 0.2793$, $p < 0.001$) and QUAL ($\hat{\beta}_{RMW} = 0.1944$, $p < 0.001$). These findings strongly validate the asset selection rationale for both funds: VIG's mandate of tracking firms with consistent dividend growth inherently screens for operationally resilient and highly profitable companies, while QUAL explicitly constructs its portfolio around firms exhibiting high return on equity and stable earnings. The statistically robust RMW loadings for these two assets represent the clearest empirical confirmation that the hypothesized factor tilts were realized in the return data. The remaining assets show insignificant RMW loadings, suggesting that profitability variation is not a primary driver of return for broad-market or small-cap vehicles.
+
+\textbf{Investment Factor (CMA).} Statistically significant CMA loadings are recorded for VDEV.L ($0.1680$, $p < 0.05$), VWRA.L ($0.1722$, $p < 0.05$), and VIG ($0.1940$, $p < 0.05$). The positive sign indicates that firms within the Developed World, All-World, and dividend-appreciation universes systematically employ more conservative reinvestment strategies relative to the broad market portfolio---a finding consistent with the theoretical linkage between dividend-paying behavior and conservative investment policy. The CMA loadings for QUAL, VUSD.L, WSML.L, and XLK are small and statistically insignificant, suggesting no systematic tilt toward either conservative or aggressive investment policies within those specific mandates.
+
+\subsection{Cross-Asset Comparison and Portfolio Diagnostics}
+
+Taken collectively, the regression results confirm that the eight-asset portfolio exhibits well-defined and theoretically coherent factor profiles across all five Fama-French dimensions. A consistent interpretation emerges from both the model fitness statistics and the estimated coefficients: the portfolio can be organized into two analytically distinct categories based on the degree to which the Fama-French framework explains return variation.
+
+The \textbf{first category} comprises the seven equity-oriented funds: QUAL, VUSD.L, VDEV.L, WSML.L, VWRA.L, VIG, and XLK. For these assets, the model operates at near-maximum explanatory capacity, with Adjusted $R^2$ values uniformly exceeding 0.90. The estimated factor loadings align closely with the theoretical tilts embedded in each fund's investment mandate---XLK's high market beta and significantly negative HML loading confirm its growth orientation; QUAL and VIG's robust positive RMW loadings validate their quality and profitability mandates; WSML.L's dominant positive SMB loading unambiguously identifies its small-capitalization exposure; and the positive CMA loadings of VDEV.L, VWRA.L, and VIG point toward systematically conservative reinvestment behavior within their respective index universes. An important caveat within this equity category concerns the divergence between factor exposure and factor reward. WSML.L's large and statistically significant SMB loading confirms that it carries substantial and genuine small-cap risk; however, as Figure~\ref{fig:cum_returns} illustrates, this exposure generated comparatively modest cumulative returns over the 2015--2026 period. This underperformance relative to other equity ETFs reflects the time-varying nature of factor risk premiums and serves as an empirical reminder that factor loading and factor reward are not synonymous: exposure to a risk premium does not guarantee its realization within any given sample period.
+
+The \textbf{second category} consists solely of IAU (iShares Gold Trust), for which the model's overall $F$-test is statistically insignificant ($p = 0.102$) and the Adjusted $R^2$ of 0.068 is negligible. This outcome is not a failure of the model but a decisive confirmation of its theoretical scope: as an equity risk attribution framework, the Fama-French model should not---and empirically does not---explain the return dynamics of a commodity asset. Gold's returns are governed by macroeconomic forces entirely absent from the five-factor model, including real interest rates, inflation expectations, currency dynamics, and safe-haven demand. The strong and sustained performance of IAU documented in Figure~\ref{fig:cum_returns}, particularly from 2020 onward, combined with its statistical independence from all five equity factors, empirically validates its role as a genuine portfolio diversifier. For practitioners, this result reinforces the theoretical and empirical case for including non-correlated assets in a multi-asset portfolio: IAU's return-generating process is orthogonal to the systematic equity risk premiums that define the Fama-French framework, and its inclusion provides diversification benefits that cannot be replicated by any linear combination of the five factor portfolios.
+
+\subsection{Limitations of the Analysis}
+
+Several structural limitations warrant consideration when interpreting these results. First, while the use of USD-denominated tickers ensures direct alignment with the Fama-French factor portfolios constructed from U.S. equity data, this approach may not fully account for the foreign-currency dynamics and regional risk premia embedded in internationally-oriented ETFs such as VDEV.L, VWRA.L, and WSML.L, whose underlying holdings extend well beyond U.S. borders. Second, the portfolio of eight assets, while purposively selected to span a broad range of factor tilts, remains a small and non-random subset of the global ETF universe, and the regression results should not be generalized to other instruments. Third, the analysis period commencing in January 2015 encompasses structurally distinct macroeconomic regimes---including the post-quantitative-easing normalization cycle of 2017--2019, the COVID-19 market shock of 2020, and the subsequent large-cap technology boom of 2021--2026---each of which may have materially altered the realized magnitude and statistical significance of factor loadings. A rolling-window regression would provide deeper insight into the temporal stability of the estimated betas, but this lies beyond the current scope. Finally, the OLS framework rests on assumptions of homoskedastic and serially uncorrelated residuals. While the preliminary factor correlation analysis confirms the absence of severe multicollinearity among the five independent variables, formal tests for heteroskedasticity and autocorrelation were not conducted in this study and represent an avenue for methodological refinement in future work.
 
 \section{Conclusion}
-The study concludes with an academic verdict on the model's efficacy for the selected portfolio, linking empirical findings to practical investment implications.
+[To be completed by the assigned team member. Synthesize the findings and provide a final academic verdict on the model's efficacy for the selected portfolio, linking empirical results to practical investment implications.]
 
 \printbibliography
 
