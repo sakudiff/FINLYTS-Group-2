@@ -11,7 +11,28 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{array}
+\usepackage{listings}
 \graphicspath{{../}}
+
+% Configuration for R code listings
+\lstset{
+  language=R,
+  basicstyle=\small\ttfamily,
+  breaklines=true,
+  keepspaces=true,
+  columns=flexible,
+  showstringspaces=false,
+  keywordstyle=\color{blue},
+  commentstyle=\color{dlsugreen},
+  stringstyle=\color{purple},
+  backgroundcolor=\color{gray!5},
+  frame=single,
+  framerule=0pt,
+  xleftmargin=10pt,
+  xrightmargin=10pt,
+  aboveskip=15pt,
+  belowskip=15pt
+}
 \usepackage[hidelinks]{hyperref}
 \usepackage[style=apa, backend=biber]{biblatex}
 \addbibresource{references.bib}
@@ -78,7 +99,7 @@
 
 
 \section{Introduction}
-This document provides a rigorous evaluation of the \textbf{Fama-French 5-Factor Model} using R. The model extends the Capital Asset Pricing Model (CAPM) by incorporating Size, Value, Profitability, and Investment factors alongside standard market risk \parencite{fama1993common, fama2015five}. The core objective is to determine the efficacy of these five factors in explaining the excess returns of a portfolio comprising seven selected assets.
+This document provides a rigorous evaluation of the \textbf{Fama-French 5-Factor Model} using R. The model extends the Capital Asset Pricing Model (CAPM) by incorporating Size, Value, Profitability, and Investment factors alongside standard market risk \parencite{fama1993common, fama2015five}. The core objective is to determine the efficacy of these five factors in explaining the excess returns of a portfolio comprising eight selected assets.
 The shift from the single-factor CAPM was driven by its poor empirical record, which, as noted by \textcite{fama2004capital}, is often considered insufficient for practical applications. While the CAPM posits that risk is measured solely relative to a comprehensive market portfolio, empirical tests frequently show that the relation between average return and beta is flatter than predicted. This gap between theory and evidence necessitated a multidimensional approach to capture the risk factors that a single market beta could not account for.
 
 \subsection{Transition from CAPM to Fama-French 5-Factor Model}
@@ -120,44 +141,34 @@ This study employs a quantitative research approach, utilizing an empirical case
 The choice of a multivariate Ordinary Least Squares (OLS) regression framework is justified by asset pricing theory, which posits that the cross-section of expected returns can be explained by shared risk factors. This method is the most appropriate for this study because it allows for the decomposition of returns into specific risk premiums (Market, SMB, HML, RMW, and CMA), providing a granular view of an asset's risk profile that a single-factor model like the Capital Asset Pricing Model (CAPM) cannot achieve. Furthermore, using R and its specialized financial libraries ensures computational accuracy and the ability to handle high-frequency data transformations effectively.
 
 \subsection{Technical Workflow and Data Integration}
-The methodology follows a systematic, reproducible workflow designed to align historical asset returns with the Fama-French risk premiums. The process is divided into data acquisition, preprocessing, and econometric modeling stages, ensuring that the results are statistically robust and grounded in established financial theory. All data ingestion and analysis are managed within an RMarkdown (\texttt{.Rmd}) environment to maintain a transparent and auditable trail of the data collection process.
+The methodology follows a systematic, reproducible workflow designed to align historical asset returns with the Fama-French risk premiums. The process is divided into six logical stages: environment setup, data ingestion, preprocessing, modeling, visualization, and diagnostics. Each stage is designed to be fully automated, ensuring that the entire study can be replicated with a single execution of the source code. The complete technical implementation is provided in Appendix \ref{sec:appendix_code}.
 
-\subsubsection{Data Acquisition and Instruments}
-Data collection is conducted through automated, secondary sources utilizing specialized software instruments within a self-contained R environment. Two primary data streams are utilized for this analysis. Factor risk premiums, which comprise the independent variables (Market, SMB, HML, RMW, and CMA) and the risk-free rate ($R_f$), are sourced from the Kenneth R. French Data Library, specifically utilizing the ``U.S. Research Returns'' archive to maintain consistency with historical benchmarks. 
+\subsubsection{Environment Setup and Dependencies}
+To ensure the analysis runs smoothly, the first step involves preparing the computational environment. We utilize specialized R libraries for data science (\texttt{tidyverse}), financial analysis (\texttt{tidyquant}), and statistical reporting (\texttt{broom}). The implementation includes an automated routine that detects and installs any missing libraries, ensuring the project is "portable" across different computers. The setup logic is detailed in Appendix \ref{sec:appendix_setup}.
 
-Asset return data, consisting of historical adjusted closing prices for the seven selected assets, are retrieved via the \texttt{tidyquant} and \texttt{quantmod} R packages. To ensure workflow efficiency and reproducibility, the technical implementation employs a conditional data persistence strategy where the script automatically verifies the presence of local \texttt{.csv} files in the \texttt{data/} directory before initiating remote calls to the Yahoo Finance API. This dual-layered approach ensures data consistency across the research team while minimizing API latency and redundant network requests.
+\subsubsection{Data Acquisition and Automated Ingestion}
+This stage handles the automated collection of data from two primary sources. First, we define a list of "tickers" representing our selected assets (e.g., VUSD.L for the S\&P 500, IAU for Gold). The script fetches historical price data for these assets from Yahoo Finance. Second, it loads the Five-Factor data—the independent variables we are testing—from the Kenneth French Data Library. To save time and avoid redundant network traffic, the code checks for local copies of these files before attempting to download them again. The ingestion script is provided in Appendix \ref{sec:appendix_ingestion}.
 
-\subsubsection{Data Analysis and Preprocessing Procedures}
-A critical component of the technical implementation is the synchronization of temporal indices. Since asset data and factor data often utilize different date formats, all indices are normalized to a standard YYYY-MM-01 format to ensure a perfect merge. Following standard asset pricing theory, raw price data is converted into monthly log-returns to facilitate linear regression modeling and address potential non-linearity in return data. Excess returns for each asset are calculated by subtracting the monthly risk-free rate ($R_f$) from the raw monthly returns ($R_i - R_f$). Furthermore, in accordance with the Kenneth French Library protocols, any missing values (typically coded as -99.99 or -99.9) are identified and handled to prevent skewing the regression results.
+\subsubsection{Preprocessing and Data Cleaning}
+Before we can run our models, the raw data must be "cleaned" and synchronized. This involves three key tasks: 
+\begin{enumerate}
+    \item \textbf{Return Calculation:} We convert daily prices into monthly "log-returns," which are mathematically better suited for linear regression.
+    \item \textbf{Temporal Alignment:} Because different data sources use different date formats, we normalize all dates to the first of the month to ensure that asset returns are perfectly matched with their corresponding risk factors.
+    \item \textbf{Excess Return Calculation:} We subtract the risk-free rate from our asset returns. This allows us to measure "Excess Return"—the specific portion of profit earned by taking market risk.
+\end{enumerate}
+The code for these transformations is documented in Appendix \ref{sec:appendix_preprocessing}.
 
 \subsubsection{Multivariate Regression Framework}
-The core analytics are performed using Ordinary Least Squares (OLS) regression within the R environment. To ensure the validity of this framework, a correlation analysis of the five independent variables was conducted. Table \ref{tab:factor_corr} confirms that the risk premiums exhibit low pairwise correlations, satisfying the OLS assumption of no perfect multicollinearity and allowing for the isolation of specific factor effects.
+The core of our analysis is a multivariate Ordinary Least Squares (OLS) regression. This is a statistical method that allows us to see how much each of the five factors (Market, Size, Value, Profitability, and Investment) contributes to an asset's total return. We use a modern "nest and map" programming approach, which allows us to run individual models for all eight assets simultaneously using the same logic. This ensures that our results are consistent across the entire portfolio. The modeling workflow is shown in Appendix \ref{sec:appendix_modeling}.
 
-\begin{table}[htbp]
-    \centering
-    \caption{Fama-French 5-Factor Correlation Matrix}
-    \label{tab:factor_corr}
-    \begin{tabularx}{\textwidth}{lXXXXX}
-        \toprule
-        & \textbf{Mkt-RF} & \textbf{SMB} & \textbf{HML} & \textbf{RMW} & \textbf{CMA} \\ 
-        \midrule
-        \textbf{Mkt-RF} & 1.000 & & & & \\ 
-        \textbf{SMB}    & 0.284 & 1.000 & & & \\ 
-        \textbf{HML}    & 0.045 & 0.112 & 1.000 & & \\ 
-        \textbf{RMW}    & -0.210 & -0.350 & 0.080 & 1.000 & \\ 
-        \textbf{CMA}    & -0.380 & -0.120 & 0.450 & 0.150 & 1.000 \\ 
-        \bottomrule
-    \end{tabularx}
-\end{table}
+\subsubsection{Visualization and High-Fidelity Plotting}
+To make the statistical results easier to interpret, the workflow generates five types of high-fidelity charts. These include "Factor Loadings" (to show an asset's sensitivity to each factor) and "Cumulative Growth" (to show how a \$1 investment would have grown over time). We define a custom visual style called \texttt{theme\_quant} to ensure all graphics are professional and publication-ready. The visualization code is provided in Appendix \ref{sec:appendix_viz}.
 
-We estimate the following 5-factor equation for each of our seven selected assets.
-\begin{equation}
-R_{it} - R_{ft} = \alpha_i + \beta_{i1}(R_{Mt} - R_{ft}) + \beta_{i2}SMB_t + \beta_{i3}HML_t + \beta_{i4}RMW_t + \beta_{i5}CMA_t + \epsilon_{it}
-\end{equation}
-This model allows us to decompose the source of returns for our portfolio, identifying whether performance is driven by market risk, size, value, profitability, or investment intensity. In addition to the regression coefficients, key descriptive statistics, including Mean, Median, Standard Deviation, Skewness, and Kurtosis, are calculated to analyze the distributional characteristics of the returns.
+\subsubsection{Diagnostic Auditing}
+The final step is a rigorous audit of our models. We calculate the $R^2$ (R-squared) value for each asset to see how well the model explains its returns. We also apply "significance stars" to our coefficients—a standard academic shorthand that tells the reader which results are statistically reliable and which might be due to random chance. These diagnostic routines are found in Appendix \ref{sec:appendix_diagnostics}.
 
 \subsection{Sampling Strategy and Asset Selection}
-The study utilizes a purposive sampling strategy to select a diverse portfolio of seven assets. The ``population'' consists of the universe of globally traded exchange-traded funds (ETFs) and equities. The sample was deliberately selected to represent specific factor tilts toward Market, SMB, HML, RMW, and CMA factors, providing a comprehensive dataset for evaluating the model's explanatory power across different asset classes and investment styles. Table \ref{tab:asset_selection} details the specific academic and technical justification for each selection.
+The study utilizes a purposive sampling strategy to select a diverse portfolio of eight assets. The ``population'' consists of the universe of globally traded exchange-traded funds (ETFs) and equities. The sample was deliberately selected to represent specific factor tilts toward Market, SMB, HML, RMW, and CMA factors, providing a comprehensive dataset for evaluating the model's explanatory power across different asset classes and investment styles. Table \ref{tab:asset_selection} details the specific academic and technical justification for each selection.
 
 \begin{table}[htbp]
     \centering
@@ -165,16 +176,16 @@ The study utilizes a purposive sampling strategy to select a diverse portfolio o
     \label{tab:asset_selection}
     \begin{tabularx}{\textwidth}{lX}
         \toprule
-        \textbf{Asset Ticker} & \textbf{Factor Exposure} \\ 
+        \textbf{Asset Ticker} & \textbf{Factor Exposure} \\
         \midrule
-        VUSD.L & Market (Beta) \\ 
-        WSML.L & Size (SMB) \\ 
-        VDEV.L & Market / Developed \\ 
-        QUAL   & Profitability (RMW) \\ 
-        VIG    & Investment (CMA) \\ 
-        XLK    & Growth (Low HML) \\ 
-        IAU    & Gold (Diagnostic) \\ 
-        VWRA.L & Total Market \\ 
+        VUSD.L & Market (Beta) \\
+        WSML.L & Size (SMB) \\
+        VDEV.L & Market / Developed \\
+        QUAL   & Profitability (RMW) \\
+        VIG    & Investment (CMA) \\
+        XLK    & Growth (Low HML) \\
+        IAU    & Gold (Diagnostic) \\
+        VWRA.L & Total Market \\
         \bottomrule
     \end{tabularx}
 \end{table}
@@ -184,7 +195,6 @@ To capture the specific risk premiums identified by the Fama-French framework, t
 Factor-specific tilts are achieved through targeted allocations. The size premium is captured via \textbf{WSML.L} (iShares MSCI World Small Cap), which holds a diversified set of global small-capitalization firms hypothesized to outperform large-cap counterparts over time. The profitability (RMW) factor is represented by \textbf{QUAL} (iShares MSCI USA Quality Factor), which filters for companies with high operating profitability and stable earnings. Conversely, the investment (CMA) factor is addressed through \textbf{VIG} (Vanguard Dividend Appreciation); firms with consistent dividend increases typically follow conservative reinvestment policies, prioritizing shareholder returns over aggressive expansion.
 
 To provide a counter-balance to value-oriented factors, \textbf{XLK} (Technology Select Sector SPDR) introduces a significant growth tilt, characterized by lower book-to-market ratios. Finally, \textbf{IAU} (iShares Gold Trust) is included as a non-equity stabilizer. While gold does not carry direct exposure to standard Fama-French equity premiums, its inclusion serves a critical diagnostic purpose, as it allows for an evaluation of the model's intercept behavior (Alpha) when applied to assets with zero hypothesized factor loadings.
-
 \section{Results}
 
 \subsection{Descriptive Statistics}
@@ -350,7 +360,7 @@ Table~\ref{tab:significance_audit} provides a high-level summary of the model's 
     \centering
     \caption{Significance Audit: Factor Hit Rates Across Portfolio ($p < 0.05$)}
     \label{tab:significance_audit}
-    \begin{tabularx}{\textwidth}{lXXl}
+    \begin{tabularx}{\textwidth}{llcX}
         \toprule
         \textbf{Factor} & \textbf{Significant Assets} & \textbf{Hit Rate} & \textbf{Primary Exposures} \\ 
         \midrule
@@ -449,5 +459,376 @@ The regression intercepts, specifically the alpha ($\hat{\alpha}$) coefficients,
 \end{itemize}
 
 \printbibliography
+
+\newpage
+\appendix
+\section{Technical Implementation Code} \label{sec:appendix_code}
+
+The following sections provide the complete R source code utilized for the automated data ingestion, preprocessing, econometric modeling, and visualization within this study.
+
+\subsection{Environment Setup and Dependencies} \label{sec:appendix_setup}
+\begin{lstlisting}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+required_packages <- c("tidyverse", "tidyquant", "quantmod", "broom", "PerformanceAnalytics", "tinytex", "moments", "zoo", "ggrepel")
+new_packages <- required_packages[!(required_packages %in% installed.packages()[,"Package"])]
+
+if(length(new_packages)) {
+  install.packages(new_packages, repos = "http://cran.us.r-project.org")
+}
+
+library(tidyverse)
+library(tidyquant)
+library(quantmod)
+library(broom)
+library(PerformanceAnalytics)
+library(moments)
+library(zoo)
+library(ggrepel)
+\end{lstlisting}
+
+\subsection{Automated Data Ingestion and Factor Loading} \label{sec:appendix_ingestion}
+\begin{lstlisting}
+# 1. Configuration & Tickers
+options(download.file.method = "libcurl")
+library(lubridate) # Ensure lubridate is loaded for floor_date
+
+# Using USD-denominated tickers to align with Fama-French USD Factors
+tickers <- c("VUSD.L", "WSML.L", "VDEV.L", "QUAL", "VIG", "XLK", "IAU", "VWRA.L")
+
+if (!dir.exists("data")) {
+  dir.create("data")
+}
+
+# 2. Automated Data Collection
+message("Checking/Updating historical data from Yahoo Finance...")
+
+lapply(tickers, function(symbol) {
+  file_path <- paste0("data/", symbol, ".csv")
+  
+  if (!file.exists(file_path)) {
+    tryCatch({
+      df <- suppressWarnings(getSymbols(symbol, src = "yahoo", from = "2015-01-01", auto.assign = FALSE))
+      if (!is.null(df) && nrow(df) > 0) {
+        df_tidy <- as.data.frame(na.omit(df)) %>%
+          rownames_to_column(var = "Date") %>%
+          as_tibble()
+        write_csv(df_tidy, file_path)
+        message(paste("Downloaded:", symbol))
+      }
+    }, error = function(e) message(paste("Failed to download", symbol, ":", e$message)))
+  } else {
+    message(paste("Using existing local data for:", symbol))
+  }
+})
+
+# 3. Monthly Return Calculation Function
+load_asset_returns <- function(ticker) {
+  file_path <- paste0("data/", ticker, ".csv")
+  if (!file.exists(file_path)) return(NULL)
+  
+  df <- read_csv(file_path, show_col_types = FALSE) %>%
+    mutate(Date = as.Date(Date)) %>%
+    arrange(Date)
+  
+  adj_col <- grep("Adjusted", names(df), value = TRUE)
+  if (length(adj_col) == 0) return(NULL)
+  
+  xts_df <- xts(df[[adj_col]], order.by = df$Date)
+  monthly_rets <- periodReturn(xts_df, period = "monthly", type = "log")
+  
+  df_ret <- as.data.frame(monthly_rets) %>%
+    rownames_to_column(var = "Date") %>%
+    mutate(Date = as.Date(Date)) %>%
+    rename(!!ticker := monthly.returns)
+  
+  return(df_ret)
+}
+
+# Load assets and merge
+asset_data_list <- compact(lapply(tickers, load_asset_returns))
+
+if (length(asset_data_list) == 0) {
+  stop("CRITICAL: No asset data found. Check tickers and internet.")
+}
+
+asset_returns <- asset_data_list %>% reduce(full_join, by = "Date")
+active_tickers <- names(asset_returns)[names(asset_returns) != "Date"]
+
+# 4. Load Kenneth French Factors
+ff5_raw <- read_csv("data/F-F_Research_Data_5_Factors_2x3.csv", skip = 3, show_col_types = FALSE)
+monthly_end_row <- which(is.na(ff5_raw[[1]]) | grepl("Annual Factors", ff5_raw[[1]]))[1] - 1
+
+ff5_monthly <- ff5_raw[1:monthly_end_row, ] %>%
+  rename(Date_Raw = 1) %>%
+  mutate(
+    Date = as.Date(paste0(Date_Raw, "01"), format = "%Y%m%d"),
+    across(c(`Mkt-RF`, SMB, HML, RMW, CMA, RF), ~ as.numeric(.) / 100)
+  ) %>%
+  # Sanitize names: replace dashes with underscores for syntactic safety in OLS
+  rename(Mkt_RF = `Mkt-RF`) %>%
+  select(Date, Mkt_RF, SMB, HML, RMW, CMA, RF)
+
+# 5. Temporal Alignment
+asset_returns <- asset_returns %>% mutate(Date = floor_date(Date, "month"))
+ff5_monthly <- ff5_monthly %>% mutate(Date = floor_date(Date, "month"))
+\end{lstlisting}
+
+\subsection{Preprocessing and Normalization} \label{sec:appendix_preprocessing}
+\begin{lstlisting}
+# Merge assets with factors
+# Using inner_join but avoiding na.omit on wide data to prevent dropping dates 
+# where only one asset is missing.
+final_data <- inner_join(asset_returns, ff5_monthly, by = "Date")
+
+# Pivot longer FIRST, then na.omit to preserve all possible data pairs
+final_data_long <- final_data %>%
+  pivot_longer(cols = all_of(active_tickers), names_to = "Asset", values_to = "Return") %>%
+  filter(!is.na(Return)) %>% # Only drop specific missing asset-months
+  mutate(Excess_Return = Return - RF)
+
+if (nrow(final_data_long) == 0) {
+  stop("ERROR: No overlapping data between assets and factors.")
+}
+
+# 1. Factor Correlation
+factor_corr <- final_data %>%
+  select(Mkt_RF, SMB, HML, RMW, CMA) %>%
+  cor(use = "pairwise.complete.obs")
+
+# 2. Cumulative Returns
+cumulative_returns <- asset_returns %>%
+  pivot_longer(-Date, names_to = "Asset", values_to = "Return") %>%
+  filter(!is.na(Return)) %>%
+  group_by(Asset) %>%
+  arrange(Date) %>%
+  mutate(Cumulative = exp(cumsum(Return)) / exp(first(Return))) %>%
+  ungroup()
+
+# 3. Summary Stats for Visuals
+stats_summary <- final_data_long %>%
+  group_by(Asset) %>%
+  summarise(
+    Mean = mean(Return, na.rm = TRUE),
+    SD = sd(Return, na.rm = TRUE),
+    .groups = "drop"
+  )
+\end{lstlisting}
+
+\subsection{Multivariate OLS Modeling Workflow} \label{sec:appendix_modeling}
+\begin{lstlisting}
+# Robust regression workflow using nest/map
+model_results <- final_data_long %>%
+  group_by(Asset) %>%
+  nest() %>%
+  mutate(
+    model = map(data, ~ lm(Excess_Return ~ Mkt_RF + SMB + HML + RMW + CMA, data = .x)),
+    tidied = map(model, tidy),
+    glanced = map(model, glance)
+  ) %>%
+  unnest(tidied) %>%
+  select(Asset, term, estimate, std.error, statistic, p.value)
+
+# Extract model fitness separately for easier join
+model_glance <- final_data_long %>%
+  group_by(Asset) %>%
+  nest() %>%
+  mutate(
+    model = map(data, ~ lm(Excess_Return ~ Mkt_RF + SMB + HML + RMW + CMA, data = .x)),
+    glanced = map(model, glance)
+  ) %>%
+  unnest(glanced) %>%
+  select(Asset, r.squared, adj.r.squared, p.value)
+
+# Regression Summary Table
+regression_summary <- model_results %>%
+  select(Asset, term, estimate, p.value) %>%
+  pivot_wider(names_from = term, values_from = c(estimate, p.value))
+
+regression_summary
+\end{lstlisting}
+
+\subsection{Visualization and Custom Theme} \label{sec:appendix_viz}
+\begin{lstlisting}
+# 0. Consistent Color Palette & Best Practices Theme
+asset_colors <- c(
+  "VWRA.L" = "#2C3E50",  # Benchmark (Dark Navy)
+  "VDEV.L" = "#5D6D7E",  # Developed
+  "WSML.L" = "#8E44AD",  # Small Cap
+  "QUAL"   = "#27AE60",  # Quality
+  "VIG"    = "#3498DB",  # Dividend
+  "XLK"    = "#E67E22",  # Tech
+  "IAU"    = "#F1C40F",  # Gold
+  "VUSD.L" = "#C0392B"   # S&P 500 (Red)
+)
+
+theme_quant <- function() {
+  theme_minimal() +
+    theme(
+      plot.title = element_text(face = "bold", size = 14, margin = margin(b = 5)),
+      plot.subtitle = element_text(size = 11, color = "#555555", margin = margin(b = 15)),
+      plot.caption = element_text(size = 8, color = "#777777", hjust = 0, margin = margin(t = 15)),
+      axis.title = element_text(size = 10, face = "bold"),
+      axis.text = element_text(size = 9),
+      panel.grid.minor = element_blank(),
+      panel.grid.major = element_line(color = "#EBEBEB", linewidth = 0.3),
+      legend.position = "bottom",
+      legend.title = element_text(size = 10, face = "bold"),
+      legend.text = element_text(size = 9),
+      axis.ticks = element_blank(),
+      plot.margin = margin(20, 20, 20, 20)
+    )
+}
+
+# 1. Coefficient Bar Chart
+coef_plot <- model_results %>%
+  filter(term != "(Intercept)") %>%
+  ggplot(aes(x = term, y = estimate, fill = Asset)) +
+  geom_bar(stat = "identity", position = "dodge", alpha = 0.9) +
+  theme_quant() +
+  scale_fill_manual(values = asset_colors) +
+  labs(title = "Asset Sensitivities to Fama-French Risk Factors",
+       subtitle = "Beta Coefficients (Loadings) estimated via OLS Regression",
+       x = "Fama-French Factor",
+       y = "Beta Loading (Unitless)",
+       fill = "Asset Ticker",
+       caption = "Note: Factors include Mkt_RF (Market), SMB (Size), HML (Value), RMW (Profitability), and CMA (Investment).\nSource: Kenneth French Data Library (2015-2026).") +
+  geom_hline(yintercept = 0, color = "black", linewidth = 0.5)
+
+# 2. Model Accuracy (Adjusted R-squared)
+rsquared_plot <- model_glance %>%
+  ggplot(aes(x = reorder(Asset, adj.r.squared), y = adj.r.squared, fill = Asset)) +
+  geom_bar(stat = "identity", width = 0.7) +
+  coord_flip() +
+  theme_quant() +
+  scale_fill_manual(values = asset_colors) +
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) +
+  labs(title = "Model Explanatory Power: Adjusted R-squared",
+       subtitle = "Proportion of variance explained by the 5-factor model",
+       x = NULL,
+       y = "Adjusted R-squared Value",
+       fill = "Asset",
+       caption = "Source: Calculations based on Kenneth French data. Higher values indicate better model fit.")
+
+# 3. Cumulative Returns Plot
+cum_plot <- cumulative_returns %>%
+  ggplot(aes(x = Date, y = Cumulative, color = Asset)) +
+  geom_line(linewidth = 0.8) +
+  theme_quant() +
+  scale_y_log10(breaks = c(1, 1.5, 2, 3, 4, 5)) +
+  scale_color_manual(values = asset_colors) +
+  labs(title = "Wealth Index: Cumulative Growth of $1 Investment",
+       subtitle = "Historical Performance (Logarithmic Scale), 2015 - 2026",
+       x = "Year",
+       y = "Value of $1 (USD)",
+       caption = "Source: Yahoo Finance. First date normalized to 1.00 for all assets.")
+
+# 4. Risk-Return Scatter Plot (FIX: Renamed Factor & Data Preservation)
+scatter_data <- final_data_long %>%
+  group_by(Asset) %>%
+  summarise(
+    Mean_Excess = mean(Excess_Return, na.rm = TRUE),
+    SD = sd(Return, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  left_join(model_results %>% filter(term == "Mkt_RF") %>% select(Asset, estimate), by = "Asset")
+
+scatter_plot <- scatter_data %>%
+  mutate(Mean_Excess_Pct = Mean_Excess * 100) %>%
+  ggplot(aes(x = estimate, y = Mean_Excess_Pct, label = Asset)) +
+  geom_smooth(method = "lm", se = FALSE, color = "#CCCCCC", linetype = "dashed", linewidth = 0.5) +
+  geom_point(aes(size = SD, color = Asset), alpha = 0.8) +
+  ggrepel::geom_text_repel(size = 3, fontface = "bold", box.padding = 0.5) +
+  theme_quant() +
+  scale_color_manual(values = asset_colors) +
+  scale_size_area(max_size = 10) + # Ensure points are visible and proportional
+  labs(title = "Security Market Line (SML): Risk-Adjusted Returns",
+       subtitle = "Mean Monthly Excess Return (%) vs. Market Beta (Loading)",
+       x = "Market Beta (β)",
+       y = "Mean Monthly Excess Return (%)",
+       size = "Volatility (SD)",
+       caption = "Note: Dashed line represents the empirical SML. Asset size indicates total volatility.")
+
+# 5. Rolling Beta Analysis (VUSD.L)
+rolling_beta_data <- final_data %>%
+  select(Date, VUSD.L, Mkt_RF, RF) %>%
+  mutate(VUSD_Excess = VUSD.L - RF)
+
+roll_reg <- function(d) {
+  coef(lm(VUSD_Excess ~ Mkt_RF, data = as.data.frame(d)))[2]
+}
+
+rolling_beta_data$Beta <- zoo::rollapply(rolling_beta_data %>% select(VUSD_Excess, Mkt_RF), 
+                                         width = 24, FUN = roll_reg, by.column = FALSE, fill = NA)
+
+rolling_beta_plot <- rolling_beta_data %>%
+  filter(!is.na(Beta)) %>%
+  ggplot(aes(x = Date, y = Beta)) +
+  geom_hline(yintercept = 1, linetype = "dashed", color = "#C0392B", linewidth = 0.8) +
+  geom_line(color = "#C0392B", linewidth = 1) +
+  theme_quant() +
+  labs(title = "Stability Analysis: 24-Month Rolling Market Beta",
+       subtitle = "Asset: VUSD.L (S&P 500 ETF) relative to Fama-French Market Factor",
+       x = "Analysis Period",
+       y = "Rolling Beta Loading",
+       caption = "Note: Red dashed line at 1.00 represents market-neutral sensitivity.\nSource: Yahoo Finance & Kenneth French Library.")
+
+# Create image/paper directory
+if (!dir.exists("image/paper")) {
+  dir.create("image/paper", recursive = TRUE)
+}
+
+# Export all plots
+ggsave("image/paper/factor_loadings.png", coef_plot, width = 10, height = 6, dpi = 300)
+ggsave("image/paper/model_accuracy.png", rsquared_plot, width = 8, height = 5, dpi = 300)
+ggsave("image/paper/cumulative_returns.png", cum_plot, width = 10, height = 6, dpi = 300)
+ggsave("image/paper/risk_return_scatter.png", scatter_plot, width = 8, height = 6, dpi = 300)
+ggsave("image/paper/rolling_beta.png", rolling_beta_plot, width = 10, height = 5, dpi = 300)
+
+# Display plots
+coef_plot
+rsquared_plot
+cum_plot
+scatter_plot
+rolling_beta_plot
+\end{lstlisting}
+
+\subsection{Model Diagnostics and Auditing} \label{sec:appendix_diagnostics}
+\begin{lstlisting}
+# 1. Model Fitness Summary (R-squared Audit)
+fitness_summary <- model_glance %>%
+  arrange(desc(adj.r.squared)) %>%
+  rename(`R-squared` = r.squared, `Adj R-squared` = adj.r.squared, `Model P-value` = p.value)
+
+# 2. Significance Audit
+# Create a summary of which factors are statistically significant (p < 0.05)
+significance_summary <- model_results %>%
+  mutate(significant = ifelse(p.value < 0.05, "Yes", "No")) %>%
+  select(Asset, term, significant) %>%
+  pivot_wider(names_from = term, values_from = significant)
+
+# 3. Formatted Coefficient Table (with Significance Stars)
+formatted_coeffs <- model_results %>%
+  mutate(
+    stars = case_when(
+      p.value < 0.001 ~ "***",
+      p.value < 0.01  ~ "**",
+      p.value < 0.05  ~ "*",
+      TRUE            ~ ""
+    ),
+    estimate_star = paste0(round(estimate, 4), stars)
+  ) %>%
+  select(Asset, term, estimate_star) %>%
+  pivot_wider(names_from = term, values_from = estimate_star)
+
+# Display diagnostic tables
+print("--- MODEL FITNESS (R-SQUARED) ---")
+print(fitness_summary)
+
+print("--- FACTOR SIGNIFICANCE (P < 0.05) ---")
+print(significance_summary)
+
+print("--- COEFFICIENTS WITH SIGNIFICANCE STARS ---")
+print(formatted_coeffs)
+\end{lstlisting}
 
 \end{document}
