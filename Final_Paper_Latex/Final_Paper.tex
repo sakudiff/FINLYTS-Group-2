@@ -77,6 +77,7 @@
 \section{Introduction}
 This document provides a rigorous evaluation of the \textbf{Fama-French 5-Factor Model} using R. The model extends the Capital Asset Pricing Model (CAPM) by incorporating Size, Value, Profitability, and Investment factors alongside standard market risk \parencite{fama1993common, fama2015five}. The core objective is to determine the efficacy of these five factors in explaining the excess returns of a portfolio comprising seven selected assets.
 The shift from the single-factor CAPM was driven by its poor empirical record, which, as noted by \textcite{fama2004capital}, is often considered insufficient for practical applications. While the CAPM posits that risk is measured solely relative to a comprehensive market portfolio, empirical tests frequently show that the relation between average return and beta is flatter than predicted. This gap between theory and evidence necessitated a multidimensional approach to capture the risk factors that a single market beta could not account for.
+
 \subsection{Transition from CAPM to Fama-French 5-Factor Model}
 The Fama-French Model, developed by \textcite{fama1992cross} in their paper titled ‘The Cross-Section of Expected Stock Returns’, was originally composed of three (3) factors and serves as an augmentation to the Capital Asset Pricing Model (CAPM). The primary purpose of the introduction of this model was to demonstrate that market risk alone cannot fully explain stock returns. Thus, the transition from a single-factor (beta) linear model (CAPM) to a multi-factor linear model led to the creation of a model that could provide a multidimensional assessment for expected returns. Here, the CAPM model was expanded to include firm-specific variables that are historically known to have an effect on returns. \\
 
@@ -89,6 +90,15 @@ Moving forward, the Fama-French 3-Factor Model was further augmented by Fama and
 The 5-factor model holds immense practical value for finance professionals, particularly in the realms of portfolio evaluation and cost of capital estimation. By identifying specific anomalies—such as the size and value effects—the model allows fund managers to more accurately assess whether a portfolio's "alpha" is the result of genuine skill or simply exposure to known risk premiums. 
 
 Furthermore, the model's ability to provide a more nuanced risk assessment assists analysts in estimating the cost of equity more reliably than the traditional CAPM. Understanding these factors is vital for asset pricing, as it helps investors recognize that expected returns are tied not just to market volatility, but to the underlying characteristics of the firms themselves, such as their profitability and investment policies \parencite{fama2015five}.
+
+\subsection{Portfolio Management}
+The Five-Factor Model redefines risk beyond market risk or beta from the CAPM model. \parencite{fama2015five} state that profitability and investment policy are closely linked to expected returns, as they are directly linked to a firm’s cash flows and investment behavior. Firms with weak operational profitability have low expected returns, similarly to firms that have an aggressive investment policy. Thus, these factors become systematic risks. The Five-Factor Model identifies these risk exposures explicitly, allowing financial managers to understand fundamental risk structure.
+
+\subsection{Asset Pricing}
+This model captures the most variation in average returns that were previously unexplained by the CAPM model and the three-factor model. In several tests, the intercepts are substantially lower than the three-factor model, thus indicating better pricing performance. Moreover, the cost of equity calculations can incorporate firm profitability and investment exposure. Thus, serving as a stronger benchmark for finding anomalies and evaluating corporate asset pricing policies.
+
+\subsection{Risk Management}
+The Five-Factor Model redefines risk beyond market risk or beta from the CAPM model. \parencite{fama2015five} state that profitability and investment policy are closely linked to expected returns, as they are directly linked to a firm’s cash flows and investment behavior. Firms with weak operational profitability have low expected returns, similarly to firms that have an aggressive investment policy. Thus, these factors become systematic risks. The Five-Factor Model identifies these risk exposures explicitly, allowing financial managers to understand fundamental risk structure.
 
 \subsection{Objectives}
 The primary goal of this research is to evaluate the explanatory power of the Fama-French 5-Factor Model through the following specific objectives:
