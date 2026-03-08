@@ -24,17 +24,136 @@ library(PerformanceAnalytics)
 ```
 
 # Data Ingestion
-This section handles the loading of asset data and the Kenneth French factors.
+This section handles the automated collection of asset data from Yahoo Finance and the loading of Kenneth French factors.
 
 ```{r data-ingestion}
-# Code to load data from the /data directory
+# 1. Configuration & Tickers
+options(download.file.method = "libcurl")
+
+# Using USD-denominated tickers to align with Fama-French USD Factors
+# VUSD.L (S&P 500), WSMU.L (Small Cap), VDEV.L (Developed), QUAL (Quality), 
+# VIG (Dividend), XLK (Info Tech), IAU (Gold), VWRA.L (All-World)
+tickers <- c("VUSD.L", "WSMU.L", "VDEV.L", "QUAL", "VIG", "XLK", "IAU", "VWRA.L")
+
+if (!dir.exists("data")) {
+  dir.create("data")
+}
+
+# 2. Automated Data Collection (Integration from Jehan.R)
+message("Checking/Updating historical data from Yahoo Finance...")
+
+lapply(tickers, function(symbol) {
+  file_path <- paste0("data/", symbol, ".csv")
+  
+  # Only download if file doesn't exist or you want to refresh
+  if (!file.exists(file_path)) {
+    tryCatch({
+      df <- suppressWarnings(getSymbols(symbol, src = "yahoo", from = "2015-01-01", auto.assign = FALSE))
+      if (!is.null(df) && nrow(df) > 0) {
+        df_tidy <- as.data.frame(na.omit(df)) %>%
+          rownames_to_column(var = "Date") %>%
+          as_tibble()
+        write_csv(df_tidy, file_path)
+        message(paste("Downloaded:", symbol))
+      }
+    }, error = function(e) message(paste("Failed to download", symbol, ":", e$message)))
+  } else {
+    message(paste("Using existing local data for:", symbol))
+  }
+})
+
+# 3. Monthly Return Calculation Function
+load_asset_returns <- function(ticker) {
+  file_path <- paste0("data/", ticker, ".csv")
+  df <- read_csv(file_path, show_col_types = FALSE) %>%
+    mutate(Date = as.Date(Date)) %>%
+    arrange(Date)
+  
+  # Select the Adjusted column (handles varying naming conventions from Yahoo)
+  adj_col <- grep("Adjusted", names(df), value = TRUE)
+  
+  # Convert to xts for periodicity conversion
+  xts_df <- xts(df[[adj_col]], order.by = df$Date)
+  
+  # Calculate monthly returns (Log returns for statistical robustness)
+  monthly_rets <- periodReturn(xts_df, period = "monthly", type = "log")
+  
+  # Convert back to tibble
+  df_ret <- as.data.frame(monthly_rets) %>%
+    rownames_to_column(var = "Date") %>%
+    mutate(Date = as.Date(Date)) %>%
+    rename(!!ticker := monthly.returns)
+  
+  return(df_ret)
+}
+
+# Load all assets and merge
+# ONLY attempt to load tickers that successfully exist in the data directory
+existing_tickers <- tickers[file.exists(paste0("data/", tickers, ".csv"))]
+
+if (length(existing_tickers) == 0) {
+  stop("CRITICAL: No asset data found in /data. Check your internet connection or Yahoo Finance tickers.")
+}
+
+asset_data_list <- lapply(existing_tickers, load_asset_returns)
+asset_returns <- asset_data_list %>% reduce(full_join, by = "Date")
+
+# Update the active tickers to match what we actually found
+tickers <- existing_tickers
+
+# 4. Load Kenneth French Factors
+# Source: Kenneth French Data Library (FF5 Research Data)
+ff5_raw <- read_csv("data/F-F_Research_Data_5_Factors_2x3.csv", skip = 3, show_col_types = FALSE)
+
+# Detect end of monthly data block
+monthly_end_row <- which(is.na(ff5_raw[[1]]) | grepl("Annual Factors", ff5_raw[[1]]))[1] - 1
+
+ff5_monthly <- ff5_raw[1:monthly_end_row, ] %>%
+  rename(Date_Raw = 1) %>%
+  mutate(
+    Date = as.Date(paste0(Date_Raw, "01"), format = "%Y%m%d"),
+    # Convert percentages to decimals
+    across(c(`Mkt-RF`, SMB, HML, RMW, CMA, RF), ~ as.numeric(.) / 100)
+  ) %>%
+  select(Date, `Mkt-RF`, SMB, HML, RMW, CMA, RF)
+
+# 5. Temporal Alignment
+# Normalize to Month-Start (YYYY-MM-01) for perfect joins
+asset_returns <- asset_returns %>% mutate(Date = floor_date(Date, "month"))
+ff5_monthly <- ff5_monthly %>% mutate(Date = floor_date(Date, "month"))
 ```
 
 # Preprocessing
 Merging returns and factor premiums.
 
 ```{r preprocessing}
-# Data cleaning and merging logic
+# Merge assets with factors
+final_data <- inner_join(asset_returns, ff5_monthly, by = "Date") %>%
+  na.omit()
+
+# Calculate excess returns (R_i - R_f)
+final_data_long <- final_data %>%
+  pivot_longer(cols = all_of(tickers), names_to = "Asset", values_to = "Return") %>%
+  mutate(Excess_Return = Return - RF)
+
+# 1. Risk Factor Correlation Matrix (Diagnostic)
+factor_corr <- final_data %>%
+  select(`Mkt-RF`, SMB, HML, RMW, CMA) %>%
+  cor()
+
+# 2. Cumulative Returns Calculation (Performance Context)
+cumulative_returns <- asset_returns %>%
+  pivot_longer(-Date, names_to = "Asset", values_to = "Return") %>%
+  filter(!is.na(Return)) %>% # Remove NAs before calculation to support different start dates
+  group_by(Asset) %>%
+  arrange(Date) %>%
+  # Prepend a 0 return at the start of each asset's series to force Wealth Index to start at 1.0
+  do(add_row(., Date = min(.$Date) - months(1), Return = 0, Asset = first(.$Asset), .before = 1)) %>%
+  mutate(Cumulative = exp(cumsum(Return))) %>%
+  ungroup()
+
+# Display a sample of the cleaned data
+head(final_data_long)
 ```
 
 # Descriptive Statistics
@@ -42,26 +161,128 @@ Analyzing the 8 selected assets.
 
 ```{r descriptive-stats}
 # Mean, SD, Skewness, Kurtosis calculations
+
+# Factor Correlation Display
+print("--- RISK FACTOR CORRELATION MATRIX ---")
+print(round(factor_corr, 3))
 ```
 
 # Regression Modeling
-Fitting the 5-factor model for each asset.
+Fitting the 5-factor model for each asset using Ordinary Least Squares (OLS).
 
 ```{r model-fitting}
-# Multivariate regression execution
+# Perform regression for each asset
+model_results <- final_data_long %>%
+  group_by(Asset) %>%
+  do(tidy(lm(Excess_Return ~ `Mkt-RF` + SMB + HML + RMW + CMA, data = .)))
+
+# Extract model fitness (R-squared)
+model_glance <- final_data_long %>%
+  group_by(Asset) %>%
+  do(glance(lm(Excess_Return ~ `Mkt-RF` + SMB + HML + RMW + CMA, data = .))) %>%
+  select(Asset, r.squared, adj.r.squared, p.value)
+
+# Combine for analysis
+regression_summary <- model_results %>%
+  select(Asset, term, estimate, p.value) %>%
+  pivot_wider(names_from = term, values_from = c(estimate, p.value))
+
+# Display the summary table
+regression_summary
 ```
 
 # Visualizations
 Generating high-fidelity plots for the Final Paper.
 
 ```{r visualizations}
-# ggplot2 visualizations (Rolling beta, Coefficient bars, etc.)
-# Export plots to image/paper/ for LaTeX integration
+# 1. Coefficient Bar Chart
+# Filter out (Intercept) for factor loading focus
+coef_plot <- model_results %>%
+  filter(term != "(Intercept)") %>%
+  ggplot(aes(x = term, y = estimate, fill = Asset)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  theme_minimal() +
+  labs(title = "Fama-French 5-Factor Loadings by Asset",
+       x = "Risk Factor",
+       y = "Beta Coefficient",
+       fill = "Asset Ticker") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# 2. Model Accuracy (Adjusted R-squared)
+rsquared_plot <- model_glance %>%
+  ggplot(aes(x = reorder(Asset, adj.r.squared), y = adj.r.squared, fill = adj.r.squared)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  theme_minimal() +
+  scale_fill_gradient(low = "red", high = "green") +
+  labs(title = "Model Explanatory Power (Adjusted R-squared)",
+       x = "Asset",
+       y = "Adjusted R-squared")
+
+# 3. Cumulative Returns Plot
+cum_plot <- cumulative_returns %>%
+  ggplot(aes(x = Date, y = Cumulative, color = Asset)) +
+  geom_line(linewidth = 1) +
+  theme_minimal() +
+  scale_y_log10() +
+  labs(title = "Cumulative Growth of $1 (2015-Present)",
+       subtitle = "Logarithmic Scale",
+       x = "Year",
+       y = "Wealth Index")
+
+# Create image/paper directory if it doesn't exist
+if (!dir.exists("image/paper")) {
+  dir.create("image/paper", recursive = TRUE)
+}
+
+# Export plots for LaTeX
+ggsave("image/paper/factor_loadings.png", coef_plot, width = 10, height = 6)
+ggsave("image/paper/model_accuracy.png", rsquared_plot, width = 8, height = 5)
+ggsave("image/paper/cumulative_returns.png", cum_plot, width = 10, height = 6)
+
+# Display plots
+coef_plot
+rsquared_plot
+cum_plot
 ```
 
 # Model Diagnostics
-Checking for significance and residuals.
+Checking for significance and model fitness across the portfolio.
 
 ```{r diagnostics}
-# Statistical significance and R-squared analysis
+# 1. Model Fitness Summary (R-squared Audit)
+fitness_summary <- model_glance %>%
+  arrange(desc(adj.r.squared)) %>%
+  rename(`R-squared` = r.squared, `Adj R-squared` = adj.r.squared, `Model P-value` = p.value)
+
+# 2. Significance Audit
+# Create a summary of which factors are statistically significant (p < 0.05)
+significance_summary <- model_results %>%
+  mutate(significant = ifelse(p.value < 0.05, "Yes", "No")) %>%
+  select(Asset, term, significant) %>%
+  pivot_wider(names_from = term, values_from = significant)
+
+# 3. Formatted Coefficient Table (with Significance Stars)
+formatted_coeffs <- model_results %>%
+  mutate(
+    stars = case_when(
+      p.value < 0.001 ~ "***",
+      p.value < 0.01  ~ "**",
+      p.value < 0.05  ~ "*",
+      TRUE            ~ ""
+    ),
+    estimate_star = paste0(round(estimate, 4), stars)
+  ) %>%
+  select(Asset, term, estimate_star) %>%
+  pivot_wider(names_from = term, values_from = estimate_star)
+
+# Display diagnostic tables
+print("--- MODEL FITNESS (R-SQUARED) ---")
+print(fitness_summary)
+
+print("--- FACTOR SIGNIFICANCE (P < 0.05) ---")
+print(significance_summary)
+
+print("--- COEFFICIENTS WITH SIGNIFICANCE STARS ---")
+print(formatted_coeffs)
 ```

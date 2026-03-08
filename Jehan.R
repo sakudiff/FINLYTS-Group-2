@@ -1,49 +1,80 @@
-```{r}
 library(quantmod)
 library(tidyverse)
 library(PerformanceAnalytics)
-```
 
+# Configure download method and silence verbose options
+options(download.file.method = "libcurl")
 
-```{r}
 # Define tickers
+# Note: VXVU.L (Developed World) frequently fails on Yahoo API.
+# VEVE.L is the corresponding Vanguard FTSE Developed World UCITS ETF on LSE and is more reliable.
+ticker_vec <- c(
+  "VUSA.L",
+  "WSML.L",
+  "VEVE.L",
+  "IWQU.L",
+  "VIG",
+  "IITU.L",
+  "SGLN.L",
+  "VWRA.L"
+)
 
-ticker_vec <- c("VUSA.L","WSML.L","VXVU.L","IWQU.L","VIG","IITU.L","SGLN.L","VWRA.L")
+# Create data directory if it doesn't exist
+if (!dir.exists("data")) {
+  dir.create("data")
+}
 
-```
-
-```{r}
-if (!require("quantmod")) install.packages("quantmod")
-library(quantmod)
-
-# Updated Ticker Vector: Using tickers known to have higher uptime on Yahoo API
-ticker_vec <- c("VUSA.L", "WSML.L", "VXVU.L", "IWQU.L", "VIG", "IITU.L", "SGLN.L", "VWRA.L")
+message("--------------------------------------------------")
+message("INITIALIZING DATA COLLECTION")
+message("Tickers: ", paste(ticker_vec, collapse = ", "))
+message("--------------------------------------------------")
 
 historical_data <- lapply(ticker_vec, function(symbol) {
-  tryCatch({
-    # Explicitly setting the download method to handle 404/Connection drops
-    options(download.file.method = "libcurl")
-    
-    df <- getSymbols(symbol, src = "yahoo", from = "2015-01-01", auto.assign = FALSE)
-    
-    # Critical Check: Only process if df is not NULL and has data
-    if (!is.null(df) && nrow(df) > 0) {
-      # Handle the "Missing Values" warning from screenshot 1
-      df <- na.omit(df)
-      message(paste("Successfully retrieved:", symbol))
-      return(df)
-    } else {
+  tryCatch(
+    {
+      # Fetch data: suppressWarnings used to silence 'missing values' checks
+      # since we handle cleaning explicitly with na.omit()
+      df <- suppressWarnings(getSymbols(
+        symbol,
+        src = "yahoo",
+        from = "2015-01-01",
+        auto.assign = FALSE
+      ))
+
+      if (!is.null(df) && nrow(df) > 0) {
+        # Clean data: Remove NAs and calculate daily returns for quick verification
+        df_clean <- na.omit(df)
+
+        # Convert to a tidy dataframe for CSV export
+        df_tidy <- as.data.frame(df_clean) %>%
+          rownames_to_column(var = "Date") %>%
+          as_tibble()
+
+        # Save CSV: standardized format for team members
+        file_name <- paste0("data/", symbol, ".csv")
+        write_csv(df_tidy, file_name)
+
+        message(sprintf(
+          "OK: [%s] | Rows: %d | Start: %s | End: %s",
+          symbol,
+          nrow(df_tidy),
+          min(df_tidy$Date),
+          max(df_tidy$Date)
+        ))
+
+        return(df_clean)
+      } else {
+        message(sprintf("ERROR: [%s] | No data returned", symbol))
+        return(NULL)
+      }
+    },
+    error = function(e) {
+      message(sprintf("FAILED: [%s] | API Error: %s", symbol, e$message))
       return(NULL)
     }
-  }, error = function(e) {
-    # This prevents the script from crashing when a 404 occurs
-    message(paste("Skipping", symbol, "due to API error: ", e$message))
-    return(NULL)
-  })
+  )
 })
 
+# Final cleanup
 names(historical_data) <- ticker_vec
 historical_data <- historical_data[!sapply(historical_data, is.null)]
-```
-
-
