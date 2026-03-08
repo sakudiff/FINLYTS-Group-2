@@ -9,7 +9,7 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
-required_packages <- c("tidyverse", "tidyquant", "quantmod", "broom", "PerformanceAnalytics", "tinytex", "moments", "zoo")
+required_packages <- c("tidyverse", "tidyquant", "quantmod", "broom", "PerformanceAnalytics", "tinytex", "moments", "zoo", "ggrepel")
 new_packages <- required_packages[!(required_packages %in% installed.packages()[,"Package"])]
 
 if(length(new_packages)) {
@@ -23,6 +23,7 @@ library(broom)
 library(PerformanceAnalytics)
 library(moments)
 library(zoo)
+library(ggrepel)
 ```
 
 # Data Ingestion
@@ -31,10 +32,9 @@ This section handles the automated collection of asset data from Yahoo Finance a
 ```{r data-ingestion}
 # 1. Configuration & Tickers
 options(download.file.method = "libcurl")
+library(lubridate) # Ensure lubridate is loaded for floor_date
 
 # Using USD-denominated tickers to align with Fama-French USD Factors
-# VUSD.L (S&P 500), WSML.L (Small Cap), VDEV.L (Developed), QUAL (Quality), 
-# VIG (Dividend), XLK (Info Tech), IAU (Gold), VWRA.L (All-World)
 tickers <- c("VUSD.L", "WSML.L", "VDEV.L", "QUAL", "VIG", "XLK", "IAU", "VWRA.L")
 
 if (!dir.exists("data")) {
@@ -106,7 +106,9 @@ ff5_monthly <- ff5_raw[1:monthly_end_row, ] %>%
     Date = as.Date(paste0(Date_Raw, "01"), format = "%Y%m%d"),
     across(c(`Mkt-RF`, SMB, HML, RMW, CMA, RF), ~ as.numeric(.) / 100)
   ) %>%
-  select(Date, `Mkt-RF`, SMB, HML, RMW, CMA, RF)
+  # Sanitize names: replace dashes with underscores for syntactic safety in OLS
+  rename(Mkt_RF = `Mkt-RF`) %>%
+  select(Date, Mkt_RF, SMB, HML, RMW, CMA, RF)
 
 # 5. Temporal Alignment
 asset_returns <- asset_returns %>% mutate(Date = floor_date(Date, "month"))
@@ -118,22 +120,24 @@ Merging returns and factor premiums.
 
 ```{r preprocessing}
 # Merge assets with factors
-final_data <- inner_join(asset_returns, ff5_monthly, by = "Date") %>%
-  na.omit()
+# Using inner_join but avoiding na.omit on wide data to prevent dropping dates 
+# where only one asset is missing.
+final_data <- inner_join(asset_returns, ff5_monthly, by = "Date")
 
-if (nrow(final_data) == 0) {
+# Pivot longer FIRST, then na.omit to preserve all possible data pairs
+final_data_long <- final_data %>%
+  pivot_longer(cols = all_of(active_tickers), names_to = "Asset", values_to = "Return") %>%
+  filter(!is.na(Return)) %>% # Only drop specific missing asset-months
+  mutate(Excess_Return = Return - RF)
+
+if (nrow(final_data_long) == 0) {
   stop("ERROR: No overlapping data between assets and factors.")
 }
 
-# Calculate excess returns
-final_data_long <- final_data %>%
-  pivot_longer(cols = all_of(active_tickers), names_to = "Asset", values_to = "Return") %>%
-  mutate(Excess_Return = Return - RF)
-
 # 1. Factor Correlation
 factor_corr <- final_data %>%
-  select(`Mkt-RF`, SMB, HML, RMW, CMA) %>%
-  cor()
+  select(Mkt_RF, SMB, HML, RMW, CMA) %>%
+  cor(use = "pairwise.complete.obs")
 
 # 2. Cumulative Returns
 cumulative_returns <- asset_returns %>%
@@ -141,7 +145,7 @@ cumulative_returns <- asset_returns %>%
   filter(!is.na(Return)) %>%
   group_by(Asset) %>%
   arrange(Date) %>%
-  mutate(Cumulative = exp(cumsum(Return))) %>%
+  mutate(Cumulative = exp(cumsum(Return)) / exp(first(Return))) %>%
   ungroup()
 
 # 3. Summary Stats for Visuals
@@ -163,7 +167,7 @@ model_results <- final_data_long %>%
   group_by(Asset) %>%
   nest() %>%
   mutate(
-    model = map(data, ~ lm(Excess_Return ~ `Mkt-RF` + SMB + HML + RMW + CMA, data = .x)),
+    model = map(data, ~ lm(Excess_Return ~ Mkt_RF + SMB + HML + RMW + CMA, data = .x)),
     tidied = map(model, tidy),
     glanced = map(model, glance)
   ) %>%
@@ -175,7 +179,7 @@ model_glance <- final_data_long %>%
   group_by(Asset) %>%
   nest() %>%
   mutate(
-    model = map(data, ~ lm(Excess_Return ~ `Mkt-RF` + SMB + HML + RMW + CMA, data = .x)),
+    model = map(data, ~ lm(Excess_Return ~ Mkt_RF + SMB + HML + RMW + CMA, data = .x)),
     glanced = map(model, glance)
   ) %>%
   unnest(glanced) %>%
@@ -193,93 +197,140 @@ regression_summary
 Generating high-fidelity plots for the Final Paper, including new scatter plots and rolling beta analysis.
 
 ```{r visualizations}
+# 0. Consistent Color Palette & Best Practices Theme
+asset_colors <- c(
+  "VWRA.L" = "#2C3E50",  # Benchmark (Dark Navy)
+  "VDEV.L" = "#5D6D7E",  # Developed
+  "WSML.L" = "#8E44AD",  # Small Cap
+  "QUAL"   = "#27AE60",  # Quality
+  "VIG"    = "#3498DB",  # Dividend
+  "XLK"    = "#E67E22",  # Tech
+  "IAU"    = "#F1C40F",  # Gold
+  "VUSD.L" = "#C0392B"   # S&P 500 (Red)
+)
+
+theme_quant <- function() {
+  theme_minimal() +
+    theme(
+      plot.title = element_text(face = "bold", size = 14, margin = margin(b = 5)),
+      plot.subtitle = element_text(size = 11, color = "#555555", margin = margin(b = 15)),
+      plot.caption = element_text(size = 8, color = "#777777", hjust = 0, margin = margin(t = 15)),
+      axis.title = element_text(size = 10, face = "bold"),
+      axis.text = element_text(size = 9),
+      panel.grid.minor = element_blank(),
+      panel.grid.major = element_line(color = "#EBEBEB", linewidth = 0.3),
+      legend.position = "bottom",
+      legend.title = element_text(size = 10, face = "bold"),
+      legend.text = element_text(size = 9),
+      axis.ticks = element_blank(),
+      plot.margin = margin(20, 20, 20, 20)
+    )
+}
+
 # 1. Coefficient Bar Chart
 coef_plot <- model_results %>%
   filter(term != "(Intercept)") %>%
   ggplot(aes(x = term, y = estimate, fill = Asset)) +
-  geom_bar(stat = "identity", position = "dodge") +
-  theme_minimal() +
-  labs(title = "Fama-French 5-Factor Loadings by Asset",
-       x = "Risk Factor",
-       y = "Beta Coefficient",
-       fill = "Asset Ticker") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  geom_bar(stat = "identity", position = "dodge", alpha = 0.9) +
+  theme_quant() +
+  scale_fill_manual(values = asset_colors) +
+  labs(title = "Asset Sensitivities to Fama-French Risk Factors",
+       subtitle = "Beta Coefficients (Loadings) estimated via OLS Regression",
+       x = "Fama-French Factor",
+       y = "Beta Loading (Unitless)",
+       fill = "Asset Ticker",
+       caption = "Note: Factors include Mkt_RF (Market), SMB (Size), HML (Value), RMW (Profitability), and CMA (Investment).\nSource: Kenneth French Data Library (2015-2026).") +
+  geom_hline(yintercept = 0, color = "black", linewidth = 0.5)
 
 # 2. Model Accuracy (Adjusted R-squared)
 rsquared_plot <- model_glance %>%
-  ggplot(aes(x = reorder(Asset, adj.r.squared), y = adj.r.squared, fill = adj.r.squared)) +
-  geom_bar(stat = "identity") +
+  ggplot(aes(x = reorder(Asset, adj.r.squared), y = adj.r.squared, fill = Asset)) +
+  geom_bar(stat = "identity", width = 0.7) +
   coord_flip() +
-  theme_minimal() +
-  scale_fill_gradient(low = "red", high = "green") +
-  labs(title = "Model Explanatory Power (Adjusted R-squared)",
-       x = "Asset",
-       y = "Adjusted R-squared")
+  theme_quant() +
+  scale_fill_manual(values = asset_colors) +
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) +
+  labs(title = "Model Explanatory Power: Adjusted R-squared",
+       subtitle = "Proportion of variance explained by the 5-factor model",
+       x = NULL,
+       y = "Adjusted R-squared Value",
+       fill = "Asset",
+       caption = "Source: Calculations based on Kenneth French data. Higher values indicate better model fit.")
 
 # 3. Cumulative Returns Plot
 cum_plot <- cumulative_returns %>%
   ggplot(aes(x = Date, y = Cumulative, color = Asset)) +
-  geom_line(linewidth = 1) +
-  theme_minimal() +
-  scale_y_log10() +
-  labs(title = "Cumulative Growth of $1 (2015-Present)",
-       subtitle = "Logarithmic Scale",
+  geom_line(linewidth = 0.8) +
+  theme_quant() +
+  scale_y_log10(breaks = c(1, 1.5, 2, 3, 4, 5)) +
+  scale_color_manual(values = asset_colors) +
+  labs(title = "Wealth Index: Cumulative Growth of $1 Investment",
+       subtitle = "Historical Performance (Logarithmic Scale), 2015 - 2026",
        x = "Year",
-       y = "Wealth Index")
+       y = "Value of $1 (USD)",
+       caption = "Source: Yahoo Finance. First date normalized to 1.00 for all assets.")
 
-# 4. Risk-Return Scatter Plot
-# Plotting Realized Mean Return vs. Market Beta
-scatter_data <- stats_summary %>%
-  select(Asset, Mean, SD) %>%
-  left_join(model_results %>% filter(term == "Mkt-RF") %>% select(Asset, estimate), by = "Asset")
+# 4. Risk-Return Scatter Plot (FIX: Renamed Factor & Data Preservation)
+scatter_data <- final_data_long %>%
+  group_by(Asset) %>%
+  summarise(
+    Mean_Excess = mean(Excess_Return, na.rm = TRUE),
+    SD = sd(Return, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  left_join(model_results %>% filter(term == "Mkt_RF") %>% select(Asset, estimate), by = "Asset")
 
 scatter_plot <- scatter_data %>%
-  ggplot(aes(x = estimate, y = Mean, label = Asset)) +
-  geom_point(aes(size = SD, color = Asset)) +
-  geom_text(vjust = -1) +
-  geom_smooth(method = "lm", se = FALSE, color = "black", linetype = "dashed") +
-  theme_minimal() +
-  labs(title = "Risk-Return Profile: Realized Return vs. Market Beta",
-       x = "Market Beta (Loading)",
-       y = "Mean Monthly Return",
-       size = "Volatility (SD)")
+  mutate(Mean_Excess_Pct = Mean_Excess * 100) %>%
+  ggplot(aes(x = estimate, y = Mean_Excess_Pct, label = Asset)) +
+  geom_smooth(method = "lm", se = FALSE, color = "#CCCCCC", linetype = "dashed", linewidth = 0.5) +
+  geom_point(aes(size = SD, color = Asset), alpha = 0.8) +
+  ggrepel::geom_text_repel(size = 3, fontface = "bold", box.padding = 0.5) +
+  theme_quant() +
+  scale_color_manual(values = asset_colors) +
+  scale_size_area(max_size = 10) + # Ensure points are visible and proportional
+  labs(title = "Security Market Line (SML): Risk-Adjusted Returns",
+       subtitle = "Mean Monthly Excess Return (%) vs. Market Beta (Loading)",
+       x = "Market Beta (β)",
+       y = "Mean Monthly Excess Return (%)",
+       size = "Volatility (SD)",
+       caption = "Note: Dashed line represents the empirical SML. Asset size indicates total volatility.")
 
-# 5. Rolling Beta Analysis (VUSD.L as example)
-# Note: For brevity, we calculate 24-month rolling beta for VUSD.L vs Market
+# 5. Rolling Beta Analysis (VUSD.L)
 rolling_beta_data <- final_data %>%
-  select(Date, VUSD.L, `Mkt-RF`, RF) %>%
+  select(Date, VUSD.L, Mkt_RF, RF) %>%
   mutate(VUSD_Excess = VUSD.L - RF)
 
-# Function for rolling regression
 roll_reg <- function(d) {
-  coef(lm(VUSD_Excess ~ `Mkt-RF`, data = as.data.frame(d)))[2]
+  coef(lm(VUSD_Excess ~ Mkt_RF, data = as.data.frame(d)))[2]
 }
 
-# Calculate rolling beta using zoo
-rolling_beta_data$Beta <- zoo::rollapply(rolling_beta_data %>% select(VUSD_Excess, `Mkt-RF`), 
+rolling_beta_data$Beta <- zoo::rollapply(rolling_beta_data %>% select(VUSD_Excess, Mkt_RF), 
                                          width = 24, FUN = roll_reg, by.column = FALSE, fill = NA)
 
 rolling_beta_plot <- rolling_beta_data %>%
   filter(!is.na(Beta)) %>%
   ggplot(aes(x = Date, y = Beta)) +
-  geom_line(color = "steelblue", linewidth = 1) +
-  geom_hline(yintercept = 1, linetype = "dashed", color = "red") +
-  theme_minimal() +
-  labs(title = "24-Month Rolling Market Beta: VUSD.L (S&P 500)",
-       x = "Date",
-       y = "Rolling Beta Loading")
+  geom_hline(yintercept = 1, linetype = "dashed", color = "#C0392B", linewidth = 0.8) +
+  geom_line(color = "#C0392B", linewidth = 1) +
+  theme_quant() +
+  labs(title = "Stability Analysis: 24-Month Rolling Market Beta",
+       subtitle = "Asset: VUSD.L (S&P 500 ETF) relative to Fama-French Market Factor",
+       x = "Analysis Period",
+       y = "Rolling Beta Loading",
+       caption = "Note: Red dashed line at 1.00 represents market-neutral sensitivity.\nSource: Yahoo Finance & Kenneth French Library.")
 
-# Create image/paper directory if it doesn't exist
+# Create image/paper directory
 if (!dir.exists("image/paper")) {
   dir.create("image/paper", recursive = TRUE)
 }
 
-# Export all plots for LaTeX
-ggsave("image/paper/factor_loadings.png", coef_plot, width = 10, height = 6)
-ggsave("image/paper/model_accuracy.png", rsquared_plot, width = 8, height = 5)
-ggsave("image/paper/cumulative_returns.png", cum_plot, width = 10, height = 6)
-ggsave("image/paper/risk_return_scatter.png", scatter_plot, width = 8, height = 6)
-ggsave("image/paper/rolling_beta.png", rolling_beta_plot, width = 10, height = 5)
+# Export all plots
+ggsave("image/paper/factor_loadings.png", coef_plot, width = 10, height = 6, dpi = 300)
+ggsave("image/paper/model_accuracy.png", rsquared_plot, width = 8, height = 5, dpi = 300)
+ggsave("image/paper/cumulative_returns.png", cum_plot, width = 10, height = 6, dpi = 300)
+ggsave("image/paper/risk_return_scatter.png", scatter_plot, width = 8, height = 6, dpi = 300)
+ggsave("image/paper/rolling_beta.png", rolling_beta_plot, width = 10, height = 5, dpi = 300)
 
 # Display plots
 coef_plot
