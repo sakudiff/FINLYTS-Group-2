@@ -148,8 +148,8 @@ cumulative_returns <- asset_returns %>%
 stats_summary <- final_data_long %>%
   group_by(Asset) %>%
   summarise(
-    Mean = mean(Return, na.omit = TRUE),
-    SD = sd(Return, na.omit = TRUE),
+    Mean = mean(Return, na.rm = TRUE),
+    SD = sd(Return, na.rm = TRUE),
     .groups = "drop"
   )
 ```
@@ -170,7 +170,7 @@ model_results <- final_data_long %>%
   unnest(tidied) %>%
   select(Asset, term, estimate, std.error, statistic, p.value)
 
-# Extract model fitness
+# Extract model fitness separately for easier join
 model_glance <- final_data_long %>%
   group_by(Asset) %>%
   nest() %>%
@@ -186,21 +186,6 @@ regression_summary <- model_results %>%
   select(Asset, term, estimate, p.value) %>%
   pivot_wider(names_from = term, values_from = c(estimate, p.value))
 
-regression_summary
-```
-
-# Extract model fitness (R-squared)
-model_glance <- final_data_long %>%
-  group_by(Asset) %>%
-  do(glance(lm(Excess_Return ~ `Mkt-RF` + SMB + HML + RMW + CMA, data = .))) %>%
-  select(Asset, r.squared, adj.r.squared, p.value)
-
-# Combine for analysis
-regression_summary <- model_results %>%
-  select(Asset, term, estimate, p.value) %>%
-  pivot_wider(names_from = term, values_from = c(estimate, p.value))
-
-# Display the summary table
 regression_summary
 ```
 
