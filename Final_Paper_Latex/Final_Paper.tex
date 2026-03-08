@@ -173,6 +173,15 @@ To provide a counter-balance to value-oriented factors, \textbf{XLK} (Technology
 \subsection{Descriptive Statistics}
 [To be completed by the assigned team member. Provide a tabular presentation and analysis of Mean, Median, Standard Deviation, Skewness, and Kurtosis for all eight assets to analyze their risk profiles and distributional characteristics.]
 
+\subsection{Visual Analytics and Performance Distribution}
+[To be completed by the R Analysis lead. This section should integrate high-fidelity graphics including:
+\begin{itemize}
+    \item \textbf{Factor Exposure Bar Charts:} Visualizing the beta coefficients from Table 4.
+    \item \textbf{Risk-Return Scatter Plots:} Mapping the assets against the 5-factor risk premiums.
+    \item \textbf{Rolling Beta Analysis:} (Optional) To show the temporal stability of factor loadings.
+\end{itemize}
+All figures must be referenced and interpreted within the text to support the discussion.]
+
 \subsection{Regression Results and Model Performance}
 
 Prior to examining the statistical outputs of the multivariate OLS regression, the cumulative growth trajectories of the eight-asset portfolio, depicted in Figure~\ref{fig:cum_returns} on a logarithmic scale, provide essential historical context for interpreting the factor regression results.
@@ -286,8 +295,22 @@ In contrast, the second group consists solely of IAU (iShares Gold Trust), for w
 Several structural limitations warrant consideration when interpreting these results. First, while the use of USD-denominated tickers ensures direct alignment with the Fama-French factor portfolios constructed from U.S. equity data, this approach may not fully account for the foreign-currency dynamics and regional risk premia embedded in internationally-oriented ETFs such as VDEV.L, VWRA.L, and WSML.L, whose underlying holdings extend well beyond U.S. borders. Second, the portfolio of eight assets, while purposively selected to span a broad range of factor tilts, remains a small and non-random subset of the global ETF universe, and the regression results should not be generalized to other instruments. Third, the analysis period commencing in January 2015 encompasses structurally distinct macroeconomic regimes, including the post-quantitative-easing normalization cycle of 2017--2019, the COVID-19 market shock of 2020, and the subsequent large-cap technology boom of 2021--2026, which may each have materially altered the realized magnitude and statistical significance of factor loadings.
  A rolling-window regression would provide deeper insight into the temporal stability of the estimated betas, but this lies beyond the current scope. Finally, the OLS framework rests on assumptions of homoskedastic and serially uncorrelated residuals. While the preliminary factor correlation analysis confirms the absence of severe multicollinearity among the five independent variables, formal tests for heteroskedasticity and autocorrelation were not conducted in this study and represent an avenue for methodological refinement in future work.
 
+\subsection{Practical Implications for Portfolio Management}
+[To be completed by the Theory \& Writing lead. This section must bridge the gap between empirical results and real-world investment strategies.
+\begin{itemize}
+    \item \textbf{Alpha for Asset Allocators:} Discuss how the model's intercept behavior (e.g., negative alphas for QUAL and VWRA.L) informs cost-of-capital estimates and manager selection.
+    \item \textbf{Factor Timing:} Analyze the divergence between factor exposure (e.g., WSML.L's high SMB loading) and factor reward over the 2015--2026 period.
+    \item \textbf{Risk-Aware Diversification:} Use the gold (IAU) diagnostic result to argue for multi-asset portfolios that include non-equity, orthogonal return streams.]
+\end{itemize}
+
 \section{Conclusion}
-[To be completed by the assigned team member. Synthesize the findings and provide a final academic verdict on the model's efficacy for the selected portfolio, linking empirical results to practical investment implications.]
+[To be completed by the assigned team member. Synthesize the findings and provide a final academic verdict on the model's efficacy for the selected portfolio.
+\begin{itemize}
+    \item \textbf{Summary of Empirical Findings:} Recap how each asset's realized returns aligned with its hypothesized factor tilts (e.g., Small Cap, Profitability, Growth).
+    \item \textbf{Model Efficacy:} Deliver a verdict on whether the 5-factor structure is sufficient for the equity core versus multi-asset benchmarks.
+    \item \textbf{Limitations and Future Research:} Briefly address the impact of foreign-currency basis and regional risk premiums not captured in this U.S.-centric framework.
+    \item \textbf{Final Academic Verdict:} A closing statement on the utility of the Fama-French 5-Factor Model in modern quantitative finance.]
+\end{itemize}
 
 \printbibliography
 
