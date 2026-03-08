@@ -9,7 +9,7 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
-required_packages <- c("tidyverse", "tidyquant", "quantmod", "broom", "PerformanceAnalytics", "tinytex")
+required_packages <- c("tidyverse", "tidyquant", "quantmod", "broom", "PerformanceAnalytics", "tinytex", "moments", "zoo")
 new_packages <- required_packages[!(required_packages %in% installed.packages()[,"Package"])]
 
 if(length(new_packages)) {
@@ -157,10 +157,29 @@ head(final_data_long)
 ```
 
 # Descriptive Statistics
-Analyzing the 8 selected assets.
+Analyzing the selected assets to understand their risk profiles and distributional characteristics.
 
 ```{r descriptive-stats}
-# Mean, SD, Skewness, Kurtosis calculations
+# Calculate full descriptive statistics
+stats_summary <- final_data_long %>%
+  group_by(Asset) %>%
+  summarise(
+    Mean = mean(Return),
+    Median = median(Return),
+    SD = sd(Return),
+    Min = min(Return),
+    Max = max(Return),
+    Skewness = moments::skewness(Return),
+    Kurtosis = moments::kurtosis(Return)
+  ) %>%
+  mutate(across(where(is.numeric), ~ round(., 4)))
+
+# Export table as CSV for reference
+write_csv(stats_summary, "data/descriptive_stats.csv")
+
+# Display the table
+print("--- ASSET DESCRIPTIVE STATISTICS ---")
+print(stats_summary)
 
 # Factor Correlation Display
 print("--- RISK FACTOR CORRELATION MATRIX ---")
@@ -192,11 +211,10 @@ regression_summary
 ```
 
 # Visualizations
-Generating high-fidelity plots for the Final Paper.
+Generating high-fidelity plots for the Final Paper, including new scatter plots and rolling beta analysis.
 
 ```{r visualizations}
 # 1. Coefficient Bar Chart
-# Filter out (Intercept) for factor loading focus
 coef_plot <- model_results %>%
   filter(term != "(Intercept)") %>%
   ggplot(aes(x = term, y = estimate, fill = Asset)) +
@@ -230,20 +248,66 @@ cum_plot <- cumulative_returns %>%
        x = "Year",
        y = "Wealth Index")
 
+# 4. Risk-Return Scatter Plot
+# Plotting Realized Mean Return vs. Market Beta
+scatter_data <- stats_summary %>%
+  select(Asset, Mean, SD) %>%
+  left_join(model_results %>% filter(term == "Mkt-RF") %>% select(Asset, estimate), by = "Asset")
+
+scatter_plot <- scatter_data %>%
+  ggplot(aes(x = estimate, y = Mean, label = Asset)) +
+  geom_point(aes(size = SD, color = Asset)) +
+  geom_text(vjust = -1) +
+  geom_smooth(method = "lm", se = FALSE, color = "black", linetype = "dashed") +
+  theme_minimal() +
+  labs(title = "Risk-Return Profile: Realized Return vs. Market Beta",
+       x = "Market Beta (Loading)",
+       y = "Mean Monthly Return",
+       size = "Volatility (SD)")
+
+# 5. Rolling Beta Analysis (VUSD.L as example)
+# Note: For brevity, we calculate 24-month rolling beta for VUSD.L vs Market
+rolling_beta_data <- final_data %>%
+  select(Date, VUSD.L, `Mkt-RF`, RF) %>%
+  mutate(VUSD_Excess = VUSD.L - RF)
+
+# Function for rolling regression
+roll_reg <- function(d) {
+  coef(lm(VUSD_Excess ~ `Mkt-RF`, data = as.data.frame(d)))[2]
+}
+
+# Calculate rolling beta using zoo
+rolling_beta_data$Beta <- zoo::rollapply(rolling_beta_data %>% select(VUSD_Excess, `Mkt-RF`), 
+                                         width = 24, FUN = roll_reg, by.column = FALSE, fill = NA)
+
+rolling_beta_plot <- rolling_beta_data %>%
+  filter(!is.na(Beta)) %>%
+  ggplot(aes(x = Date, y = Beta)) +
+  geom_line(color = "steelblue", linewidth = 1) +
+  geom_hline(yintercept = 1, linetype = "dashed", color = "red") +
+  theme_minimal() +
+  labs(title = "24-Month Rolling Market Beta: VUSD.L (S&P 500)",
+       x = "Date",
+       y = "Rolling Beta Loading")
+
 # Create image/paper directory if it doesn't exist
 if (!dir.exists("image/paper")) {
   dir.create("image/paper", recursive = TRUE)
 }
 
-# Export plots for LaTeX
+# Export all plots for LaTeX
 ggsave("image/paper/factor_loadings.png", coef_plot, width = 10, height = 6)
 ggsave("image/paper/model_accuracy.png", rsquared_plot, width = 8, height = 5)
 ggsave("image/paper/cumulative_returns.png", cum_plot, width = 10, height = 6)
+ggsave("image/paper/risk_return_scatter.png", scatter_plot, width = 8, height = 6)
+ggsave("image/paper/rolling_beta.png", rolling_beta_plot, width = 10, height = 5)
 
 # Display plots
 coef_plot
 rsquared_plot
 cum_plot
+scatter_plot
+rolling_beta_plot
 ```
 
 # Model Diagnostics
