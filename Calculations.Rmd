@@ -152,38 +152,13 @@ cumulative_returns <- asset_returns %>%
   mutate(Cumulative = exp(cumsum(Return))) %>%
   ungroup()
 
-# Display a sample of the cleaned data
-head(final_data_long)
-```
-
-# Descriptive Statistics
-Analyzing the selected assets to understand their risk profiles and distributional characteristics.
-
-```{r descriptive-stats}
-# Calculate full descriptive statistics
+# 3. Summary Stats for Visuals (Hidden from final output)
 stats_summary <- final_data_long %>%
   group_by(Asset) %>%
   summarise(
     Mean = mean(Return),
-    Median = median(Return),
-    SD = sd(Return),
-    Min = min(Return),
-    Max = max(Return),
-    Skewness = moments::skewness(Return),
-    Kurtosis = moments::kurtosis(Return)
-  ) %>%
-  mutate(across(where(is.numeric), ~ round(., 4)))
-
-# Export table as CSV for reference
-write_csv(stats_summary, "data/descriptive_stats.csv")
-
-# Display the table
-print("--- ASSET DESCRIPTIVE STATISTICS ---")
-print(stats_summary)
-
-# Factor Correlation Display
-print("--- RISK FACTOR CORRELATION MATRIX ---")
-print(round(factor_corr, 3))
+    SD = sd(Return)
+  )
 ```
 
 # Regression Modeling
