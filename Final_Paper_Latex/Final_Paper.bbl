@@ -184,35 +184,6 @@
       \field{pages}{1\bibrangedash 22}
       \range{pages}{22}
     \endentry
-    \entry{french2024data}{misc}{}{}
-      \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=4ca55f4db61ae3245d066a218dca72c8}{%
-           family={French},
-           familyi={F\bibinitperiod},
-           given={Kenneth\bibnamedelima R},
-           giveni={K\bibinitperiod\bibinitdelim R\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{4ca55f4db61ae3245d066a218dca72c8}
-      \strng{fullhash}{4ca55f4db61ae3245d066a218dca72c8}
-      \strng{fullhashraw}{4ca55f4db61ae3245d066a218dca72c8}
-      \strng{bibnamehash}{4ca55f4db61ae3245d066a218dca72c8}
-      \strng{authorbibnamehash}{4ca55f4db61ae3245d066a218dca72c8}
-      \strng{authornamehash}{4ca55f4db61ae3245d066a218dca72c8}
-      \strng{authorfullhash}{4ca55f4db61ae3245d066a218dca72c8}
-      \strng{authorfullhashraw}{4ca55f4db61ae3245d066a218dca72c8}
-      \field{sortinit}{F}
-      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{howpublished}{\url{https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html}}
-      \field{note}{Accessed: 2026-03-01}
-      \field{title}{Data Library}
-      \field{year}{2024}
-    \endentry
     \entry{MOSOEU202255}{article}{}{}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=e86ca3a84adaf4bec13cfef45bb25350}{%
@@ -428,35 +399,6 @@
       \field{year}{2015}
       \field{pages}{1\bibrangedash 22}
       \range{pages}{22}
-    \endentry
-    \entry{french2024data}{misc}{}{}
-      \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=4ca55f4db61ae3245d066a218dca72c8}{%
-           family={French},
-           familyi={F\bibinitperiod},
-           given={Kenneth\bibnamedelima R},
-           giveni={K\bibinitperiod\bibinitdelim R\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{4ca55f4db61ae3245d066a218dca72c8}
-      \strng{fullhash}{4ca55f4db61ae3245d066a218dca72c8}
-      \strng{fullhashraw}{4ca55f4db61ae3245d066a218dca72c8}
-      \strng{bibnamehash}{4ca55f4db61ae3245d066a218dca72c8}
-      \strng{authorbibnamehash}{4ca55f4db61ae3245d066a218dca72c8}
-      \strng{authornamehash}{4ca55f4db61ae3245d066a218dca72c8}
-      \strng{authorfullhash}{4ca55f4db61ae3245d066a218dca72c8}
-      \strng{authorfullhashraw}{4ca55f4db61ae3245d066a218dca72c8}
-      \field{sortinit}{F}
-      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{howpublished}{\url{https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html}}
-      \field{note}{Accessed: 2026-03-01}
-      \field{title}{Data Library}
-      \field{year}{2024}
     \endentry
     \entry{MOSOEU202255}{article}{}{}
       \name{author}{2}{}{%
