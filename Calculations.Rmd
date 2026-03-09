@@ -10,6 +10,8 @@ output:
 ```{r setup, include=FALSE}
 # --- 1. Environment Setup & Dependencies ---
 # This section ensures all necessary libraries are installed and loaded.
+# We utilize specialized R libraries for data science (tidyverse), 
+# financial analysis (tidyquant), and statistical reporting (broom).
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 required_packages <- c("tidyverse", "tidyquant", "quantmod", "broom", "PerformanceAnalytics", "tinytex", "moments", "zoo", "ggrepel")
@@ -30,7 +32,7 @@ library(ggrepel)
 ```
 
 # 1. Data Ingestion
-This section handles the automated collection of asset data from Yahoo Finance and the loading of Kenneth French factors from the local data directory.
+This stage handles the automated acquisition of historical price data and risk factors. As detailed in the methodology, we define a set of USD-denominated tickers to align with the Kenneth French factors. The script fetches asset data from Yahoo Finance and loads the Five-Factor data from the local Kenneth French Data Library, utilizing a local caching mechanism to optimize network traffic.
 
 ```{r data-ingestion}
 # 1. Configuration & Tickers
@@ -114,18 +116,20 @@ ff5_monthly <- ff5_raw[1:monthly_end_row, ] %>%
   select(Date, Mkt_RF, SMB, HML, RMW, CMA, RF)
 
 # 5. Temporal Alignment
+# Synchronizing dates to the first of each month to ensure perfect factor alignment.
 asset_returns <- asset_returns %>% mutate(Date = floor_date(Date, "month"))
 ff5_monthly <- ff5_monthly %>% mutate(Date = floor_date(Date, "month"))
 ```
 
 # 2. Preprocessing & Normalization
-Merging returns and factor premiums, and calculating cumulative returns for performance analysis.
+This section performs the critical task of synchronizing asset returns with factor premiums. We calculate log-returns and derive "Excess Returns" by subtracting the risk-free rate (RF), which allows us to isolate the compensation earned specifically for market risk exposure.
 
 ```{r preprocessing}
 # 1. Merge assets with factors
 final_data <- inner_join(asset_returns, ff5_monthly, by = "Date")
 
 # 2. Pivot longer for analysis
+# Pivoting allows for the vectorized application of models across all assets.
 final_data_long <- final_data %>%
   pivot_longer(cols = all_of(active_tickers), names_to = "Asset", values_to = "Return") %>%
   filter(!is.na(Return)) %>% 
@@ -136,11 +140,13 @@ if (nrow(final_data_long) == 0) {
 }
 
 # 3. Factor Correlation
+# Auditing the relationship between the five risk premiums to detect potential multicollinearity.
 factor_corr <- final_data %>%
   select(Mkt_RF, SMB, HML, RMW, CMA) %>%
   cor(use = "pairwise.complete.obs")
 
 # 4. Cumulative Returns (Wealth Index)
+# Calculating the growth of a hypothetical $1 investment over the analysis horizon.
 cumulative_returns <- asset_returns %>%
   pivot_longer(-Date, names_to = "Asset", values_to = "Return") %>%
   filter(!is.na(Return)) %>%
@@ -151,7 +157,7 @@ cumulative_returns <- asset_returns %>%
 ```
 
 # 3. Descriptive Statistical Profiling
-Calculating central tendency, dispersion, and higher-moment metrics to understand the distribution of asset returns.
+Prior to regression analysis, we perform a distributional audit. This stage computes central tendency (Mean, Median) and dispersion (SD, Range), along with higher-moment metrics (Skewness, Kurtosis) to identify non-normalities and the impact of historical market shocks.
 
 ```{r stats-profiling}
 # Descriptive Statistics Table
@@ -169,7 +175,7 @@ stats_table
 ```
 
 # 4. Multivariate Regression Modeling
-Fitting the Fama-French 5-Factor model for each asset using a nested OLS workflow.
+The core of our econometric analysis involves fitting the Fama-French 5-Factor model using Ordinary Least Squares (OLS) regression. We employ a modern functional programming approach (nest and map) to decompose each asset's excess returns into the five systematic risk premiums: Market, Size, Value, Profitability, and Investment.
 
 ```{r model-fitting}
 # Robust regression workflow using nest/map
@@ -184,7 +190,7 @@ model_results <- final_data_long %>%
   unnest(tidied) %>%
   select(Asset, term, estimate, std.error, statistic, p.value)
 
-# Extract model fitness (R-squared)
+# Extract model fitness (Adjusted R-squared)
 model_glance <- final_data_long %>%
   group_by(Asset) %>%
   nest() %>%
@@ -204,7 +210,7 @@ regression_summary
 ```
 
 # 5. Visual Analytics
-Generating high-fidelity visualizations for factor loadings, performance, and model stability.
+To facilitate interpretation, we generate high-fidelity visualizations. These charts map asset sensitivities (Factor Loadings), evaluate model accuracy (Adjusted R-squared), and trace historical growth trajectories. All plots utilize a consistent color palette and a custom `theme_quant` for professional publication standards.
 
 ```{r visualizations}
 # 0. Consistent Color Palette & Custom Theme
@@ -330,7 +336,7 @@ rolling_beta_plot <- rolling_beta_data %>%
        y = "Rolling Beta Loading",
        caption = "Red dashed line at 1.00 represents market-neutral sensitivity.")
 
-# Create directories and save plots
+# Create directories and save plots for Final Paper integration
 if (!dir.exists("image/paper")) dir.create("image/paper", recursive = TRUE)
 ggsave("image/paper/factor_loadings.png", coef_plot, width = 10, height = 6)
 ggsave("image/paper/model_accuracy.png", rsquared_plot, width = 8, height = 5)
@@ -338,7 +344,7 @@ ggsave("image/paper/cumulative_returns.png", cum_plot, width = 10, height = 6)
 ggsave("image/paper/risk_return_scatter.png", scatter_plot, width = 8, height = 6)
 ggsave("image/paper/rolling_beta.png", rolling_beta_plot, width = 10, height = 5)
 
-# Display plots
+# Display active plots
 coef_plot
 rsquared_plot
 cum_plot
@@ -347,19 +353,19 @@ rolling_beta_plot
 ```
 
 # 6. Model Diagnostics & Significance Audit
-Final audit of model fitness and statistical significance of individual risk premiums.
+The final stage of the workflow involves a rigorous audit of statistical significance. We calculate p-values for all factor loadings and apply standard academic "significance stars." This diagnostic ensures the reliability of our findings and identifies which risk premiums are the primary drivers of performance across the portfolio.
 
 ```{r diagnostics}
-# 1. Model Fitness Summary
+# 1. Model Fitness Summary (Sorted by Adjusted R-squared)
 fitness_summary <- model_glance %>%
   arrange(desc(adj.r.squared)) %>%
   rename(`R-squared` = r.squared, `Adj R-squared` = adj.r.squared, `Model P-value` = p.value)
 
-# 2. Significance Audit (Binary)
+# 2. Significance Audit (Binary Yes/No at 95% Confidence)
 significance_summary <- model_results %>%
   mutate(significant = ifelse(p.value < 0.05, "Yes", "No")) %>%
   select(Asset, term, significant) %>%
-  pivot_wider(names_from = term, values_from = significant)
+  pivot_wider(names_from = term, values_from = significance)
 
 # 3. Formatted Coefficient Table (Stars)
 formatted_coeffs <- model_results %>%
@@ -375,8 +381,13 @@ formatted_coeffs <- model_results %>%
   select(Asset, term, estimate_star) %>%
   pivot_wider(names_from = term, values_from = estimate_star)
 
-# Print Diagnostics
+# Display Diagnostic Tables
+print("--- MODEL FITNESS (ADJUSTED R-SQUARED) ---")
 print(fitness_summary)
+
+print("--- FACTOR SIGNIFICANCE AUDIT (P < 0.05) ---")
 print(significance_summary)
+
+print("--- REGRESSION COEFFICIENTS WITH SIGNIFICANCE STARS ---")
 print(formatted_coeffs)
 ```
