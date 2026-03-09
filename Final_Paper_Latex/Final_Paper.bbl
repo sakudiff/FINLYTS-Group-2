@@ -19,23 +19,23 @@
 
 \refsection{0}
   \datalist[entry]{apa/apasortcite//global/global/global}
-    \entry{fama1993common}{article}{}{}
+    \entry{fama1992cross}{article}{}{}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=cf1dad75742cba1f00261a0ee70e7ba2}{%
            family={Fama},
            familyi={F\bibinitperiod},
-           given={Eugene\bibnamedelima F},
+           given={Eugene\bibnamedelima F.},
            giveni={E\bibinitperiod\bibinitdelim F\bibinitperiod},
            givenun=0}}%
         {{un=0,uniquepart=base,hash=4ca55f4db61ae3245d066a218dca72c8}{%
            family={French},
            familyi={F\bibinitperiod},
-           given={Kenneth\bibnamedelima R},
+           given={Kenneth\bibnamedelima R.},
            giveni={K\bibinitperiod\bibinitdelim R\bibinitperiod},
            givenun=0}}%
       }
       \list{publisher}{1}{%
-        {Elsevier}%
+        {JSTOR}%
       }
       \strng{namehash}{ac5c181ffbfa45c593cd5483bcb59bd3}
       \strng{fullhash}{ac5c181ffbfa45c593cd5483bcb59bd3}
@@ -53,15 +53,15 @@
       \true{uniqueprimaryauthor}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{journaltitle}{Journal of financial economics}
-      \field{number}{1}
-      \field{title}{Common risk factors in the returns on stocks and bonds}
-      \field{volume}{33}
-      \field{year}{1993}
-      \field{pages}{3\bibrangedash 56}
-      \range{pages}{54}
+      \field{journaltitle}{The Journal of Finance}
+      \field{number}{2}
+      \field{title}{The Cross-Section of Expected Stock Returns}
+      \field{volume}{47}
+      \field{year}{1992}
+      \field{pages}{427\bibrangedash 465}
+      \range{pages}{39}
     \endentry
-    \entry{fama2015five}{article}{}{}
+    \entry{fama1993common}{article}{}{}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=cf1dad75742cba1f00261a0ee70e7ba2}{%
            family={Fama},
@@ -97,14 +97,20 @@
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of financial economics}
       \field{number}{1}
-      \field{title}{A five-factor asset pricing model}
-      \field{volume}{116}
-      \field{year}{2015}
-      \field{pages}{1\bibrangedash 22}
-      \range{pages}{22}
+      \field{title}{Common risk factors in the returns on stocks and bonds}
+      \field{volume}{33}
+      \field{year}{1993}
+      \field{pages}{3\bibrangedash 56}
+      \range{pages}{54}
     \endentry
-    \entry{french2024data}{misc}{}{}
-      \name{author}{1}{}{%
+    \entry{fama2004capital}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=cf1dad75742cba1f00261a0ee70e7ba2}{%
+           family={Fama},
+           familyi={F\bibinitperiod},
+           given={Eugene\bibnamedelima F},
+           giveni={E\bibinitperiod\bibinitdelim F\bibinitperiod},
+           givenun=0}}%
         {{un=0,uniquepart=base,hash=4ca55f4db61ae3245d066a218dca72c8}{%
            family={French},
            familyi={F\bibinitperiod},
@@ -112,14 +118,15 @@
            giveni={K\bibinitperiod\bibinitdelim R\bibinitperiod},
            givenun=0}}%
       }
-      \strng{namehash}{4ca55f4db61ae3245d066a218dca72c8}
-      \strng{fullhash}{4ca55f4db61ae3245d066a218dca72c8}
-      \strng{fullhashraw}{4ca55f4db61ae3245d066a218dca72c8}
-      \strng{bibnamehash}{4ca55f4db61ae3245d066a218dca72c8}
-      \strng{authorbibnamehash}{4ca55f4db61ae3245d066a218dca72c8}
-      \strng{authornamehash}{4ca55f4db61ae3245d066a218dca72c8}
-      \strng{authorfullhash}{4ca55f4db61ae3245d066a218dca72c8}
-      \strng{authorfullhashraw}{4ca55f4db61ae3245d066a218dca72c8}
+      \strng{namehash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{fullhash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{fullhashraw}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{bibnamehash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{authorbibnamehash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{authornamehash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{authorfullhash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{authorfullhashraw}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \field{extraname}{3}
       \field{sortinit}{F}
       \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
       \field{extradatescope}{labelyear}
@@ -127,30 +134,124 @@
       \true{uniqueprimaryauthor}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{howpublished}{\url{https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html}}
-      \field{note}{Accessed: 2026-03-01}
-      \field{title}{Data Library}
-      \field{year}{2024}
+      \field{journaltitle}{Journal of economic perspectives}
+      \field{number}{3}
+      \field{title}{The capital asset pricing model: Theory and evidence}
+      \field{volume}{18}
+      \field{year}{2004}
+      \field{pages}{25\bibrangedash 46}
+      \range{pages}{22}
+    \endentry
+    \entry{fama2015five}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=cf1dad75742cba1f00261a0ee70e7ba2}{%
+           family={Fama},
+           familyi={F\bibinitperiod},
+           given={Eugene\bibnamedelima F},
+           giveni={E\bibinitperiod\bibinitdelim F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4ca55f4db61ae3245d066a218dca72c8}{%
+           family={French},
+           familyi={F\bibinitperiod},
+           given={Kenneth\bibnamedelima R},
+           giveni={K\bibinitperiod\bibinitdelim R\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier}%
+      }
+      \strng{namehash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{fullhash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{fullhashraw}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{bibnamehash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{authorbibnamehash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{authornamehash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{authorfullhash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{authorfullhashraw}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \field{extraname}{4}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of financial economics}
+      \field{number}{1}
+      \field{title}{A five-factor asset pricing model}
+      \field{volume}{116}
+      \field{year}{2015}
+      \field{pages}{1\bibrangedash 22}
+      \range{pages}{22}
+    \endentry
+    \entry{MOSOEU202255}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=e86ca3a84adaf4bec13cfef45bb25350}{%
+           family={Mosoeu},
+           familyi={M\bibinitperiod},
+           given={Selebogo},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=2c5f1b001b18720f942cf449f54e7523}{%
+           family={Kodongo},
+           familyi={K\bibinitperiod},
+           given={Odongo},
+           giveni={O\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{7952cead22b5b30a6377685c714e10e7}
+      \strng{fullhash}{7952cead22b5b30a6377685c714e10e7}
+      \strng{fullhashraw}{7952cead22b5b30a6377685c714e10e7}
+      \strng{bibnamehash}{7952cead22b5b30a6377685c714e10e7}
+      \strng{authorbibnamehash}{7952cead22b5b30a6377685c714e10e7}
+      \strng{authornamehash}{7952cead22b5b30a6377685c714e10e7}
+      \strng{authorfullhash}{7952cead22b5b30a6377685c714e10e7}
+      \strng{authorfullhashraw}{7952cead22b5b30a6377685c714e10e7}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{We test the Fama-French five-factor asset-pricing model on average stock returns for selected emerging and developed equity markets. We deploy the generalized method of moments (GMM) regression on 313 weekly data observations for the period, January 2010 through December 2015. We find that the profitability factor is the most useful for explaining the cross-section of emerging markets equity returns. The five-factor model performs dismally on country-specific portfolios and on geographically diversified portfolios using the Gibbons-Ross-Shanken (GRS) tests. Our results are broadly consistent with those of studies that use Australian, Chinese and South African data but contrary to studies examining American and Japanese data.}
+      \field{issn}{1062-9769}
+      \field{journaltitle}{The Quarterly Review of Economics and Finance}
+      \field{title}{The Fama-French five-factor model and emerging market equity returns}
+      \field{volume}{85}
+      \field{year}{2022}
+      \field{pages}{55\bibrangedash 76}
+      \range{pages}{22}
+      \verb{doi}
+      \verb https://doi.org/10.1016/j.qref.2020.10.023
+      \endverb
+      \verb{urlraw}
+      \verb https://www.sciencedirect.com/science/article/pii/S1062976920301460
+      \endverb
+      \verb{url}
+      \verb https://www.sciencedirect.com/science/article/pii/S1062976920301460
+      \endverb
+      \keyw{Emerging equity markets,Fama-French factors,Generalized method of moments}
     \endentry
   \enddatalist
   \datalist[entry]{apa/global//global/global/global}
-    \entry{fama1993common}{article}{}{}
+    \entry{fama1992cross}{article}{}{}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=cf1dad75742cba1f00261a0ee70e7ba2}{%
            family={Fama},
            familyi={F\bibinitperiod},
-           given={Eugene\bibnamedelima F},
+           given={Eugene\bibnamedelima F.},
            giveni={E\bibinitperiod\bibinitdelim F\bibinitperiod},
            givenun=0}}%
         {{un=0,uniquepart=base,hash=4ca55f4db61ae3245d066a218dca72c8}{%
            family={French},
            familyi={F\bibinitperiod},
-           given={Kenneth\bibnamedelima R},
+           given={Kenneth\bibnamedelima R.},
            giveni={K\bibinitperiod\bibinitdelim R\bibinitperiod},
            givenun=0}}%
       }
       \list{publisher}{1}{%
-        {Elsevier}%
+        {JSTOR}%
       }
       \strng{namehash}{ac5c181ffbfa45c593cd5483bcb59bd3}
       \strng{fullhash}{ac5c181ffbfa45c593cd5483bcb59bd3}
@@ -168,15 +269,15 @@
       \true{uniqueprimaryauthor}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{journaltitle}{Journal of financial economics}
-      \field{number}{1}
-      \field{title}{Common risk factors in the returns on stocks and bonds}
-      \field{volume}{33}
-      \field{year}{1993}
-      \field{pages}{3\bibrangedash 56}
-      \range{pages}{54}
+      \field{journaltitle}{The Journal of Finance}
+      \field{number}{2}
+      \field{title}{The Cross-Section of Expected Stock Returns}
+      \field{volume}{47}
+      \field{year}{1992}
+      \field{pages}{427\bibrangedash 465}
+      \range{pages}{39}
     \endentry
-    \entry{fama2015five}{article}{}{}
+    \entry{fama1993common}{article}{}{}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=cf1dad75742cba1f00261a0ee70e7ba2}{%
            family={Fama},
@@ -212,14 +313,20 @@
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of financial economics}
       \field{number}{1}
-      \field{title}{A five-factor asset pricing model}
-      \field{volume}{116}
-      \field{year}{2015}
-      \field{pages}{1\bibrangedash 22}
-      \range{pages}{22}
+      \field{title}{Common risk factors in the returns on stocks and bonds}
+      \field{volume}{33}
+      \field{year}{1993}
+      \field{pages}{3\bibrangedash 56}
+      \range{pages}{54}
     \endentry
-    \entry{french2024data}{misc}{}{}
-      \name{author}{1}{}{%
+    \entry{fama2004capital}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=cf1dad75742cba1f00261a0ee70e7ba2}{%
+           family={Fama},
+           familyi={F\bibinitperiod},
+           given={Eugene\bibnamedelima F},
+           giveni={E\bibinitperiod\bibinitdelim F\bibinitperiod},
+           givenun=0}}%
         {{un=0,uniquepart=base,hash=4ca55f4db61ae3245d066a218dca72c8}{%
            family={French},
            familyi={F\bibinitperiod},
@@ -227,14 +334,15 @@
            giveni={K\bibinitperiod\bibinitdelim R\bibinitperiod},
            givenun=0}}%
       }
-      \strng{namehash}{4ca55f4db61ae3245d066a218dca72c8}
-      \strng{fullhash}{4ca55f4db61ae3245d066a218dca72c8}
-      \strng{fullhashraw}{4ca55f4db61ae3245d066a218dca72c8}
-      \strng{bibnamehash}{4ca55f4db61ae3245d066a218dca72c8}
-      \strng{authorbibnamehash}{4ca55f4db61ae3245d066a218dca72c8}
-      \strng{authornamehash}{4ca55f4db61ae3245d066a218dca72c8}
-      \strng{authorfullhash}{4ca55f4db61ae3245d066a218dca72c8}
-      \strng{authorfullhashraw}{4ca55f4db61ae3245d066a218dca72c8}
+      \strng{namehash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{fullhash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{fullhashraw}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{bibnamehash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{authorbibnamehash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{authornamehash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{authorfullhash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{authorfullhashraw}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \field{extraname}{3}
       \field{sortinit}{F}
       \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
       \field{extradatescope}{labelyear}
@@ -242,10 +350,104 @@
       \true{uniqueprimaryauthor}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{howpublished}{\url{https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html}}
-      \field{note}{Accessed: 2026-03-01}
-      \field{title}{Data Library}
-      \field{year}{2024}
+      \field{journaltitle}{Journal of economic perspectives}
+      \field{number}{3}
+      \field{title}{The capital asset pricing model: Theory and evidence}
+      \field{volume}{18}
+      \field{year}{2004}
+      \field{pages}{25\bibrangedash 46}
+      \range{pages}{22}
+    \endentry
+    \entry{fama2015five}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=cf1dad75742cba1f00261a0ee70e7ba2}{%
+           family={Fama},
+           familyi={F\bibinitperiod},
+           given={Eugene\bibnamedelima F},
+           giveni={E\bibinitperiod\bibinitdelim F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4ca55f4db61ae3245d066a218dca72c8}{%
+           family={French},
+           familyi={F\bibinitperiod},
+           given={Kenneth\bibnamedelima R},
+           giveni={K\bibinitperiod\bibinitdelim R\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier}%
+      }
+      \strng{namehash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{fullhash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{fullhashraw}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{bibnamehash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{authorbibnamehash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{authornamehash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{authorfullhash}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \strng{authorfullhashraw}{ac5c181ffbfa45c593cd5483bcb59bd3}
+      \field{extraname}{4}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of financial economics}
+      \field{number}{1}
+      \field{title}{A five-factor asset pricing model}
+      \field{volume}{116}
+      \field{year}{2015}
+      \field{pages}{1\bibrangedash 22}
+      \range{pages}{22}
+    \endentry
+    \entry{MOSOEU202255}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=e86ca3a84adaf4bec13cfef45bb25350}{%
+           family={Mosoeu},
+           familyi={M\bibinitperiod},
+           given={Selebogo},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=2c5f1b001b18720f942cf449f54e7523}{%
+           family={Kodongo},
+           familyi={K\bibinitperiod},
+           given={Odongo},
+           giveni={O\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{7952cead22b5b30a6377685c714e10e7}
+      \strng{fullhash}{7952cead22b5b30a6377685c714e10e7}
+      \strng{fullhashraw}{7952cead22b5b30a6377685c714e10e7}
+      \strng{bibnamehash}{7952cead22b5b30a6377685c714e10e7}
+      \strng{authorbibnamehash}{7952cead22b5b30a6377685c714e10e7}
+      \strng{authornamehash}{7952cead22b5b30a6377685c714e10e7}
+      \strng{authorfullhash}{7952cead22b5b30a6377685c714e10e7}
+      \strng{authorfullhashraw}{7952cead22b5b30a6377685c714e10e7}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{We test the Fama-French five-factor asset-pricing model on average stock returns for selected emerging and developed equity markets. We deploy the generalized method of moments (GMM) regression on 313 weekly data observations for the period, January 2010 through December 2015. We find that the profitability factor is the most useful for explaining the cross-section of emerging markets equity returns. The five-factor model performs dismally on country-specific portfolios and on geographically diversified portfolios using the Gibbons-Ross-Shanken (GRS) tests. Our results are broadly consistent with those of studies that use Australian, Chinese and South African data but contrary to studies examining American and Japanese data.}
+      \field{issn}{1062-9769}
+      \field{journaltitle}{The Quarterly Review of Economics and Finance}
+      \field{title}{The Fama-French five-factor model and emerging market equity returns}
+      \field{volume}{85}
+      \field{year}{2022}
+      \field{pages}{55\bibrangedash 76}
+      \range{pages}{22}
+      \verb{doi}
+      \verb https://doi.org/10.1016/j.qref.2020.10.023
+      \endverb
+      \verb{urlraw}
+      \verb https://www.sciencedirect.com/science/article/pii/S1062976920301460
+      \endverb
+      \verb{url}
+      \verb https://www.sciencedirect.com/science/article/pii/S1062976920301460
+      \endverb
+      \keyw{Emerging equity markets,Fama-French factors,Generalized method of moments}
     \endentry
   \enddatalist
 \endrefsection
