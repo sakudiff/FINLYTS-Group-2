@@ -35,16 +35,29 @@
 }
 \usepackage{setspace}
 \usepackage{titlesec}
+\usepackage{ragged2e}
+
+% APA 7th Edition: 0.5in indentation for paragraphs
+\setlength{\parindent}{0.5in}
+% Ensure flush-left (ragged right) while maintaining indentation
+\RaggedRight
+
+% APA 7th Edition Headings: Level 1 centered, Level 2 left-aligned
 \titleformat{\section}{\normalfont\Large\bfseries\centering}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{\thesubsection}{1em}{}
+\titlespacing*{\section}{0pt}{12pt}{6pt}
+\titlespacing*{\subsection}{0pt}{12pt}{6pt}
+
 \usepackage[hidelinks]{hyperref}
 \usepackage[style=apa, backend=biber]{biblatex}
 \addbibresource{references.bib}
+% APA 7th Edition: 0.5in hanging indent for references
+\setlength{\bibhang}{0.5in}
 
 \definecolor{dlsugreen}{HTML}{00703C}
 
 \begin{document}
 \doublespacing
-\raggedright
 
 \begin{titlepage}
     \centering
@@ -108,12 +121,11 @@ This document provides a rigorous evaluation of the \textbf{Fama-French 5-Factor
 The shift from the single-factor CAPM was driven by its poor empirical record, which, as noted by \textcite{fama2004capital}, is often considered insufficient for practical applications. While the CAPM posits that risk is measured solely relative to a comprehensive market portfolio, empirical tests frequently show that the relation between average return and beta is flatter than predicted. This gap between theory and evidence necessitated a multidimensional approach to capture the risk factors that a single market beta could not account for.
 
 \subsection{Transition from CAPM to Fama-French 5-Factor Model}
-The Fama-French Model, developed by \textcite{fama1992cross} in their paper titled 'The Cross-Section of Expected Stock Returns', was originally composed of three (3) factors and serves as an augmentation to the Capital Asset Pricing Model (CAPM). The primary purpose of the introduction of this model was to demonstrate that market risk alone cannot fully explain stock returns. Thus, the transition from a single-factor (beta) linear model (CAPM) to a multi-factor linear model led to the creation of a model that could provide a multidimensional assessment for expected returns. Here, the CAPM model was expanded to include firm-specific variables that are historically known to have an effect on returns. \\
+The Fama-French Model, developed by \textcite{fama1992cross} in their paper titled 'The Cross-Section of Expected Stock Returns', was originally composed of three (3) factors and serves as an augmentation to the Capital Asset Pricing Model (CAPM). The primary purpose of the introduction of this model was to demonstrate that market risk alone cannot fully explain stock returns. Thus, the transition from a single-factor (beta) linear model (CAPM) to a multi-factor linear model led to the creation of a model that could provide a multidimensional assessment for expected returns. Here, the CAPM model was expanded to include firm-specific variables that are historically known to have an effect on returns.
 
-The initial Fama-French Model was composed of the following systematic risk factors. First, Market Risk (Rf), taken from the original CAPM model, represents the excess returns of the overall market over the overall risk-free rate. Next, SMB (small minus big) represents the idea that small-cap stocks tend to outperform large-cap stocks over time. Lastly, there is HML (high minus low) or the value factor; stocks with higher BM ratios tend to outperform stocks with low BM ratios. The three-factor model was originally developed to encapsulate the relationship between average return and price ratios (such as book-to-market ratio) \parencite{fama1993common}. \\
+The initial Fama-French Model was composed of the following systematic risk factors. First, Market Risk (Rf), taken from the original CAPM model, represents the excess returns of the overall market over the overall risk-free rate. Next, SMB (small minus big) represents the idea that small-cap stocks tend to outperform large-cap stocks over time. Lastly, there is HML (high minus low) or the value factor; stocks with higher BM ratios tend to outperform stocks with low BM ratios. The three-factor model was originally developed to encapsulate the relationship between average return and price ratios (such as book-to-market ratio) \parencite{fama1993common}.
 
-Moving forward, the Fama-French 3-Factor Model was further augmented by Fama and French in 2015 in their working paper titled 'A five-factor asset pricing model'. This model is composed of the three factors mentioned above with the further additions of RMW (robust minus weak) and CMA (conservative minus aggressive). The factor of RMW represents the difference between the returns of stocks with robust and weak profitability. Meanwhile, CMA represents the difference between the returns on diversified portfolios of stocks of low and high investment firms, which are referred to as conservative and aggressive \parencite{fama2015five}. These labels refer to a company's investment policy, whether it can be considered conservative or aggressive \parencite{MOSOEU202255}. This new model with these two newly added variables is what is now referred to as the Fama-French 5-Factor Model. \\
-
+Moving forward, the Fama-French 3-Factor Model was further augmented by Fama and French in 2015 in their working paper titled 'A five-factor asset pricing model'. This model is composed of the three factors mentioned above with the further additions of RMW (robust minus weak) and CMA (conservative minus aggressive). The factor of RMW represents the difference between the returns of stocks with robust and weak profitability. Meanwhile, CMA represents the difference between the returns on diversified portfolios of stocks of low and high investment firms, which are referred to as conservative and aggressive \parencite{fama2015five}. These labels refer to a company's investment policy, whether it can be considered conservative or aggressive \parencite{MOSOEU202255}. This new model with these two newly added variables is what is now referred to as the Fama-French 5-Factor Model.
 
 \subsection{Theoretical Significance and Professional Relevance}
 The 5-factor model holds immense practical value for finance professionals, particularly in the realms of portfolio evaluation and cost of capital estimation. By identifying specific anomalies, such as the size and value effects, the model allows fund managers to more accurately assess whether a portfolio's "alpha" is the result of genuine skill or simply exposure to known risk premiums. 
