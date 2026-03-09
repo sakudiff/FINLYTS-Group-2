@@ -225,7 +225,7 @@ git push origin draft
 
 | Command | Action | Google Docs Analogy | Why it's Essential |
 | :--- | :--- | :--- | :--- |
-| `git checkout draft` | **Switch Branch** | Switching from "Final" to "Draft" tab. | Keeps the main submission safe while we experiment. |
+| `git checkout draft` | **Switch Branch** | Switching from "Main" to "Draft" tab. | Keeps the main submission safe while we experiment. |
 | `git pull --rebase origin draft` | **Sync Down** | Refreshing the browser to see team edits. | Keeps history linear and avoids "Merge Junk." |
 | `git rebase --abort` | **Emergency Stop** | Hitting "Undo" on a failed refresh. | Rescues you if a rebase gets messy or confusing. |
 | `git status` | **Check State** | Checking which files have "Unsaved Changes." | Confirms what you've actually changed before you save. |
