@@ -280,10 +280,12 @@ names(results) <- active_tickers
 
 results
 ```
+
+
 # Descriptive Statistics
 
 # VUSD.L
-The ETF VUSD.L has a mean return of approximately 1.00%, 
+  The ETF VUSD.L has a mean return of approximately 1.00%, 
 indicating a relatively high average performance throughout the data period. 
 While several negative observations caused the mean to decline, the median 
 return (1.62%) is slightly greater than the mean, indicating that the majority 
@@ -300,7 +302,7 @@ moderate volatility, making it representative of broad U.S. equity exposure.
 
 
 # WSML.L
-Compared to several other equity ETFs in the sample, the ETF WSML.L, which 
+  Compared to several other equity ETFs in the sample, the ETF WSML.L, which 
 symbolizes small-cap stocks, has a mean return of 0.65%. Its standard deviation 
 of 0.0543, however, is among the highest, suggesting more volatility. The 
 inherent risk of small-cap equities, which are typically more susceptible to 
@@ -313,6 +315,89 @@ returns. Additionally, heavy tails are indicated by the kurtosis value of 4.80,
 which means that severe return events happen more frequently than in a normal 
 distribution. These results suggest that WSML.L offers higher risk and potentially higher 
 reward, consistent with the characteristics of small-cap equity investments.
+
+# VDEV.L
+  With a standard return of 0.85%, the asset VDEV.L performs moderately on 
+average in developed markets. Negative returns may occasionally lower the 
+average return, as indicated by the median return (1.61%) being higher than the 
+mean. The relatively small volatility shown by the standard deviation of 0.0399 
+is comparable to that of diverse foreign stocks. A comparatively balanced range 
+of results is indicated by the smallest return of −11.05% and the best return of 
+11.93%. Extreme negative returns are slightly more inclined than positive ones, 
+according to the negative skewness (−0.54). The somewhat heavy tails implied by 
+the kurtosis of 3.66 suggest that extreme occurrences happen a little more 
+frequently than they would under a normal distribution. All things considered, 
+VDEV.L exhibits the balanced risk and return traits common to diversified 
+developed market stocks.
+
+# QUAL
+  The ETF QUAL, which concentrates on high-quality companies, has an average 
+return of around 0.98%, indicating outstanding average performance. Moderate 
+volatility is indicated by the standard deviation of 0.0437. The asset exhibits 
+both positive and negative volatility typical of equity markets, as evidenced 
+by the minimum return of −12.09% and maximum return of 11.58%. A tendency toward 
+infrequent excessive negative returns is indicated by the negative skewness 
+(−0.50). The returns distribution appears to have significantly heavier tails 
+than a normal distribution, according to the kurtosis of 3.41. These findings 
+show that, in line with its emphasis on financially sound businesses, QUAL 
+offers comparatively strong and reliable returns with modest risk.
+
+# VIG
+  VIG, which monitors dividend growth firms, has a mean return of 0.90% and a 
+median return of 1.43%, implying overall favorable performance. In comparison 
+to other stock ETFs, the standard deviation of 0.0381 stands among the lowest 
+in the sample, indicating comparatively lower volatility. The maximum return of 
+9.56% and the minimum return of -10.08% show modest return volatility. The 
+skewness is negative (−0.39), indicating occasional negative shocks. The 
+kurtosis of 3.27 suggests that the distribution is similar to normal, but with 
+slightly greater in weight tails. Overall, these figures indicate that VIG 
+provides comparatively steady returns and reduced volatility, which is in 
+line with the defensive traits of dividend-paying businesses.
+
+# XLK
+  The technology sector ETF XLK has the greatest mean return of all the assets 
+(1.50%), indicating that technology companies have performed well over the 
+sample period. It does, however, also have an elevated standard deviation 
+(0.0543), which suggests significant volatility. The wide range of results 
+typical of sector-specific investments is demonstrated by a minimum return of 
+−12.75% and maximum return of 12.87%. A slightly greater chance of experiencing 
+drastic negative returns is shown by the negative skewness (−0.30). In 
+comparison to other assets, the kurtosis of 2.67, which is partially less than 
+3, indicates a distribution that is closer to normal and has less extreme events. 
+These figures show that XLK has a great potential for growth but also a higher 
+risk because of sector concentration.
+
+
+# IAU
+  When compared to equity ETFs, the asset IAU, exhibits distinctive features. It 
+has a mean return with approximately 1.07%, but the median return is considerably 
+lower at 0.34%, suggesting that the average was raised by a few high-return 
+periods. Moderate volatility is indicated by the standard deviation of 0.0420. 
+IAU moves in both positive and negative directions, as evidenced by its minimum 
+return of −8.73% and greatest return of 11.65%. In contrast to the majority of 
+stocks, IAU shows positive skewness (0.29), indicating that extreme gains are 
+more common than extreme losses. A return distribution that is significantly 
+lower than a normal distribution is shown by the kurtosis of 2.76. These traits 
+imply that IAU is performing differently from stocks and could be advantageous 
+for portfolio diversification.
+
+
+# VWRA.L
+  Global equity markets are represented by VWRA.L, which displays a mean return 
+of 0.93%, suggesting strong average performance across foreign markets. Negative 
+market shocks may occasionally lower the average return, as indicated by the 
+median return of 1.94% becoming greater than the mean. The mild volatility 
+indicated by the standard deviation of 0.0424 is in line with diverse global 
+stocks. The usual range of swings in the worldwide market is illustrated by the 
+minimum return of −11.64% and the maximum return of 11.27%. Extreme negative 
+returns are slightly more common than positive ones, according to the negative 
+skewness (−0.58). The kurtosis of 3.58 implies irregular significant market 
+fluctuations and heavier tails than a normal distribution. In conclusion, VWRA.L 
+exhibits balanced risk and return traits common to internationally diversified 
+stock investments.
+
+
+
 
 
 
