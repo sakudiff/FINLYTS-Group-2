@@ -31,3 +31,7 @@ env/
 *.out
 *.synctex.gz
 *.toc
+*.bcf
+*.blg
+*.run.xml
+*-SAVE-ERROR

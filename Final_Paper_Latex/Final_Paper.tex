@@ -754,9 +754,9 @@ scatter_plot <- scatter_data %>%
   scale_color_manual(values = asset_colors) +
   scale_size_area(max_size = 10) +
   labs(title = "Security Market Line (SML): Risk-Adjusted Returns",
-       subtitle = "Mean Monthly Excess Return (\%) vs. Market Beta (Loading)",
+       subtitle = "Mean Monthly Excess Return (%) vs. Market Beta (Loading)",
        x = "Market Beta (beta)",
-       y = "Mean Monthly Excess Return (\%)",
+       y = "Mean Monthly Excess Return (%)",
        size = "Volatility (SD)",
        caption = "Dashed line represents the empirical SML.")
 
@@ -812,6 +812,7 @@ significance_summary <- model_results %>%
   mutate(significant = ifelse(p.value < 0.05, "Yes", "No")) %>%
   select(Asset, term, significant) %>%
   pivot_wider(names_from = term, values_from = significant)
+
 
 # 3. Formatted Coefficient Table (Stars)
 formatted_coeffs <- model_results %>%
