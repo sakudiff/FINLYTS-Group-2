@@ -36,13 +36,9 @@
 \usepackage{setspace}
 \usepackage{titlesec}
 \usepackage{ragged2e}
+\usepackage{indentfirst}
 
-% APA 7th Edition: 0.5in indentation for paragraphs
-\setlength{\parindent}{0.5in}
-% Ensure flush-left (ragged right) while maintaining indentation
-\RaggedRight
-
-% APA 7th Edition Headings: Level 1 centered, Level 2 left-aligned
+% APA 7th Edition: Headings
 \titleformat{\section}{\normalfont\Large\bfseries\centering}{\thesection}{1em}{}
 \titleformat{\subsection}{\normalfont\large\bfseries}{\thesubsection}{1em}{}
 \titlespacing*{\section}{0pt}{12pt}{6pt}
@@ -58,6 +54,9 @@
 
 \begin{document}
 \doublespacing
+\RaggedRight
+% Set parindent after RaggedRight to ensure it's not reset
+\setlength{\parindent}{0.5in}
 
 \begin{titlepage}
     \centering
