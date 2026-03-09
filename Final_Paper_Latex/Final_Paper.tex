@@ -468,6 +468,8 @@ The following sections provide the complete R source code utilized for the autom
 \begin{lstlisting}
 # --- 1. Environment Setup & Dependencies ---
 # This section ensures all necessary libraries are installed and loaded.
+# We utilize specialized R libraries for data science (tidyverse), 
+# financial analysis (tidyquant), and statistical reporting (broom).
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 required_packages <- c("tidyverse", "tidyquant", "quantmod", "broom", "PerformanceAnalytics", "tinytex", "moments", "zoo", "ggrepel")
@@ -570,6 +572,7 @@ ff5_monthly <- ff5_raw[1:monthly_end_row, ] %>%
   select(Date, Mkt_RF, SMB, HML, RMW, CMA, RF)
 
 # 5. Temporal Alignment
+# Synchronizing dates to the first of each month to ensure perfect factor alignment.
 asset_returns <- asset_returns %>% mutate(Date = floor_date(Date, "month"))
 ff5_monthly <- ff5_monthly %>% mutate(Date = floor_date(Date, "month"))
 \end{lstlisting}
@@ -580,6 +583,7 @@ ff5_monthly <- ff5_monthly %>% mutate(Date = floor_date(Date, "month"))
 final_data <- inner_join(asset_returns, ff5_monthly, by = "Date")
 
 # 2. Pivot longer for analysis
+# Pivoting allows for the vectorized application of models across all assets.
 final_data_long <- final_data %>%
   pivot_longer(cols = all_of(active_tickers), names_to = "Asset", values_to = "Return") %>%
   filter(!is.na(Return)) %>% 
@@ -590,11 +594,13 @@ if (nrow(final_data_long) == 0) {
 }
 
 # 3. Factor Correlation
+# Auditing the relationship between the five risk premiums to detect potential multicollinearity.
 factor_corr <- final_data %>%
   select(Mkt_RF, SMB, HML, RMW, CMA) %>%
   cor(use = "pairwise.complete.obs")
 
 # 4. Cumulative Returns (Wealth Index)
+# Calculating the growth of a hypothetical $1 investment over the analysis horizon.
 cumulative_returns <- asset_returns %>%
   pivot_longer(-Date, names_to = "Asset", values_to = "Return") %>%
   filter(!is.na(Return)) %>%
@@ -634,7 +640,7 @@ model_results <- final_data_long %>%
   unnest(tidied) %>%
   select(Asset, term, estimate, std.error, statistic, p.value)
 
-# Extract model fitness (R-squared)
+# Extract model fitness (Adjusted R-squared)
 model_glance <- final_data_long %>%
   group_by(Asset) %>%
   nest() %>%
@@ -778,7 +784,7 @@ rolling_beta_plot <- rolling_beta_data %>%
        y = "Rolling Beta Loading",
        caption = "Red dashed line at 1.00 represents market-neutral sensitivity.")
 
-# Create directories and save plots
+# Create directories and save plots for Final Paper integration
 if (!dir.exists("image/paper")) dir.create("image/paper", recursive = TRUE)
 ggsave("image/paper/factor_loadings.png", coef_plot, width = 10, height = 6)
 ggsave("image/paper/model_accuracy.png", rsquared_plot, width = 8, height = 5)
@@ -786,7 +792,7 @@ ggsave("image/paper/cumulative_returns.png", cum_plot, width = 10, height = 6)
 ggsave("image/paper/risk_return_scatter.png", scatter_plot, width = 8, height = 6)
 ggsave("image/paper/rolling_beta.png", rolling_beta_plot, width = 10, height = 5)
 
-# Display plots
+# Display active plots
 coef_plot
 rsquared_plot
 cum_plot
@@ -796,12 +802,12 @@ rolling_beta_plot
 
 \subsection{Model Diagnostics and Auditing} \label{sec:appendix_diagnostics}
 \begin{lstlisting}
-# 1. Model Fitness Summary
+# 1. Model Fitness Summary (Sorted by Adjusted R-squared)
 fitness_summary <- model_glance %>%
   arrange(desc(adj.r.squared)) %>%
   rename(`R-squared` = r.squared, `Adj R-squared` = adj.r.squared, `Model P-value` = p.value)
 
-# 2. Significance Audit (Binary)
+# 2. Significance Audit (Binary Yes/No at 95% Confidence)
 significance_summary <- model_results %>%
   mutate(significant = ifelse(p.value < 0.05, "Yes", "No")) %>%
   select(Asset, term, significant) %>%
@@ -821,9 +827,14 @@ formatted_coeffs <- model_results %>%
   select(Asset, term, estimate_star) %>%
   pivot_wider(names_from = term, values_from = estimate_star)
 
-# Print Diagnostics
+# Display Diagnostic Tables
+print("--- MODEL FITNESS (ADJUSTED R-SQUARED) ---")
 print(fitness_summary)
+
+print("--- FACTOR SIGNIFICANCE AUDIT (P < 0.05) ---")
 print(significance_summary)
+
+print("--- REGRESSION COEFFICIENTS WITH SIGNIFICANCE STARS ---")
 print(formatted_coeffs)
 \end{lstlisting}
 
