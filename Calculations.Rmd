@@ -8,11 +8,14 @@ output:
 ---
 
 ```{r setup, include=FALSE}
+# --- 1. Environment Setup & Dependencies ---
+# This section ensures all necessary libraries are installed and loaded.
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+
 required_packages <- c("tidyverse", "tidyquant", "quantmod", "broom", "PerformanceAnalytics", "tinytex", "moments", "zoo", "ggrepel")
 new_packages <- required_packages[!(required_packages %in% installed.packages()[,"Package"])]
 
-if(length(new_packages)) {
+if (length(new_packages)) {
   install.packages(new_packages, repos = "http://cran.us.r-project.org")
 }
 
@@ -26,13 +29,13 @@ library(zoo)
 library(ggrepel)
 ```
 
-# Data Ingestion
-This section handles the automated collection of asset data from Yahoo Finance and the loading of Kenneth French factors.
+# 1. Data Ingestion
+This section handles the automated collection of asset data from Yahoo Finance and the loading of Kenneth French factors from the local data directory.
 
 ```{r data-ingestion}
 # 1. Configuration & Tickers
 options(download.file.method = "libcurl")
-library(lubridate) # Ensure lubridate is loaded for floor_date
+library(lubridate) 
 
 # Using USD-denominated tickers to align with Fama-French USD Factors
 tickers <- c("VUSD.L", "WSML.L", "VDEV.L", "QUAL", "VIG", "XLK", "IAU", "VWRA.L")
@@ -115,31 +118,29 @@ asset_returns <- asset_returns %>% mutate(Date = floor_date(Date, "month"))
 ff5_monthly <- ff5_monthly %>% mutate(Date = floor_date(Date, "month"))
 ```
 
-# Preprocessing
-Merging returns and factor premiums.
+# 2. Preprocessing & Normalization
+Merging returns and factor premiums, and calculating cumulative returns for performance analysis.
 
 ```{r preprocessing}
-# Merge assets with factors
-# Using inner_join but avoiding na.omit on wide data to prevent dropping dates 
-# where only one asset is missing.
+# 1. Merge assets with factors
 final_data <- inner_join(asset_returns, ff5_monthly, by = "Date")
 
-# Pivot longer FIRST, then na.omit to preserve all possible data pairs
+# 2. Pivot longer for analysis
 final_data_long <- final_data %>%
   pivot_longer(cols = all_of(active_tickers), names_to = "Asset", values_to = "Return") %>%
-  filter(!is.na(Return)) %>% # Only drop specific missing asset-months
+  filter(!is.na(Return)) %>% 
   mutate(Excess_Return = Return - RF)
 
 if (nrow(final_data_long) == 0) {
   stop("ERROR: No overlapping data between assets and factors.")
 }
 
-# 1. Factor Correlation
+# 3. Factor Correlation
 factor_corr <- final_data %>%
   select(Mkt_RF, SMB, HML, RMW, CMA) %>%
   cor(use = "pairwise.complete.obs")
 
-# 2. Cumulative Returns
+# 4. Cumulative Returns (Wealth Index)
 cumulative_returns <- asset_returns %>%
   pivot_longer(-Date, names_to = "Asset", values_to = "Return") %>%
   filter(!is.na(Return)) %>%
@@ -147,28 +148,28 @@ cumulative_returns <- asset_returns %>%
   arrange(Date) %>%
   mutate(Cumulative = exp(cumsum(Return)) / exp(first(Return))) %>%
   ungroup()
-
-# 3. Summary Stats for Visuals
-stats_summary <- final_data_long %>%
-  group_by(Asset) %>%
-  summarise(
-    Mean = mean(Return, na.rm = TRUE),
-    SD = sd(Return, na.rm = TRUE),
-    .groups = "drop"
-  )
 ```
 
-```{r Descriptive Statistics}
-# Descriptive Statistics
+# 3. Descriptive Statistical Profiling
+Calculating central tendency, dispersion, and higher-moment metrics to understand the distribution of asset returns.
 
+```{r stats-profiling}
+# Descriptive Statistics Table
+stats_table <- data.frame(
+  Mean = apply(asset_returns[active_tickers], 2, mean, na.rm = TRUE),
+  Median = apply(asset_returns[active_tickers], 2, median, na.rm = TRUE),
+  SD = apply(asset_returns[active_tickers], 2, sd, na.rm = TRUE),
+  Min = apply(asset_returns[active_tickers], 2, min, na.rm = TRUE),
+  Max = apply(asset_returns[active_tickers], 2, max, na.rm = TRUE),
+  Skewness = apply(asset_returns[active_tickers], 2, skewness, na.rm = TRUE),
+  Kurtosis = apply(asset_returns[active_tickers], 2, kurtosis, na.rm = TRUE)
+)
+
+stats_table
 ```
 
-
-
-
-
-# Regression Modeling
-Fitting the 5-factor model for each asset.
+# 4. Multivariate Regression Modeling
+Fitting the Fama-French 5-Factor model for each asset using a nested OLS workflow.
 
 ```{r model-fitting}
 # Robust regression workflow using nest/map
@@ -183,7 +184,7 @@ model_results <- final_data_long %>%
   unnest(tidied) %>%
   select(Asset, term, estimate, std.error, statistic, p.value)
 
-# Extract model fitness separately for easier join
+# Extract model fitness (R-squared)
 model_glance <- final_data_long %>%
   group_by(Asset) %>%
   nest() %>%
@@ -194,7 +195,7 @@ model_glance <- final_data_long %>%
   unnest(glanced) %>%
   select(Asset, r.squared, adj.r.squared, p.value)
 
-# Regression Summary Table
+# Pivot for summary view
 regression_summary <- model_results %>%
   select(Asset, term, estimate, p.value) %>%
   pivot_wider(names_from = term, values_from = c(estimate, p.value))
@@ -202,11 +203,11 @@ regression_summary <- model_results %>%
 regression_summary
 ```
 
-# Visualizations
-Generating high-fidelity plots for the Final Paper, including new scatter plots and rolling beta analysis.
+# 5. Visual Analytics
+Generating high-fidelity visualizations for factor loadings, performance, and model stability.
 
 ```{r visualizations}
-# 0. Consistent Color Palette & Best Practices Theme
+# 0. Consistent Color Palette & Custom Theme
 asset_colors <- c(
   "VWRA.L" = "#2C3E50",  # Benchmark (Dark Navy)
   "VDEV.L" = "#5D6D7E",  # Developed
@@ -236,7 +237,7 @@ theme_quant <- function() {
     )
 }
 
-# 1. Coefficient Bar Chart
+# 1. Coefficient Bar Chart (Factor Loadings)
 coef_plot <- model_results %>%
   filter(term != "(Intercept)") %>%
   ggplot(aes(x = term, y = estimate, fill = Asset)) +
@@ -248,7 +249,7 @@ coef_plot <- model_results %>%
        x = "Fama-French Factor",
        y = "Beta Loading (Unitless)",
        fill = "Asset Ticker",
-       caption = "Note: Factors include Mkt_RF (Market), SMB (Size), HML (Value), RMW (Profitability), and CMA (Investment).\nSource: Kenneth French Data Library (2015-2026).") +
+       caption = "Note: Factors include Mkt_RF, SMB, HML, RMW, and CMA.\nSource: Kenneth French Data Library (2015-2026).") +
   geom_hline(yintercept = 0, color = "black", linewidth = 0.5)
 
 # 2. Model Accuracy (Adjusted R-squared)
@@ -264,7 +265,7 @@ rsquared_plot <- model_glance %>%
        x = NULL,
        y = "Adjusted R-squared Value",
        fill = "Asset",
-       caption = "Source: Calculations based on Kenneth French data. Higher values indicate better model fit.")
+       caption = "Higher values indicate better model fit.")
 
 # 3. Cumulative Returns Plot
 cum_plot <- cumulative_returns %>%
@@ -277,9 +278,9 @@ cum_plot <- cumulative_returns %>%
        subtitle = "Historical Performance (Logarithmic Scale), 2015 - 2026",
        x = "Year",
        y = "Value of $1 (USD)",
-       caption = "Source: Yahoo Finance. First date normalized to 1.00 for all assets.")
+       caption = "Source: Yahoo Finance. First date normalized to 1.00.")
 
-# 4. Risk-Return Scatter Plot (FIX: Renamed Factor & Data Preservation)
+# 4. Security Market Line (SML) Scatter Plot
 scatter_data <- final_data_long %>%
   group_by(Asset) %>%
   summarise(
@@ -297,15 +298,15 @@ scatter_plot <- scatter_data %>%
   ggrepel::geom_text_repel(size = 3, fontface = "bold", box.padding = 0.5) +
   theme_quant() +
   scale_color_manual(values = asset_colors) +
-  scale_size_area(max_size = 10) + # Ensure points are visible and proportional
+  scale_size_area(max_size = 10) +
   labs(title = "Security Market Line (SML): Risk-Adjusted Returns",
        subtitle = "Mean Monthly Excess Return (%) vs. Market Beta (Loading)",
        x = "Market Beta (β)",
        y = "Mean Monthly Excess Return (%)",
        size = "Volatility (SD)",
-       caption = "Note: Dashed line represents the empirical SML. Asset size indicates total volatility.")
+       caption = "Dashed line represents the empirical SML.")
 
-# 5. Rolling Beta Analysis (VUSD.L)
+# 5. Rolling Beta Analysis (Stability Diagnostic)
 rolling_beta_data <- final_data %>%
   select(Date, VUSD.L, Mkt_RF, RF) %>%
   mutate(VUSD_Excess = VUSD.L - RF)
@@ -324,22 +325,18 @@ rolling_beta_plot <- rolling_beta_data %>%
   geom_line(color = "#C0392B", linewidth = 1) +
   theme_quant() +
   labs(title = "Stability Analysis: 24-Month Rolling Market Beta",
-       subtitle = "Asset: VUSD.L (S&P 500 ETF) relative to Fama-French Market Factor",
+       subtitle = "Asset: VUSD.L (S&P 500 ETF) relative to Market Factor",
        x = "Analysis Period",
        y = "Rolling Beta Loading",
-       caption = "Note: Red dashed line at 1.00 represents market-neutral sensitivity.\nSource: Yahoo Finance & Kenneth French Library.")
+       caption = "Red dashed line at 1.00 represents market-neutral sensitivity.")
 
-# Create image/paper directory
-if (!dir.exists("image/paper")) {
-  dir.create("image/paper", recursive = TRUE)
-}
-
-# Export all plots
-ggsave("image/paper/factor_loadings.png", coef_plot, width = 10, height = 6, dpi = 300)
-ggsave("image/paper/model_accuracy.png", rsquared_plot, width = 8, height = 5, dpi = 300)
-ggsave("image/paper/cumulative_returns.png", cum_plot, width = 10, height = 6, dpi = 300)
-ggsave("image/paper/risk_return_scatter.png", scatter_plot, width = 8, height = 6, dpi = 300)
-ggsave("image/paper/rolling_beta.png", rolling_beta_plot, width = 10, height = 5, dpi = 300)
+# Create directories and save plots
+if (!dir.exists("image/paper")) dir.create("image/paper", recursive = TRUE)
+ggsave("image/paper/factor_loadings.png", coef_plot, width = 10, height = 6)
+ggsave("image/paper/model_accuracy.png", rsquared_plot, width = 8, height = 5)
+ggsave("image/paper/cumulative_returns.png", cum_plot, width = 10, height = 6)
+ggsave("image/paper/risk_return_scatter.png", scatter_plot, width = 8, height = 6)
+ggsave("image/paper/rolling_beta.png", rolling_beta_plot, width = 10, height = 5)
 
 # Display plots
 coef_plot
@@ -349,23 +346,22 @@ scatter_plot
 rolling_beta_plot
 ```
 
-# Model Diagnostics
-Checking for significance and model fitness across the portfolio.
+# 6. Model Diagnostics & Significance Audit
+Final audit of model fitness and statistical significance of individual risk premiums.
 
 ```{r diagnostics}
-# 1. Model Fitness Summary (R-squared Audit)
+# 1. Model Fitness Summary
 fitness_summary <- model_glance %>%
   arrange(desc(adj.r.squared)) %>%
   rename(`R-squared` = r.squared, `Adj R-squared` = adj.r.squared, `Model P-value` = p.value)
 
-# 2. Significance Audit
-# Create a summary of which factors are statistically significant (p < 0.05)
+# 2. Significance Audit (Binary)
 significance_summary <- model_results %>%
   mutate(significant = ifelse(p.value < 0.05, "Yes", "No")) %>%
   select(Asset, term, significant) %>%
   pivot_wider(names_from = term, values_from = significant)
 
-# 3. Formatted Coefficient Table (with Significance Stars)
+# 3. Formatted Coefficient Table (Stars)
 formatted_coeffs <- model_results %>%
   mutate(
     stars = case_when(
@@ -379,13 +375,8 @@ formatted_coeffs <- model_results %>%
   select(Asset, term, estimate_star) %>%
   pivot_wider(names_from = term, values_from = estimate_star)
 
-# Display diagnostic tables
-print("--- MODEL FITNESS (R-SQUARED) ---")
+# Print Diagnostics
 print(fitness_summary)
-
-print("--- FACTOR SIGNIFICANCE (P < 0.05) ---")
 print(significance_summary)
-
-print("--- COEFFICIENTS WITH SIGNIFICANCE STARS ---")
 print(formatted_coeffs)
 ```
