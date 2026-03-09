@@ -158,6 +158,15 @@ stats_summary <- final_data_long %>%
   )
 ```
 
+```{r Descriptive Statistics}
+# Descriptive Statistics
+
+```
+
+
+
+
+
 # Regression Modeling
 Fitting the 5-factor model for each asset.
 
