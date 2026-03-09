@@ -35,16 +35,28 @@
 }
 \usepackage{setspace}
 \usepackage{titlesec}
+\usepackage{ragged2e}
+\usepackage{indentfirst}
+
+% APA 7th Edition: Headings
 \titleformat{\section}{\normalfont\Large\bfseries\centering}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{\thesubsection}{1em}{}
+\titlespacing*{\section}{0pt}{12pt}{6pt}
+\titlespacing*{\subsection}{0pt}{12pt}{6pt}
+
 \usepackage[hidelinks]{hyperref}
 \usepackage[style=apa, backend=biber]{biblatex}
 \addbibresource{references.bib}
+% APA 7th Edition: 0.5in hanging indent for references
+\setlength{\bibhang}{0.5in}
 
 \definecolor{dlsugreen}{HTML}{00703C}
 
 \begin{document}
 \doublespacing
-\raggedright
+\RaggedRight
+% Set parindent after RaggedRight to ensure it's not reset
+\setlength{\parindent}{0.5in}
 
 \begin{titlepage}
     \centering
@@ -108,12 +120,11 @@ This document provides a rigorous evaluation of the \textbf{Fama-French 5-Factor
 The shift from the single-factor CAPM was driven by its poor empirical record, which, as noted by \textcite{fama2004capital}, is often considered insufficient for practical applications. While the CAPM posits that risk is measured solely relative to a comprehensive market portfolio, empirical tests frequently show that the relation between average return and beta is flatter than predicted. This gap between theory and evidence necessitated a multidimensional approach to capture the risk factors that a single market beta could not account for.
 
 \subsection{Transition from CAPM to Fama-French 5-Factor Model}
-The Fama-French Model, developed by \textcite{fama1992cross} in their paper titled 'The Cross-Section of Expected Stock Returns', was originally composed of three (3) factors and serves as an augmentation to the Capital Asset Pricing Model (CAPM). The primary purpose of the introduction of this model was to demonstrate that market risk alone cannot fully explain stock returns. Thus, the transition from a single-factor (beta) linear model (CAPM) to a multi-factor linear model led to the creation of a model that could provide a multidimensional assessment for expected returns. Here, the CAPM model was expanded to include firm-specific variables that are historically known to have an effect on returns. \\
+The Fama-French Model, developed by \textcite{fama1992cross} in their paper titled 'The Cross-Section of Expected Stock Returns', was originally composed of three (3) factors and serves as an augmentation to the Capital Asset Pricing Model (CAPM). The primary purpose of the introduction of this model was to demonstrate that market risk alone cannot fully explain stock returns. Thus, the transition from a single-factor (beta) linear model (CAPM) to a multi-factor linear model led to the creation of a model that could provide a multidimensional assessment for expected returns. Here, the CAPM model was expanded to include firm-specific variables that are historically known to have an effect on returns.
 
-The initial Fama-French Model was composed of the following systematic risk factors. First, Market Risk (Rf), taken from the original CAPM model, represents the excess returns of the overall market over the overall risk-free rate. Next, SMB (small minus big) represents the idea that small-cap stocks tend to outperform large-cap stocks over time. Lastly, there is HML (high minus low) or the value factor; stocks with higher BM ratios tend to outperform stocks with low BM ratios. The three-factor model was originally developed to encapsulate the relationship between average return and price ratios (such as book-to-market ratio) \parencite{fama1993common}. \\
+The initial Fama-French Model was composed of the following systematic risk factors. First, Market Risk (Rf), taken from the original CAPM model, represents the excess returns of the overall market over the overall risk-free rate. Next, SMB (small minus big) represents the idea that small-cap stocks tend to outperform large-cap stocks over time. Lastly, there is HML (high minus low) or the value factor; stocks with higher BM ratios tend to outperform stocks with low BM ratios. The three-factor model was originally developed to encapsulate the relationship between average return and price ratios (such as book-to-market ratio) \parencite{fama1993common}.
 
-Moving forward, the Fama-French 3-Factor Model was further augmented by Fama and French in 2015 in their working paper titled 'A five-factor asset pricing model'. This model is composed of the three factors mentioned above with the further additions of RMW (robust minus weak) and CMA (conservative minus aggressive). The factor of RMW represents the difference between the returns of stocks with robust and weak profitability. Meanwhile, CMA represents the difference between the returns on diversified portfolios of stocks of low and high investment firms, which are referred to as conservative and aggressive \parencite{fama2015five}. These labels refer to a company's investment policy, whether it can be considered conservative or aggressive \parencite{MOSOEU202255}. This new model with these two newly added variables is what is now referred to as the Fama-French 5-Factor Model. \\
-
+Moving forward, the Fama-French 3-Factor Model was further augmented by Fama and French in 2015 in their working paper titled 'A five-factor asset pricing model'. This model is composed of the three factors mentioned above with the further additions of RMW (robust minus weak) and CMA (conservative minus aggressive). The factor of RMW represents the difference between the returns of stocks with robust and weak profitability. Meanwhile, CMA represents the difference between the returns on diversified portfolios of stocks of low and high investment firms, which are referred to as conservative and aggressive \parencite{fama2015five}. These labels refer to a company's investment policy, whether it can be considered conservative or aggressive \parencite{MOSOEU202255}. This new model with these two newly added variables is what is now referred to as the Fama-French 5-Factor Model.
 
 \subsection{Theoretical Significance and Professional Relevance}
 The 5-factor model holds immense practical value for finance professionals, particularly in the realms of portfolio evaluation and cost of capital estimation. By identifying specific anomalies, such as the size and value effects, the model allows fund managers to more accurately assess whether a portfolio's "alpha" is the result of genuine skill or simply exposure to known risk premiums. 
@@ -135,7 +146,7 @@ The primary goal of this research is to evaluate the explanatory power of the Fa
     \item To conduct an empirical analysis assessing the efficacy of the five risk premiums, including Market, Size (SMB), Value (HML), Profitability (RMW), and Investment (CMA), in capturing the variations in returns across a diverse portfolio.
     \item To perform a statistical interpretation of the resulting alpha and beta coefficients, evaluating their significance and interpreting their economic implications for portfolio risk management.
     \item To develop a technical implementation of a fully reproducible R workflow that leverages the Kenneth French Data Library for factor ingestion and data alignment.
-    \item To provide a theoretical justification and rigorous academic grounding for the selection of seven specific assets based on hypothesized factor exposures.
+    \item To provide a theoretical justification and rigorous academic grounding for the selection of eight specific assets based on hypothesized factor exposures.
 \end{itemize}
 
 \section{Methodology}
@@ -198,7 +209,7 @@ The study utilizes a purposive sampling strategy to select a diverse portfolio o
     \end{tabularx}
 \end{table}
 
-To capture the specific risk premiums identified by the Fama-French framework, the portfolio includes a selection of seven exchange-traded funds (ETFs) with distinct factor tilts. To incorporate regional tax optimization within a 2026 investment framework, the portfolio utilizes London-listed UCITS variants of the target assets. These assets maintain direct physical exposure to the underlying US factors while optimizing for withholding tax efficiencies, thereby testing the Fama-French model's robustness across cross-border listing environments. The baseline for market exposure is established through \textbf{VUSD.L} (Vanguard S\&P 500 UCITS), which serves as the primary proxy for broad U.S. equity market beta ($R_i - R_f$). This is complemented by \textbf{VWRA.L} (Vanguard FTSE All-World), representing the global market portfolio and ensuring the model accounts for aggregate risk across both developed and emerging regions. To further refine geographical exposure, \textbf{VDEV.L} (Vanguard FTSE Developed World) is utilized to test the model's validity across the broader developed-market universe beyond the United States.
+To capture the specific risk premiums identified by the Fama-French framework, the portfolio includes a selection of eight exchange-traded funds (ETFs) with distinct factor tilts. To incorporate regional tax optimization within a 2026 investment framework, the portfolio utilizes London-listed UCITS variants of the target assets. These assets maintain direct physical exposure to the underlying US factors while optimizing for withholding tax efficiencies, thereby testing the Fama-French model's robustness across cross-border listing environments. The baseline for market exposure is established through \textbf{VUSD.L} (Vanguard S\&P 500 UCITS), which serves as the primary proxy for broad U.S. equity market beta ($R_i - R_f$). This is complemented by \textbf{VWRA.L} (Vanguard FTSE All-World), representing the global market portfolio and ensuring the model accounts for aggregate risk across both developed and emerging regions. To further refine geographical exposure, \textbf{VDEV.L} (Vanguard FTSE Developed World) is utilized to test the model's validity across the broader developed-market universe beyond the United States.
 
 Factor-specific tilts are achieved through targeted allocations. The size premium is captured via \textbf{WSML.L} (iShares MSCI World Small Cap), which holds a diversified set of global small-capitalization firms hypothesized to outperform large-cap counterparts over time. The profitability (RMW) factor is represented by \textbf{QUAL} (iShares MSCI USA Quality Factor), which filters for companies with high operating profitability and stable earnings. Conversely, the investment (CMA) factor is addressed through \textbf{VIG} (Vanguard Dividend Appreciation); firms with consistent dividend increases typically follow conservative reinvestment policies, prioritizing shareholder returns over aggressive expansion.
 

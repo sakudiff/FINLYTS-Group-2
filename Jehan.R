@@ -280,9 +280,39 @@ names(results) <- active_tickers
 
 results
 ```
+# Descriptive Statistics
+
+# VUSD.L
+The ETF VUSD.L has a mean return of approximately 1.00%, 
+indicating a relatively high average performance throughout the data period. 
+While several negative observations caused the mean to decline, the median 
+return (1.62%) is slightly greater than the mean, indicating that the majority 
+of monthly returns are positive. The standard deviation of 0.0405 indicates 
+moderate volatility typical of diversified equity ETFs. The asset can undergo 
+considerable volatility during extreme market situations, as evidenced 
+by the low return of −10.27% and maximum return of 9.98%. The negative 
+skewness (−0.52) indicates that, as is typical in equity markets, extreme 
+negative returns are more prevalent than extreme positive ones. 
+In contrast, the kurtosis of 3.33 suggests infrequent 
+severe returns due to a bit larger tails than a normal distribution.
+These statistics suggest that VUSD.L provides strong average returns with 
+moderate volatility, making it representative of broad U.S. equity exposure.
 
 
-
+# WSML.L
+Compared to several other equity ETFs in the sample, the ETF WSML.L, which 
+symbolizes small-cap stocks, has a mean return of 0.65%. Its standard deviation 
+of 0.0543, however, is among the highest, suggesting more volatility. The 
+inherent risk of small-cap equities, which are typically more susceptible to 
+fluctuations in the economy, is reflected in this higher volatility. While the 
+maximum return of 14.20% shows the possibility for considerable positive 
+performance during favorable market conditions, the minimum return of −21.10% 
+highlights the asset's significant downside risk. According to the negative 
+skewness (−0.72), huge negative returns are more common than large positive 
+returns. Additionally, heavy tails are indicated by the kurtosis value of 4.80, 
+which means that severe return events happen more frequently than in a normal 
+distribution. These results suggest that WSML.L offers higher risk and potentially higher 
+reward, consistent with the characteristics of small-cap equity investments.
 
 
 
