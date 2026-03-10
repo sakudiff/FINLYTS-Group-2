@@ -406,12 +406,16 @@ Several structural limitations warrant consideration when interpreting these res
 The regression intercepts, specifically the alpha ($\hat{\alpha}$) coefficients, represent the portion of excess returns not attributable to any of the five systematic risk factors, and their magnitude and significance carry important economic implications. 
 
 \textbf{To be completed by the \textbf{Theory \& Writing lead}}
-\begin{itemize}
-    \item Explain how intercept (alpha) behavior affects cost-of-capital and manager selection.
-    \item Interpret the negative alphas of QUAL and VWRA.L as results of management fees and transaction costs.
-    \item Describe how decomposing returns allows practitioners to separate genuine skill from factor exposure.
-    \item Discuss the role of the 5-factor model as a more rigorous benchmark than simple market indices.
-\end{itemize}
+
+The intercept (alpha) represents the returns that cannot be explained by the factors in the Fama-French Model. Alphas can be interpreted differently for cost-of-capital estimation purposes. First, a zero alpha indicated that the model perfectly captures the required return for the asset. Meanwhile, a positive alpha indicates that the returns are above the required cost of capital. Meanwhile, as a measure of manager selection, alpha is used as a measure of a manager’s skill. If a manager receives consistently positive alphas, it means that the manager generates positive returns beyond what can be explained by systematic risk exposure.
+
+
+The negative alpha of QUAL (0.0029) suggests that QUAL underperforms the return predicted by the Fama-French 5-Factor Model by approximately 0.29 percent per period. QUAL generates abnormal negative returns. This indicates that even accounting for market risk, firm size, value, profitability, and investment factors, the asset delivers lower expected returns. These abnormal negative returns may potentially be a result of additional expenses such as management fees and transaction costs. They reduce the net returns received by investors and can potentially be the reason behind the negative returns. Moving forward, the negative alpha of VWRA.L (0.0030) indicates that the asset’s realized returns are 0.30 percent lower than predicted. Considering that it is a global-index tracking ETF, it incurs trading and tracking costs (as a result of replicating the underlying index) that are not captured by the model but are incurred by investors. This may result in the negative abnormal return as seen in the alpha.
+
+The process of decomposing returns is the process of breaking down an asset's (or portfolio’s) total returns into components that explain where the return came from.  By estimating each asset’s sensitivity (beta) to the market, size, value, profitability, and investment factors, the model attributes most of the asset’s return variation to systematic sources of risk. Any remaining unexplained return is captured by alpha. This process can help practitioners distinguish returns produced by managerial skill from returns generated from systemic risk factors. Thus, if returns are mostly explained by exposures such as those present in the Fama-French model (market risk, size, value, profitability, and investment), then asset or portfolio performance can be attributed to factor tilts rather than the ability of managers.
+
+The Fama-French model is a further expansion of the CAPM model. It serves as a more rigorous benchmark for asset or portfolio performance, as it accounts for multiple systemic drivers of returns rather than only relying on market risk as a factor (CAPM). This allows practitioners to have a more accurate and all-encompassing evaluation of portfolio performance, estimate the cost of capital, and assess whether the excess returns are a result of managerial skill or exposure to known risk factors.
+
 
 \subsection{Factor Timing and the Divergence Between Exposure and Reward}
 
@@ -425,13 +429,15 @@ The regression intercepts, specifically the alpha ($\hat{\alpha}$) coefficients,
 
 \subsection{Risk-Aware Diversification with Non-Equity Assets}
 
-\textbf{To be completed by the \textbf{Theory \& Writing lead}}
-\begin{itemize}
-    \item Use the IAU (Gold) results to justify the inclusion of non-equity assets in portfolios.
-    \item Highlight that IAU's statistical independence proves it is a genuine diversifier.
-    \item Explain that gold's returns cannot be replicated using Fama-French equity factors.
-    \item Provide guidance on using non-correlated assets to hedge against systematic equity drawdowns.
-\end{itemize}
+The statistical results for IAU (Gold) provide a solid justification for the inclusion of non-equity assets within a diversified portfolio. The Fama-French model has extremely limited explanatory power when applied to IAU. As shown in Table 3, IAU only has an adjusted R-squared value of 0.068 and a p-value of 0.102 (making IAU not statistically significant). Thus, this indicates that the five equity factors fail to explain the variability in IAU returns. This further proves that the dynamics of gold as an asset run independently from the systemic equity risk factors captured by the framework. 
+
+Considering that gold behaves differently and independently from traditional equity assets, it functions as a portfolio diversifier. While equity returns are largely exposed to market, firm size, value, profitability, and investment policies, gold’s performance is primarily driven by macroeconomic factors such as inflation, interest rates, its function as a safe-haven asset, and other factors (Hayes, 2025). These drivers are beyond the scope of the Fama-French model, and the returns of gold cannot be replicated by any combination of equity factor exposures.
+
+During periods of significant economic stress, the presence of an asset whose dynamics are uncorrelated with equity risk factors may provide significant risk aversion benefits. Non-equity assets such as gold, as mentioned previously, can provide portfolio stability in times of economic drawdowns. Thus, including gold may allow a portfolio to weather harsh economic conditions, as the macroeconomic factors that affect them (real interest rates, inflation, political factors, etc.) are distinct from factors that affect equities. (Why gold is a good anchor for modern portfolios, 2026). 
+
+In this instance, IAU (gold) has demonstrated statistical independence from Fama-French equity factors. Thus, this shows that it is driven by other macroeconomic forces such as inflation, real interest rates, and safe-haven demand (among others). Considering this, allocating a portion of your resources towards a non-correlated asset such as gold can reduce overall portfolio volatility and mitigate losses during periods of equity market downturns. As a result, portfolio resilience and risk-adjusted performance are improved.
+
+
 
 \section{Conclusion}
 
