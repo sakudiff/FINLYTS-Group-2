@@ -33,5 +33,6 @@ env/
 *.toc
 *.bcf
 *.blg
+*.bbl
 *.run.xml
 *-SAVE-ERROR
