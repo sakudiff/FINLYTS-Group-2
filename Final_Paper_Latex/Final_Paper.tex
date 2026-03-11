@@ -181,33 +181,33 @@ To make the statistical results easier to interpret, the workflow generates five
 The final step is a rigorous audit of our models. We calculate the $R^2$ (R-squared) value for each asset to see how well the model explains its returns. We also apply "significance stars" to our coefficients---a standard academic shorthand that tells the reader which results are statistically reliable and which might be due to random chance. These diagnostic routines are found in Appendix \ref{sec:appendix_diagnostics}.
 
 \subsection{Sampling Strategy and Asset Selection}
-The study utilizes a purposive sampling strategy to select a diverse portfolio of eight assets. The ``population'' consists of the universe of globally traded exchange-traded funds (ETFs) and equities. The sample was deliberately selected to represent specific factor tilts toward Market, SMB, HML, RMW, and CMA factors, providing a comprehensive dataset for evaluating the model's explanatory power across different asset classes and investment styles. Table \ref{tab:asset_selection} details the specific academic and technical justification for each selection.
+Assembling a portfolio to validate a factor model is much like curating a menu for a bored aristocrat, a performance in aesthetic bias masquerading as nutritional science. This study utilizes a purposive sampling strategy. This exercise in selection isolates specific risk premiums from the malaise of the global market. The sample consists of eight exchange-traded funds. These assets represent specific tilts toward Market, Size, Value, Profitability, and Investment factors. London-listed UCITS variants optimize for regional tax efficiency. They provide direct exposure to U.S. systematic factors. Table \ref{tab:asset_selection} details the specific academic and technical justification for each selection.
 
 \begin{table}[htbp]
     \centering
     \caption{Asset Selection and Factor Exposure (USD Tickers)}
     \label{tab:asset_selection}
-    \begin{tabularx}{\textwidth}{lX}
+    \begin{tabularx}{\textwidth}{llX}
         \toprule
-        \textbf{Asset Ticker} & \textbf{Factor Exposure} \\
+        \textbf{Ticker} & \textbf{Full Asset Name} & \textbf{Factor Exposure} \\
         \midrule
-        VUSD.L & Market (Beta) \\
-        WSML.L & Size (SMB) \\
-        VDEV.L & Market / Developed \\
-        QUAL   & Profitability (RMW) \\
-        VIG    & Investment (CMA) \\
-        XLK    & Growth (Low HML) \\
-        IAU    & Gold (Diagnostic) \\
-        VWRA.L & Total Market \\
+        VUSD.L & Vanguard S\&P 500 UCITS ETF & Market (Beta) \\
+        WSML.L & iShares MSCI World Small Cap UCITS ETF & Size (SMB) \\
+        VDEV.L & Vanguard FTSE Developed World UCITS ETF & Market / Developed \\
+        QUAL   & iShares MSCI USA Quality Factor ETF & Profitability (RMW) \\
+        VIG    & Vanguard Dividend Appreciation ETF & Investment (CMA) \\
+        XLK    & Technology Select Sector SPDR Fund & Growth (Low HML) \\
+        IAU    & iShares Gold Trust & Gold (Diagnostic) \\
+        VWRA.L & Vanguard FTSE All-World UCITS ETF & Total Market \\
         \bottomrule
     \end{tabularx}
 \end{table}
 
-To capture the specific risk premiums identified by the Fama-French framework, the portfolio includes a selection of eight exchange-traded funds (ETFs) with distinct factor tilts. To incorporate regional tax optimization within a 2026 investment framework, the portfolio utilizes London-listed UCITS variants of the target assets. These assets maintain direct physical exposure to the underlying US factors while optimizing for withholding tax efficiencies, thereby testing the Fama-French model's robustness across cross-border listing environments. The baseline for market exposure is established through \textbf{VUSD.L} (Vanguard S\&P 500 UCITS), which serves as the primary proxy for broad U.S. equity market beta ($R_i - R_f$). This is complemented by \textbf{VWRA.L} (Vanguard FTSE All-World), representing the global market portfolio and ensuring the model accounts for aggregate risk across both developed and emerging regions. To further refine geographical exposure, \textbf{VDEV.L} (Vanguard FTSE Developed World) is utilized to test the model's validity across the broader developed-market universe beyond the United States.
+The transition to a five-factor framework requires a deliberate curation of assets. The selection process resembles an exercise in financial archaeology. \textbf{VUSD.L} represents the primary proxy for broad U.S. equity market beta. \textbf{VWRA.L} captures the global market portfolio. This ensures the model accounts for aggregate risk across both developed and emerging regions. \textbf{VDEV.L} addresses the developed-market universe beyond the United States. 
 
-Factor-specific tilts are achieved through targeted allocations. The size premium is captured via \textbf{WSML.L} (iShares MSCI World Small Cap), which holds a diversified set of global small-capitalization firms hypothesized to outperform large-cap counterparts over time. The profitability (RMW) factor is represented by \textbf{QUAL} (iShares MSCI USA Quality Factor), which filters for companies with high operating profitability and stable earnings. Conversely, the investment (CMA) factor is addressed through \textbf{VIG} (Vanguard Dividend Appreciation); firms with consistent dividend increases typically follow conservative reinvestment policies, prioritizing shareholder returns over aggressive expansion.
+Factor-specific tilts are achieved through targeted allocations. The size premium is captured via \textbf{WSML.L}. This fund holds global small-capitalization firms hypothesized to outperform large-cap counterparts over time. \textbf{QUAL} filters for companies with high operating profitability and stable earnings. \textbf{VIG} addresses the investment factor. Firms with consistent dividend increases typically follow conservative reinvestment policies. They prioritize shareholder returns over aggressive expansion. \textbf{XLK} introduces a significant growth tilt. It is characterized by lower book-to-market ratios. \textbf{IAU} serves as a non-equity stabilizer. Gold lacks direct exposure to standard Fama-French equity premiums. Its inclusion serves a critical diagnostic purpose. It allows for an evaluation of intercept behavior when applied to assets with zero hypothesized factor loadings.
 
-To provide a counter-balance to value-oriented factors, \textbf{XLK} (Technology Select Sector SPDR) introduces a significant growth tilt, characterized by lower book-to-market ratios. Finally, \textbf{IAU} (iShares Gold Trust) is included as a non-equity stabilizer. While gold does not carry direct exposure to standard Fama-French equity premiums, its inclusion serves a critical diagnostic purpose, as it allows for an evaluation of the model's intercept behavior (Alpha) when applied to assets with zero hypothesized factor loadings.
+The portfolio is a theater.
 \section{Results}
 
 \subsection{Descriptive Statistics}
