@@ -427,7 +427,7 @@ The Fama-French model is a further expansion of the CAPM model. It serves as a m
 
 \subsection{Factor Timing and the Divergence Between Exposure and Reward}
 
-The Small Minus Big (SMB) factor, which is frequently used when determining the probability of a small-cap premium, shows the return difference between companies with small and high capitalizations. The Fama-French Five-Factor Model's regression results highlight that the majority of the portfolio's assets exhibit minimal exposure to the SMB factor. Most ETFs, such as VUSD.L (−0.103), VDEV.L (−0.065), QUAL (−0.092), VIG (−0.056), XLK (−0.254), and IAU (−0.089), have negative SMB coefficients, indicating that their return behavior is more in line with large-cap investments than small-cap companies. The sole specialized small-cap ETF that has an elevated positive SMB loading (0.522) with significant statistical significance (p < 0.001) is WSML.L, which effectively introduces investors to size factors. The SMB coefficient for the worldwide market benchmark VWRA.L is nearly nonexistent or close to zero (0.005), suggesting little susceptibility to the small-cap premium. These results imply that the returns of the majority of assets throughout the sample period were mostly explained by the small-cap factor.
+The Small Minus Big (SMB) factor, which is frequently used when determining the probability of a small-cap premium, shows the return difference between companies with small and high capitalizations. The Fama-French Five-Factor Model's regression results highlight that the majority of the portfolio's assets exhibit minimal exposure to the SMB factor. Most ETFs, such as VUSD.L (-0.103), VDEV.L (-0.065), QUAL (-0.092), VIG (-0.056), XLK (-0.254), and IAU (-0.089), have negative SMB coefficients, indicating that their return behavior is more in line with large-cap investments than small-cap companies. The sole specialized small-cap ETF that has an elevated positive SMB loading (0.522) with significant statistical significance (p < 0.001) is WSML.L, which effectively introduces investors to size factors. The SMB coefficient for the worldwide market benchmark VWRA.L is nearly nonexistent or close to zero (0.005), suggesting little susceptibility to the small-cap premium. These results imply that the returns of the majority of assets throughout the sample period were mostly explained by the small-cap factor.
 
 Descriptive statistics adhere to the interpretation of small-cap premium compression from 2015 to 2026. The mean return (0.0159) of the small-cap ETF WSML.L was not significantly higher in comparison of large-cap or broad-market ETFs like VUSD.L (0.0162) and VWRA.L (0.0194), despite the fact that it showed the highest volatility amongst the equity assets (SD = 0.0543). In real terms, despite similar or lower risk levels, some large-cap-oriented assets, such XLK and VWRA.L, produced better average returns. This pattern suggests that during the study period, investors did not consistently obtain an additional return for holding smaller enterprises. Large-capitalization stocks, especially those connected to technology and international market benchmarks, seem to have been the main drivers to achieve success instead. As a result, the empirical findings support the theory of small-cap premium compression, which holds that in the current market situation, small-cap companies' historical advantage over large-cap stocks has decreased.
 
@@ -447,40 +447,28 @@ In this instance, IAU (gold) has demonstrated statistical independence from Fama
 
 \subsection{Summary of Empirical Findings}
 
-\textbf{To be completed by the \textbf{assigned team member}}
-\begin{itemize}
-    \item Summarize how each asset's realized returns aligned with its hypothesized factor tilts (e.g., WSML.L for size, QUAL/VIG for profitability).
-    \item Recap specific findings for XLK (growth/tech) and the international funds (CMA/investment policy).
-    \item Reiterate IAU's lack of sensitivity to all equity-based factors.
-\end{itemize}
+The results show that the assets largely behaved in line with their expected factor tilts, although the strength of these relationships varies across the portfolio. WSML.L clearly captures the size effect, with a strong and statistically significant positive SMB loading. However, despite this exposure, its relatively weak performance over the sample period confirms that carrying a factor does not guarantee being rewarded for it. This reflects the well-documented compression of the small-cap premium from 2015 to 2026.
+On the other hand, QUAL and VIG strongly validate the profitability (RMW) factor. Both exhibit significant positive loadings and deliver relatively strong and stable returns, reinforcing the idea that profitability remains a reliable driver of excess returns within equity markets.
+XLK stands out as the most aggressive asset in the portfolio. Its high market beta and significantly negative HML loading confirm its strong growth orientation, while its superior realized returns reflect the dominance of the technology sector, especially in the post-2020 period.
+For the international funds (VDEV.L, VWRA.L, and VUSD.L), the model still performs well in terms of explanatory power. However, their factor interpretations are less clean due to broader geographic exposure and differences in investment structure. The presence of positive CMA loadings for some of these funds suggests a tilt toward more conservative investment behavior, though this is not as sharply defined as in the U.S.-focused assets.
+Finally, IAU behaves exactly as expected—it shows no meaningful sensitivity to any of the five equity factors. Its low explanatory power and distinct return profile confirm that gold operates outside the equity factor framework, reinforcing its role as a diversification asset rather than a return driver within this model.
 
 \subsection{Model Efficacy Verdict}
 
-\textbf{To be completed by the \textbf{assigned team member}}
-\begin{itemize}
-    \item Issue a final judgment on the model's performance for equity vs. multi-asset contexts.
-    \item Confirm sufficiency for the "Equity Core" based on high Adjusted $R^2$ and significance tests.
-    \item Confirm the "Multi-Asset Scope" is correctly bounded, as evidenced by the model's failure to explain gold.
-\end{itemize}
+Overall, the Fama-French 5-Factor Model performs extremely well for equity assets but does not extend effectively to a broader multi-asset setting. For the equity core of the portfolio, the model is clearly sufficient. All seven equity funds show very high Adjusted R2 values and statistically significant results, indicating that the model captures most of the variation in returns. The fact that alpha is largely insignificant across these assets further supports this, suggesting that returns are primarily driven by systematic factors rather than unexplained excess performance.
+However, the model breaks down when applied outside equities. The case of IAU makes this very clear—its low Adjusted R2 and insignificant model results show that the five-factor framework simply does not apply to assets like gold.Because of this, the model should be seen as highly effective within its intended scope, but not as a universal framework for all asset classes.
 
 \subsection{Limitations and Future Research Directions}
 
-\textbf{To be completed by the \textbf{assigned team member}}
-\begin{itemize}
-    \item Identify the mismatch between US-centric factors and international ETFs (VDEV.L, VWRA.L, WSML.L).
-    \item Discuss the instability of factor premiums across different macroeconomic regimes (2015--2026).
-    \item Note the lack of formal econometric testing for heteroskedasticity and autocorrelation.
-    \item Propose future studies involving international multi-factor models, rolling-window regressions, and Bayesian updates.
-\end{itemize}
+While the model performs strongly, there are several limitations that need to be acknowledged.
+First, the factors used in the model are based on U.S. data, which creates a mismatch when applied to international ETFs like VDEV.L, VWRA.L, and WSML.L. Even with USD alignment, these assets are still influenced by regional economic conditions that the model does not fully capture.
+Second, factor performance is not stable over time. The sample period includes multiple major economic phases, such as the COVID-19 shock and the more recent monetary tightening cycle. These shifts likely affected how factors behaved, particularly in the case of the weakened size premium and the strong performance of growth-oriented assets.
+Third, the analysis relies on standard OLS assumptions but does not formally test for issues like heteroskedasticity or autocorrelation. This means that while the results are statistically strong, there may still be underlying estimation limitations.
+Future research could address these gaps by incorporating international factor models, applying rolling regressions to track how exposures change over time, and exploring more flexible approaches such as Bayesian estimation. Expanding the dataset and including macroeconomic variables would also provide a more complete view of asset return behavior.
 
-\subsection{Final Academic Verdict}
+\subsection{Final Academic Verdict} 
 
-\textbf{To be completed by the \textbf{assigned team member}}
-\begin{itemize}
-    \item Summarize the utility of the Fama-French 5-Factor Model in modern quantitative finance.
-    \item Reconfirm its strength as a risk attribution tool for diversified equity mandates.
-    \item Acknowledge that while it is state-of-the-art, single-country factor constructions require adaptation for global portfolios.
-\end{itemize}
+The Fama-French 5-Factor Model remains a highly effective tool in modern quantitative finance, particularly when applied to equity portfolios. In this study, it demonstrates strong explanatory power and provides clear insight into how different assets derive their returns. The alignment between factor loadings and each fund’s investment strategy further confirms its usefulness as a risk attribution framework. At the same time, the results highlight an important limitation: the model is not meant to explain all assets. Its failure to account for gold returns is not a weakness, but rather a reminder that it is specifically designed for equities. Overall, the model is best understood as a powerful but specialized tool—highly reliable for analyzing diversified equity portfolios, but requiring adaptation when extended to global or multi-asset contexts.
 
 \printbibliography
 
