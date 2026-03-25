@@ -866,4 +866,29 @@ print(formatted_coeffs)
 \end{lstlisting}
 
 
+
+\section{Interactive Web Companion} \label{sec:appendix_web}
+
+The complete computational workflow, including all visualizations, regression outputs, and diagnostic tables, is published as a self-contained interactive web report hosted via Netlify. The report is rendered directly from the source \texttt{Calculations.Rmd} file and presents all outputs in a structured, navigable format with a floating table of contents.
+
+\begin{center}
+    \large\textbf{Report URL:}\\[6pt]
+    \href{https://case1group2finlyts.netlify.app}{\texttt{https://case1group2finlyts.netlify.app}}
+\end{center}
+
+\vspace{6pt}
+
+The report is organized into the following sections, each accessible via anchor links:
+
+\begin{itemize}
+    \item \textbf{Data Ingestion} --- automated retrieval from Yahoo Finance and the Kenneth French Data Library (\href{https://case1group2finlyts.netlify.app/\#1\_Data\_Ingestion}{\texttt{\#1\_Data\_Ingestion}})
+    \item \textbf{Preprocessing and Normalization} --- temporal alignment and excess return derivation
+    \item \textbf{Descriptive Statistical Profiling} --- distributional audit with higher-moment metrics
+    \item \textbf{Multivariate Regression Modeling} --- Fama-French 5-Factor OLS estimation across all assets
+    \item \textbf{Visual Analytics} --- factor loadings, adjusted $R^2$, cumulative returns, SML, and rolling beta
+    \item \textbf{Model Diagnostics and Significance Audit} --- formatted coefficient tables with significance stars
+\end{itemize}
+
+All outputs are self-contained and reproducible. The source code is version-controlled and publicly available at \href{https://github.com/sakudiff/FINLYTS-Group-2}{\texttt{github.com/sakudiff/FINLYTS-Group-2}}.
+
 \end{document}
