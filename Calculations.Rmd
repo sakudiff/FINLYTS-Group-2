@@ -3,8 +3,12 @@ title: "Fama-French 5-Factor Model: Calculations & Visualizations"
 author: "Group 2"
 date: "`r Sys.Date()`"
 output:
-  pdf_document:
-    latex_engine: xelatex
+  html_document:
+    self_contained: true
+    theme: flatly
+    toc: true
+    toc_float: true
+    df_print: paged
 ---
 
 ```{r setup, include=FALSE}
