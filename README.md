@@ -9,8 +9,8 @@
 
 ### Group 2
 **Authors:** ABRIL, Jehan | GO, Keira Ley Arcala | SISON, Aaron Joshua Estacio | VALENCIA, Carlos Martin Belangel  
-**Institution:** De La Salle University | **Course:** Financial Analytics (FINLYTS)  
-**Date:** March 1, 2026
+**Institution:** De La Salle University | **Course:** Financial Analytics (FINLYTS C02)  
+**Date:** March 1, 2026 [AY2025-2026, Term 2]
 
 ---
 
