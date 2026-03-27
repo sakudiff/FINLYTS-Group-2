@@ -1,12 +1,16 @@
-# Financial Analytics [FINLYTS CO2] 
+# Financial Analytics [FINLYTS CO2]
 
 > [!IMPORTANT]
-> **View the live project on GitHub:** [sakudiff/FINLYTS-Group-2](https://github.com/sakudiff/FINLYTS-Group-2/blob/main/README.md)  
-> *Note: You must be signed into a GitHub account with authorized access to view this private repository.*
+> **Live Interactive Dashboard:** [case1group2finlyts.netlify.app](https://case1group2finlyts.netlify.app/)  
+> **GitHub Repository:** [github.com/sakudiff/FINLYTS-Group-2](https://github.com/sakudiff/FINLYTS-Group-2)  
+> **Final Paper (PDF):** [Final_Paper_Latex/Final_Paper.pdf](Final_Paper_Latex/Final_Paper.pdf)
 
 ## Fama-French 5-Factor Model Evaluation
 
 ### Group 2
+**Authors:** ABRIL, Jehan | GO, Keira Ley Arcala | SISON, Aaron Joshua Estacio | VALENCIA, Carlos Martin Belangel  
+**Institution:** De La Salle University | **Course:** Financial Analytics (FINLYTS)  
+**Date:** March 1, 2026
 
 ---
 
@@ -14,16 +18,17 @@
 *   [**Project Overview**](#project-overview) - High-level goals and data sources.
 *   [**Directory Map**](#directory-map) - Where to find specific files.
 *   [**Research Outline**](#research-outline) - The 4-part academic structure.
-*   [**GitHub & R Guide**](#github--r-guide) - Setup and workflow instructions (Start here for collaborators).
-*   [**LaTeX Guide**](#8-working-with-latex-tex) - Instructions for editing the final paper.
+*   [**Setup Guide**](#setup-guide) - R and RStudio installation (Start here for new users).
+*   [**LaTeX Guide**](#working-with-latex-tex) - Instructions for editing the final paper.
 
 ---
 
 ## Project Overview
 This project involves a rigorous evaluation of the **Fama-French 5-Factor Model** using R. The model extends the Capital Asset Pricing Model (CAPM) by incorporating Size, Value, Profitability, and Investment factors alongside standard market risk. The core objective is to determine the efficacy of these five factors in explaining the excess returns of a portfolio comprising eight selected assets.
 
-- **Primary Data Source:** [Kenneth French Data Library (202412 Archive)](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library_202412_archive.html?fbclid=IwY2xjawQQ7_VleHRuA2FlbQIxMABicmlkETFsSFNsRW9xUzFERHV0Mmphc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHhCyNmhvsra8VKQbzTAyF44hmQnhpTS1HayGqPx4nJFkfgL3PNoSgsHpVOy3_aem_4hRBx0knAjCHkzPbw_raSQ)
+- **Primary Data Source:** [Kenneth French Data Library](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)
 - **Lecture Baseline:** [Financial Analytics CO2 Lecture](https://youtu.be/RPvvnNdwgBo?si=kGSzqJF13dZCSI0m)
+- **Interactive Dashboard:** [case1group2finlyts.netlify.app](https://case1group2finlyts.netlify.app/)
 
 ## Objectives
 - **Empirical Analysis:** Assess how well the five factors (Market, SMB, HML, RMW, CMA) explain asset returns.
@@ -45,14 +50,16 @@ This project involves a rigorous evaluation of the **Fama-French 5-Factor Model*
 | :--- | :--- | :--- |
 | [**data/**](data/) | Raw CSV files from Kenneth French & Yahoo Finance. | Source data for all quantitative models. |
 | [**image/**](image/) | Plots, logos, and screenshots. | Visual assets for the README and the final paper. |
-| [**Final_Paper_Latex/**](Final_Paper_Latex/) ![1772373428466](image/README/1772373428466.png) | LaTeX source files and `.bib` references. | The production environment for the formal academic report. |
-| [**Calculations.Rmd**](Calculations.Rmd) ![1772373395801](image/README/1772373395801.png)| The primary RMarkdown execution script. | Handles data cleaning, regression analysis, and plot generation. |
-| [**README.md**](README.md) | This documentation file. | Project roadmap, setup guide, and team coordination. |
+| [**Final_Paper_Latex/**](Final_Paper_Latex/) | LaTeX source files (`.tex`) and BibTeX references (`.bib`). | The production environment for the formal academic report. |
+| [**Calculations.Rmd**](Calculations.Rmd) | The primary RMarkdown execution script. | Handles data cleaning, regression analysis, and plot generation. Renders to [index.html](index.html). |
+| [**index.html**](index.html) | Rendered HTML output of Calculations.Rmd. | Interactive web dashboard with all analysis and visualizations. |
+| [**README.md**](README.md) | This documentation file. | Project roadmap, setup guide, and technical reference. |
 | [**.gitignore**](.gitignore) | Version control exclusion list. | Prevents system junk and local R history from cluttering the repo. |
 
 ## Workflow & Deliverables
 *   **Calculations & Visuals:** All data processing, factor modeling, and plot generation are handled in `Calculations.Rmd`.
 *   **Final Paper:** The formal academic report is maintained in `Final_Paper_Latex/Final_Paper.tex`. Results and plots from the R analysis are exported and integrated here for the final PDF submission.
+*   **Interactive Dashboard:** The rendered HTML output (`index.html`) is deployed at [case1group2finlyts.netlify.app](https://case1group2finlyts.netlify.app/).
 
 
 > [!TIP]
@@ -124,175 +131,34 @@ This project involves a rigorous evaluation of the **Fama-French 5-Factor Model*
 
 ---
 
-# GitHub & R Guide
+# Setup Guide
 
-If you have never used GitHub or the Command Line, follow this exactly. Do not skip steps.
+This repository is now **public**. Anyone can view, clone, and learn from this project.
 
-## 0. Why GitHub? (The "Why")
-GitHub is our **Centralized Office**. It is where our project "lives" and evolves. We use it for:
-*   **Safety:** If your computer breaks, the project is safe in the cloud.
-*   **Version History:** If you make a mistake, we can "Rewind" time to any previous save.
-*   **Collaboration:** Multiple team members can work on different sections simultaneously without overwriting each other.
-*   **Transparency:** It tracks who contributed what, making it easy to see project progress.
+## Quick Start
 
-## 1. Get Access (Crucial!)
-Before you can see or download the files, you need permission.
-1.  **Send your GitHub Username** to the Project Owner (Aaron).
-2.  **Check your Email:** You will receive an invitation from GitHub.
-3.  **Click "Accept Invitation":** You must do this, or the next steps will fail.
-
-> Example of a invite: ![1772365170360](image/README/1772365170360.png)
-
-
-## 2. Initial Setup (The "Automated" Way)
-If you haven't set up GitHub on your computer yet, use these scripts to do it automatically (otherwise skip to next step).
-1.  Go to this link: [sakudiff/tutorials-for-friends](https://github.com/sakudiff/tutorials-for-friends/tree/658f314237f379e4dcefa59a659ab22ed0d6c593/r-setup)
-2.  Download the file for your OS:
-    *   **MacOS:** `setup-mac.sh`
-    *   **Windows:** `setup-windows.ps1`
-3.  Run the script and follow the prompts. This installs everything you need.
-
-## 3. Login to GitHub in RStudio
-Open **RStudio** and look for the **Terminal** tab (usually next to the Console). Type this and press Enter:
+### 1. Clone the Repository
 ```bash
-gh auth login
-```
-![1772365121967](image/README/1772365121967.png)
-
-*   **What should be your preferred protocol?** Select `HTTPS`.
-*   **Authenticate Git with your GitHub credentials?** Select `Yes`.
-*   **How would you like to authenticate?** Select `Login with a web browser`.
-*   Copy the code shown, press Enter to open your browser, and paste the code.
-
-## 4. Understanding Branches (The "Google Docs" Analogy)
-Think of this project like a Google Doc:
-*   **The Repository:** The whole Google Doc folder.
-*   **The `main` Branch:** This is the **Final Printed Version**. We don't touch this until the very end. 
-*   **The `draft` Branch:** This is like a **Working Tab** in a spreadsheet or a "Version 1" copy. We do ALL our work here.
-*   **Cloning:** This is like clicking "Make a Copy" so you have it on your own computer.
-
-### 4.1 Why Two Branches?
-1.  **Safety:** If we make a mistake on the `draft` branch, it doesn't break the "Final Printed Version" (`main`).
-2.  **Review:** Before merging to `main`, the project lead can review all changes to ensure they meet the submission criteria.
-3.  **No Messy History:** The `main` branch will only contain clean, finalized versions.
-
-> [!WARNING]
-> **Visibility on GitHub:** When you view our repository on GitHub.com, it defaults to the `main` branch. **You will NOT see your changes there.**
-> 
-> To see your work on the website, you MUST click the branch dropdown (top-left) and select `draft`. This is the most common source of "Where is my work?!" panic—don't forget to toggle!
-
-## 5. Cloning the Repo (Getting the Files)
-1.  In the RStudio Terminal, navigate to where you keep your code (e.g., `Documents`):
-    ```bash
-    cd ~/Documents
-    ```
-2.  Run the clone command:
-    ```bash
-    gh repo clone https://github.com/sakudiff/FINLYTS-Group-2.git
-    ```
-3.  In RStudio: `File -> Open Project...` -> Navigate to the `FINLYTS-Group-2` folder -> Open the `.Rproj` file.
-
-## 6. Daily Workflow (How to Work)
-**Crucial:** Always make sure you are in the `draft` "tab" before working.
-
-### Step 1: Switch to the Draft Branch
-```bash
-git checkout draft
+git clone https://github.com/sakudiff/FINLYTS-Group-2.git
+cd FINLYTS-Group-2
 ```
 
-### Step 2: Get Latest Changes (Sync)
-It's like hitting "Refresh" on a Google Doc to see what others wrote. We use `--rebase` to keep our history clean:
-```bash
-git pull --rebase origin draft
-```
+### 2. Open in RStudio
+*   In RStudio: `File -> Open Project...` -> Navigate to the `FINLYTS-Group-2` folder -> Open the `.Rproj` file.
 
-### Step 3: Make your edits
-Edit your `.qmd / .rmd` or `.R` files in RStudio. Save them normally.
-
-### Step 4: Save to GitHub (Commit & Push)
-This is like "Saving a Version" so others can see it:
-```bash
-git add .
-git commit -m "Added my section on asset selection"
-git push origin draft
-```
-
-> **Note:** If you check the website on the `main` view, your changes **won't show up**. You have to switch the branch toggle on GitHub from `main` to `draft` to see your work. We keep them separate so we don't accidentally ruin the final submission.
-
-![1772365140954](image/README/1772365140954.png)
-
-### 6.1 Essential Command Cheat Sheet
-
-| Command | Action | Google Docs Analogy | Why it's Essential |
-| :--- | :--- | :--- | :--- |
-| `git checkout draft` | **Switch Branch** | Switching from "Main" to "Draft" tab. | Keeps the main submission safe while we experiment. |
-| `git pull --rebase origin draft` | **Sync Down** | Refreshing the browser to see team edits. | Keeps history linear and avoids "Merge Junk." |
-| `git rebase --abort` | **Emergency Stop** | Hitting "Undo" on a failed refresh. | Rescues you if a rebase gets messy or confusing. |
-| `git status` | **Check State** | Checking which files have "Unsaved Changes." | Confirms what you've actually changed before you save. |
-| `git add .` | **Stage Changes** | Highlighting the text you want to keep. | Prepares your work for the official save/checkpoint. |
-| `git commit -m "msg"` | **Save Locally** | Clicking "File > Save Version" with a name. | Creates a history point you can return to if things break. |
-| `git push origin draft` | **Sync Up** | Clicking "Share" to update the cloud. | Makes your work visible and accessible to the team. |
-
-### 6.2 Why we use `git pull --rebase`?
-Standard `git pull` often creates "Merge Commits"—messy nodes in our history that look like a tangled web. By using `--rebase`, we ensure a **Linear History**.
-
-*   **How it works:** Git temporarily sets aside your local work, downloads the team's latest changes, and then "re-applies" your work on top of theirs.
-*   **The Result:** A single, straight line of progress that is much easier to read and troubleshoot.
-*   **The Escape Hatch:** If things go wrong during a rebase, just type `git rebase --abort` to return to exactly where you were before you tried to pull.
-
-### 6.3 Workflow Safety Tips
-*   **Pull Before You Start:** Always run `git pull --rebase origin draft` before editing anything. This ensures you're working on the latest version.
-*   **Small, Frequent Saves:** Don't wait until you've finished a 10-page report. Commit after every major change.
-*   **Descriptive Notes:** Your commit messages (the stuff in `"..."`) should explain **what** you did (e.g., `git commit -m "Fixed Table 1 formatting"`).
-*   **When in Doubt, `git status`:** If you're unsure if your work saved, run `git status`. It tells you exactly what Git sees.
-
-> [!TIP]
-> **Advanced Efficiency:** You can create a shortcut (Alias) so you don't have to type the long rebase command. Run this in your terminal to set `git pr` as your default pull:  
-> `git config --global alias.pr "pull --rebase origin draft"`
-
-### 6.4 Mastering Merge Conflicts (The "Collision")
-If you and a teammate edit the same sentence at the same time, Git will show a **"Merge Conflict"** error. This is common and nothing to fear!
-
-#### 1. Immediate Conflict Management
-If you aren't ready to resolve it yet, return to a safe state immediately:
-*   **Command:** `git merge --abort` (or `git rebase --abort`)
-*   **Effect:** This resets your repo to exactly how it was before the pull attempt.
-
-#### 2. Understanding Conflict Markers
-Git communicates conflicts by injecting literal text into your file. It looks like this:
-```text
-<<<<<<< HEAD
-(Your version of the text)
-=======
-(Their version of the text from GitHub)
->>>>>>> [branch_name]
-```
-*   `<<<<<<< HEAD`: Starts your local changes.
-*   `=======`: The separator between your work and theirs.
-*   `>>>>>>>`: Ends their incoming changes.
-
-#### 3. Resolution Workflow Checklist
-To fix the conflict permanently, follow these steps:
-
-| Step | Action | Command |
-| :--- | :--- | :--- |
-| **1** | **Identify Files** | `git status` to see which files are "Unmerged." |
-| **2** | **Find Markers** | Open the file and search for `=======` in your editor. |
-| **3** | **Manual Synthesis** | Delete the markers and the version you don't want. Combine both if needed! |
-| **4** | **Stage & Finalize** | Save the file, then `git add <filename>` and `git commit`. |
-
-> [!TIP]
-> **Don't Struggle in Isolation:** Automated "Accept Current" buttons in IDEs often discard good work. If the conflict is complex, message the team lead or the person who wrote the conflicting code. Manual editing is the safest way!
-
-## 7. Rendering to PDF
-To turn your `.qmd` or `.rmd` files into professional PDFs, run this in your **R Console**:
+### 3. Install Dependencies
+The `Calculations.Rmd` file will automatically install any missing packages when you render it. Alternatively, run this in your R console:
 ```R
-install.packages("tinytex")
-tinytex::install_tinytex()
+install.packages(c("tidyverse", "tidyquant", "quantmod", "broom", "PerformanceAnalytics", "tinytex", "moments", "zoo", "ggrepel", "lubridate"))
+tinytex::install_tinytex()  # For PDF rendering
 ```
-Once done, just click the **Render** button at the top of your RStudio editor.
 
-## 8. Working with LaTeX (`.tex`)
+### 4. Render the Analysis
+Open `Calculations.Rmd` and click the **Knit** button to generate the HTML report (`index.html`).
+
+---
+
+# Working with LaTeX (`.tex`)
 The formal academic paper is located in `Final_Paper_Latex/Final_Paper.tex`.
 
 > [!TIP]
@@ -347,8 +213,22 @@ The bibliography at the end of the paper will update automatically.
 
 ### How to Render (See changes in the PDF)
 To see how your changes look in the final PDF:
-*   **The "Automated" Way:** If you followed **Section 2 (Initial Setup)** and ran the setup script, you should already have the necessary LaTeX tools installed. Simply press **Cmd + S** (Mac) or **Ctrl + S** (Windows) in RStudio to save, and it may automatically attempt to compile. If it doesn't work, don't worry—just let the project lead know.
-*   **The "No-Install" Way:** You don't actually *need* to render it yourself. Simply **Save and Push** your changes to the `draft` branch. The project leads will handle the rendering and verify the layout for you.
+*   **In RStudio:** Open `Final_Paper_Latex/Final_Paper.tex` and click the **Compile** button (or press `Ctrl+Shift`+`X` / `Cmd+Shift`+`X`).
+*   **Prerequisites:** Ensure you have a LaTeX distribution installed (e.g., TinyTeX via `tinytex::install_tinytex()` in R, or MiKTeX/TeXLive).
+*   **Alternative:** You don't need to render it yourself. Simply **Save and Push** your changes to the repository, and the project leads can handle the rendering and verify the layout.
 
 ---
+
+## License & Attribution
+This project is open-source and available for educational purposes. If you use this code or analysis in your own work, please cite:
+
+```bibtex
+@unpublished{Abril2026,
+  title = {Fama-French 5-Factor Model Evaluation},
+  author = {Abril, Jehan and Go, Keira Ley Arcala and Sison, Aaron Joshua Estacio and Valencia, Carlos Martin Belangel},
+  year = {2026},
+  institution = {De La Salle University},
+  url = {https://github.com/sakudiff/FINLYTS-Group-2}
+}
+```
 
