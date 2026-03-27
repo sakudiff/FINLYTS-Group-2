@@ -11,10 +11,7 @@ output:
     df_print: paged
 ---
 
-Link to the public Github repository: https://github.com/sakudiff/FINLYTS-Group-2.git
-
-# 0. Install packages and csv files for chosen assets.
-```{r setup, include=TRUE}
+```{r setup, include=FALSE}
 # --- 1. Environment Setup & Dependencies ---
 # This section ensures all necessary libraries are installed and loaded.
 # We utilize specialized R libraries for data science (tidyverse), 
