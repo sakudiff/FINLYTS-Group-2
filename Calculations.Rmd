@@ -11,7 +11,8 @@ output:
     df_print: paged
 ---
 
-Link to the public Github repository: https://github.com/sakudiff/FINLYTS-Group-2.git
+**Live Dashboard:** [case1group2finlyts.netlify.app](https://case1group2finlyts.netlify.app/)  
+**GitHub Repository:** [github.com/sakudiff/FINLYTS-Group-2](https://github.com/sakudiff/FINLYTS-Group-2)
 
 # 0. Install packages and csv files for chosen assets.
 ```{r setup, include=TRUE}
