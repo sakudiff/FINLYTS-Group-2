@@ -9,6 +9,17 @@ output:
     toc: true
     toc_float: true
     df_print: paged
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    latex_engine: pdflatex
+    number_sections: false
+    df_print: kable
+header-includes:
+  - \usepackage{fvextra}
+  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+  - \usepackage[margin=1in]{geometry}
+  - \usepackage{booktabs}
 ---
 
 **Live Dashboard:** [case1group2finlyts.netlify.app](https://case1group2finlyts.netlify.app/)  
@@ -20,7 +31,13 @@ output:
 # This section ensures all necessary libraries are installed and loaded.
 # We utilize specialized R libraries for data science (tidyverse), 
 # financial analysis (tidyquant), and statistical reporting (broom).
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(
+  echo    = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  tidy    = TRUE,
+  tidy.opts = list(width.cutoff = 72)
+)
 
 required_packages <- c("tidyverse", "tidyquant", "quantmod", "broom", "PerformanceAnalytics", "tinytex", "moments", "zoo", "ggrepel")
 new_packages <- required_packages[!(required_packages %in% installed.packages()[,"Package"])]
